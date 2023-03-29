@@ -1,1 +1,0 @@
-# bteclevel2ictgradecalc.github.io
