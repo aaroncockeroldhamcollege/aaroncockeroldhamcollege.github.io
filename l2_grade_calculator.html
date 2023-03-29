@@ -1,5 +1,5 @@
 <!--
-	Written by Aaron Cocker, 2022-12-11
+	Written by Aaron Cocker-Swanick, 2023-03-29
 	For BTEC Firsts Level 2 Extended Certificate in IC&T,
 	To allow students to calculate their BTEC Extended Certificate grade.
 
@@ -15,6 +15,7 @@
 -->
 
 <!DOCTYPE html>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <html>
     <head>
         <style>
@@ -38,6 +39,22 @@
         {
             margin-top:20px;
         }
+
+        p
+        {
+            font-family:"Arial";
+        }
+
+        footer.h6
+        {
+            font-family:"Arial";
+        }
+
+        grades.th
+        {
+            font-family:"Arial";
+        }
+
         </style>
         <script>
         function main()
@@ -307,39 +324,43 @@
                 sum += value;
            }
 
-           // print grade to screen
-
-           if (sum >= 0 && sum < 71)
+           // check number of points and select grade according to range
+            if (sum <= 71)
             {
-                document.getElementById("score").innerHTML = 'Level 1';
+                document.getElementById("score").innerHTML = 'You do not have enough credits to pass the course.';
             }
 
-            else if (sum >= 72 && sum < 143)
+            else if (sum >= 72 && sum <= 143)
+            {
+                document.getElementById("score").innerHTML = 'Level 1 Pass';
+            }
+
+            else if (sum >= 144 && sum <= 173)
             {
                 document.getElementById("score").innerHTML = 'PP';
             }
 
-            else if (sum >= 174 && sum < 203)
+            else if (sum >= 174 && sum <= 203)
             {
                 document.getElementById("score").innerHTML = 'MP';
             }
 
-            else if (sum >= 204 && sum < 233)
+            else if (sum >= 204 && sum <= 233)
             {
                 document.getElementById("score").innerHTML = 'MM';
             }
 
-            else if (sum >= 234 && sum < 263)
+            else if (sum >= 234 && sum <= 263)
             {
                 document.getElementById("score").innerHTML = 'DM';
             }
 
-            else if (sum >= 264 && sum < 269)
+            else if (sum >= 264 && sum <= 269)
             {
                 document.getElementById("score").innerHTML = 'DD';
             }
 
-            else if (sum >= 270 && sum < 275)
+            else if (sum >= 270 && sum <= 275)
             {
                 document.getElementById("score").innerHTML = 'D*D';
             }
@@ -371,7 +392,6 @@
             document.getElementById("u20").selectedIndex ='---';
         }
         </script>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
 
@@ -383,8 +403,8 @@
         </div>
 
         <!-- Instructions for user in how to use tool -->
-        <div id="">
-            <p>Use this tool to calculate your Level 1 or Level 2 predicted grade. Choose your achieved or predicted grade for each </p>
+        <div id="instructions">
+            <p>Use this tool to calculate your Level 1 or Level 2 predicted grade. Choose your achieved or predicted grade for each unit. If you are in the hardware course, instead of Unit 12 you are doing Unit 11.</p>
         </div>
 
         <!-- List of units and drop down menus for unit grades-->
@@ -509,6 +529,11 @@
             <p>Total number of points: <span id="number"></span></p>
             <p>Your expected grade is: <span id="score"></span></p>
         </div>
+
+        <div id="footer">
+            <h6>Calculator by Aaron Cocker-Swanick, &#169; March 2023.</h6>
+        </div>
+
     </body>
 </html>
 
