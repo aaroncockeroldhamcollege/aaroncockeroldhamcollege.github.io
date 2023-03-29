@@ -1,0 +1,514 @@
+<!--
+	Written by Aaron Cocker, 2022-12-11
+	For BTEC Firsts Level 2 Extended Certificate in IC&T,
+	To allow students to calculate their BTEC Extended Certificate grade.
+
+	Based on Unit values and grade boundaries published in Specification
+	600/6072/4, Issue 7, Pearson Education Ltd, 2020
+
+	This code is licensed under the LGPL.  You may use it and adapt it,
+	as long as you credit its source
+
+	Comments and layout is largely for the benefit of Web and Software Development students, it is to be refactored at a later date.
+
+	If you have anything to say about it, please use aaron.cocker-swanick@@oldham.ac.uk
+-->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+        h1
+        {
+            font-family:arial;
+            color:red;
+        }
+
+        h3
+        {
+            font-family:arial;
+        }
+
+        table, th, td
+        {
+            border: 1px solid black;
+        }
+
+        button
+        {
+            margin-top:20px;
+        }
+        </style>
+        <script>
+        function main()
+        {
+            // initialise array for each unit score
+            let unit_scores = [];
+            let units_list = ['u1','u2','u3','u9','u12','u13','u15','u18','u20'];
+
+            // connect to select element in drop-down lists for each unit
+            var u1select = document.getElementById('u1');
+            var u2select = document.getElementById('u2');
+            var u3select = document.getElementById('u3');
+            var u9select = document.getElementById('u9');
+            var u12select = document.getElementById('u12');
+            var u13select = document.getElementById('u13');
+            var u15select = document.getElementById('u15');
+            var u18select = document.getElementById('u18');
+            var u20select = document.getElementById('u20');
+
+            // extract valyes from drop-down lists for each unit
+            var u1value = u1select.options[u1select.selectedIndex].text;
+            var u2value = u2select.options[u2select.selectedIndex].text;
+            var u3value = u3select.options[u3select.selectedIndex].text;
+            var u9value = u9select.options[u9select.selectedIndex].text;
+            var u12value = u12select.options[u12select.selectedIndex].text;
+            var u13value = u13select.options[u13select.selectedIndex].text;
+            var u15value = u15select.options[u15select.selectedIndex].text;
+            var u18value = u18select.options[u18select.selectedIndex].text;
+            var u20value = u20select.options[u20select.selectedIndex].text;
+
+            // initialising marks for each unit
+            var u1marks = 0
+            var u2marks = 0
+            var u3marks = 0
+            var u9marks = 0
+            var u12marks = 0
+            var u13marks = 0
+            var u15marks = 0
+            var u18marks = 0
+            var u20marks = 0
+
+            // 30-credit units
+            switch (u1value)
+            {
+                case '---':
+                    u1marks = 0;
+                    break;
+
+                case 'L1 Pass':
+                    u1marks = 6;
+                    break;
+
+                case 'L2 Pass':
+                    u1marks = 12;
+                    break;
+
+                case 'L2 Merit':
+                    u1marks = 18;
+                    break;
+
+                case 'L2 Distinction':
+                    u1marks = 24;
+                    break;
+            }
+
+            switch (u2value)
+            {
+                case '---':
+                    u2marks = 0;
+                    break;
+
+                case 'L1 Pass':
+                    u2marks = 6;
+                    break;
+
+                case 'L2 Pass':
+                    u2marks = 12;
+                    break;
+
+                case 'L2 Merit':
+                    u2marks = 18;
+                    break;
+
+                case 'L2 Distinction':
+                    u2marks = 24;
+                    break;
+           }
+
+           switch (u3value)
+           {
+                case '---':
+                    u3marks = 0;
+                    break;
+
+                case 'L1 Pass':
+                    u3marks = 6;
+                    break;
+
+                case 'L2 Pass':
+                    u3marks = 12;
+                    break;
+
+                case 'L2 Merit':
+                    u3marks = 18;
+                    break;
+
+                case 'L2 Distinction':
+                    u3marks = 24;
+                    break;
+           }
+
+           switch (u9value)
+           {
+                case '---':
+                    u9marks = 0;
+                    break;
+
+                case 'L1 Pass':
+                    u9marks = 6;
+                    break;
+
+                case 'L2 Pass':
+                    u9marks = 12;
+                    break;
+
+                case 'L2 Merit':
+                    u9marks = 18;
+                    break;
+
+                case 'L2 Distinction':
+                    u9marks = 24;
+                    break;
+           }
+
+           switch (u18value)
+           {
+                case '---':
+                    u18marks = 0;
+                    break;
+
+                case 'L1 Pass':
+                    u18marks = 6;
+                    break;
+
+                case 'L2 Pass':
+                    u18marks = 12;
+                    break;
+
+                case 'L2 Merit':
+                    u18marks = 18;
+                    break;
+
+                case 'L2 Distinction':
+                    u18marks = 24;
+                    break;
+           }
+
+           switch (u20value)
+           {
+                case '---':
+                    u20marks = 0;
+                    break;
+
+                case 'L1 Pass':
+                    u20marks = 6;
+                    break;
+
+                case 'L2 Pass':
+                    u20marks = 12;
+                    break;
+
+                case 'L2 Merit':
+                    u20marks = 18;
+                    break;
+
+                case 'L2 Distinction':
+                    u20marks = 24;
+                    break;
+           }
+
+           //60-credit units
+
+            switch (u12value)
+           {
+                case '---':
+                    u12marks = 0;
+                    break;
+
+                case 'L1 Pass':
+                    u12marks = 12;
+                    break;
+
+                case 'L2 Pass':
+                    u12marks = 24;
+                    break;
+
+                case 'L2 Merit':
+                    u12marks = 36;
+                    break;
+
+                case 'L2 Distinction':
+                    u12marks = 48;
+                    break;
+           }
+
+            switch (u13value)
+           {
+                case '---':
+                    u13marks = 0;
+                    break;
+
+                case 'L1 Pass':
+                    u13marks = 12;
+                    break;
+
+                case 'L2 Pass':
+                    u13marks = 24;
+                    break;
+
+                case 'L2 Merit':
+                    u13marks = 36;
+                    break;
+
+                case 'L2 Distinction':
+                    u13marks = 48;
+                    break;
+           }
+
+            switch (u15value)
+           {
+                case '---':
+                    u15marks = 0;
+                    break;
+
+                case 'L1 Pass':
+                    u15marks = 12;
+                    break;
+
+                case 'L2 Pass':
+                    u15marks = 24;
+                    break;
+
+                case 'L2 Merit':
+                    u15marks = 36;
+                    break;
+
+                case 'L2 Distinction':
+                    u15marks = 48;
+                    break;
+           }
+
+           // add individual unit scores to scores array
+           unit_scores.push(u1marks);
+           unit_scores.push(u2marks);
+           unit_scores.push(u3marks);
+           unit_scores.push(u9marks);
+           unit_scores.push(u12marks);
+           unit_scores.push(u13marks);
+           unit_scores.push(u15marks);
+           unit_scores.push(u18marks);
+           unit_scores.push(u20marks);
+
+           // sum all scores in array
+           let sum = 0;
+           for (const value of unit_scores)
+           {
+                sum += value;
+           }
+
+           // print grade to screen
+
+           if (sum >= 0 && sum < 71)
+            {
+                document.getElementById("score").innerHTML = 'Level 1';
+            }
+
+            else if (sum >= 72 && sum < 143)
+            {
+                document.getElementById("score").innerHTML = 'PP';
+            }
+
+            else if (sum >= 174 && sum < 203)
+            {
+                document.getElementById("score").innerHTML = 'MP';
+            }
+
+            else if (sum >= 204 && sum < 233)
+            {
+                document.getElementById("score").innerHTML = 'MM';
+            }
+
+            else if (sum >= 234 && sum < 263)
+            {
+                document.getElementById("score").innerHTML = 'DM';
+            }
+
+            else if (sum >= 264 && sum < 269)
+            {
+                document.getElementById("score").innerHTML = 'DD';
+            }
+
+            else if (sum >= 270 && sum < 275)
+            {
+                document.getElementById("score").innerHTML = 'D*D';
+            }
+
+            else if (sum >= 276)
+            {
+                document.getElementById("score").innerHTML = 'D*D*';
+            }
+
+
+            // print total score on page
+            document.getElementById("number").innerHTML = sum;
+
+            //print total score in console for debugging purposes
+            console.log(sum);
+        }
+
+        function resetScores()
+        {
+            // reset all selects to default '---' option
+            document.getElementById("u1").selectedIndex ='---';
+            document.getElementById("u2").selectedIndex ='---';
+            document.getElementById("u3").selectedIndex ='---';
+            document.getElementById("u9").selectedIndex ='---';
+            document.getElementById("u12").selectedIndex ='---';
+            document.getElementById("u13").selectedIndex ='---';
+            document.getElementById("u15").selectedIndex ='---';
+            document.getElementById("u18").selectedIndex ='---';
+            document.getElementById("u20").selectedIndex ='---';
+        }
+        </script>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+
+        <!-- Title and introduction section-->
+        <div id="header">
+            <title>BTEC Level 2 Grade Calculator</title>
+            <h1>BTEC Firsts Level 2 Extended Certificate in Information & Creative Technology</h1>
+            <h3>BTEC predicted grade Calculator</h3>
+        </div>
+
+        <!-- Instructions for user in how to use tool -->
+        <div id="">
+            <p>Use this tool to calculate your Level 1 or Level 2 predicted grade. Choose your achieved or predicted grade for each </p>
+        </div>
+
+        <!-- List of units and drop down menus for unit grades-->
+        <div id="grade_table">
+            <table id="grades">
+                <tr>
+                    <th>Unit</th>
+                    <th>GLH</th>
+                    <th>Grade</th>
+                </tr>
+
+                <!-- Unit 1 -->
+                <tr><td>Unit 1: The Online World</td><td>30</td><td><select id="u1"><option value="u1blank"> --- </option><option value="u1l1pass">L1 Pass</option>
+                <option value="u1l2pass">L2 Pass</option> <option value="u1l2merit">L2 Merit</option><option value="u1l2dist">L2 Distinction</option></select></td></tr>
+
+                <!-- Unit 2 -->
+                <tr><td>Unit 2: Information Systems</td>
+                <td>30</td><td><select id="u2">
+                        <option value="u2blank"> --- </option>
+                        <option value="u2l1pass">L1 Pass</option>
+                        <option value="u2l2pass">L2 Pass</option>
+                        <option value="u2l2merit">L2 Merit</option>
+                        <option value="u2l2dist">L2 Distinction</option>
+                    </select></td>
+                </tr>
+
+                <!-- Unit 3 -->
+                <tr><td>Unit 3: A Digital Portfolio</td>
+                    <td>30</td>
+                    <td><select id="u3">
+                        <option value="u3blank"> --- </option>
+                        <option value="u3l1pass">L1 Pass</option>
+                        <option value="u3l2pass">L2 Pass</option>
+                        <option value="u3l2merit">L2 Merit</option>
+                        <option value="u3l2dist">L2 Distinction</option>
+                    </select></td>
+                </tr>
+
+                <!-- Unit 9 -->
+                <tr><td>Unit 9: Spreadsheet Development </td>
+                    <td>30</td>
+                    <td><select id="u9">
+                        <option value="u9blank"> --- </option>
+                        <option value="u9l1pass">L1 Pass</option>
+                        <option value="u9l2pass">L2 Pass</option>
+                        <option value="u9l2merit">L2 Merit</option>
+                        <option value="u9l2dist">L2 Distinction</option>
+                    </select></td>
+                </tr>
+
+                <!-- Unit 12 -->
+                <tr><td>Unit 12: Software Development</td>
+                    <td>60</td>
+                    <td><select id="u12">
+                        <option value="u12blank"> --- </option>
+                        <option value="u12l1pass">L1 Pass</option>
+                        <option value="u12l2pass">L2 Pass</option>
+                        <option value="u12l2merit">L2 Merit</option>
+                        <option value="u12l2dist">L2 Distinction</option>
+                    </select></td>
+                </tr>
+
+                <!-- Unit 13 -->
+                <tr><td>Unit 13: Website Development</td>
+                    <td>60</td>
+                    <td><select id="u13">
+                        <option value="u13blank"> --- </option>
+                        <option value="u13l1pass">L1 Pass</option>
+                        <option value="u13l2pass">L2 Pass</option>
+                        <option value="u13l2merit">L2 Merit</option>
+                        <option value="u13l2dist">L2 Distinction</option>
+                    </select></td>
+                </tr>
+
+                <!-- Unit 15 -->
+                <tr><td>Unit 15: Installing and Maintaining Computer Software</td>
+                    <td>60</td>
+                    <td><select id="u15">
+                        <option value="u15blank"> --- </option>
+                        <option value="u15l1pass">L1 Pass</option>
+                        <option value="u15l2pass">L2 Pass</option>
+                        <option value="u15l2merit">L2 Merit</option>
+                        <option value="u15l2dist">L2 Distinction</option>
+                    </select></td>
+                </tr>
+
+
+                <!-- Unit 18 -->
+                <tr><td>Unit 18: Computational Thinking</td>
+                    <td>30</td>
+                    <td><select id="u18">
+                        <option value="u18blank"> --- </option>
+                        <option value="u18l1pass">L1 Pass</option>
+                        <option value="u18l2pass">L2 Pass</option>
+                        <option value="u18l2merit">L2 Merit</option>
+                        <option value="u18l2dist">L2 Distinction</option>
+                    </select></td>
+                </tr>
+
+                <!-- Unit 20 -->
+                <tr><td>Unit 20: Building a Personal Computer</td>
+                    <td>30</td>
+                    <td><select id="u20">
+                        <option value="u20blank"> --- </option>
+                        <option value="u20l1pass">L1 Pass</option>
+                        <option value="u20l2pass">L2 Pass</option>
+                        <option value="u20l2merit">L2 Merit</option>
+                        <option value="u20l2dist">L2 Distinction</option>
+                    </select></td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Submit and reset buttons -->
+        <div id="buttons">
+            <button type="calculate" onclick="main()">Calculate grade</button>
+            <button type="reset" onclick="resetScores()">Reset form</button>
+        </div>
+
+        <!-- This is where the calculated grade will be printed to the user -->
+        <div id="print_grade">
+            <p>Total number of points: <span id="number"></span></p>
+            <p>Your expected grade is: <span id="score"></span></p>
+        </div>
+    </body>
+</html>
+
