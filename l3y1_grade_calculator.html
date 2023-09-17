@@ -1,0 +1,231 @@
+<!--
+	Written by Aaron Cocker-Swanick, 2023-09-17
+	For BTEC National Level 3 Foundation Diploma in IT,
+	To allow students to calculate their BTEC Foundation Diploma grade.
+
+	Based on Unit values and grade boundaries published in Specification
+	601/7576/X Pearson Education Ltd, 2016
+
+	This code is licensed under the LGPL.  You may use it and adapt it,
+	as long as you credit its source
+
+	Comments and layout is largely for the benefit of Web and Software Development students, it is to be refactored at a later date.
+
+	If you have anything to say about it, please use aaron.cocker-swanick@oldham.ac.uk
+-->
+<html>
+  <head>
+    <style>
+    h1 {
+      font-family: "arial";
+    }
+
+    table,td,th {
+      border: 1px solid;
+    }
+
+    #score{
+      font-weight:bold;
+    }
+  </style>
+  <script>
+    function resetScores() {
+      // reset all selects to default '---' option
+      document.getElementById('u1').selectedIndex = '---';
+      document.getElementById('u2').selectedIndex = '---';
+      document.getElementById('u3').selectedIndex = '---';
+      document.getElementById('u4').selectedIndex = '---';
+      document.getElementById('u5').selectedIndex = '---';
+      document.getElementById('u6').selectedIndex = '---';
+    }
+
+    function main() {
+      var u1grade = document.getElementById('u1').value;
+      var u2grade = document.getElementById('u2').value;
+      var u3grade = document.getElementById('u3').value;
+      var u4grade = document.getElementById('u4').value;
+      var u5grade = document.getElementById('u5').value;
+      var u6grade = document.getElementById('u6').value;
+
+      var unit_scores = []
+
+      var u1points = 0;
+      var u2points = 0;
+      var u3points = 0;
+      var u4points = 0;
+      var u5points = 0;
+      var u6points = 0;
+
+      switch (u1grade) {
+        case "u1u": u1points = 0; break;
+        case "u1n": u1points = 8; break;
+        case "u1p": u1points = 12; break;
+        case "u1m": u1points = 20; break;
+        case "u1d": u1points = 32; break;
+      }
+
+      switch (u2grade) {
+        case "u2u": u2points = 0; break;
+        case "u2n": u2points = 6; break;
+        case "u2p": u2points = 9; break;
+        case "u2m": u2points = 15; break;
+        case "u2d": u2points = 24; break;
+      }
+      
+      switch (u3grade) {
+        case "u3u": u3points = 0; break;
+        case "u3p": u3points = 9; break;
+        case "u3m": u3points = 15; break;
+        case "u3d": u3points = 24; break;
+      }
+      
+      switch (u4grade) {
+        case "u4u": u4points = 0; break;
+        case "u4p": u4points = 9; break;
+        case "u4m": u4points = 15; break;
+        case "u4d": u4points = 24; break;
+      }
+
+      switch (u5grade) {
+        case "u5u": u5points = 0; break;
+        case "u5p": u5points = 6; break;
+        case "u5m": u5points = 10; break;
+        case "u5d": u5points = 16; break;
+      }
+
+      switch (u6grade) {
+        case "u6u": u6points = 0; break;
+        case "u6p": u6points = 6; break;
+        case "u6m": u6points = 10; break;
+        case "u6d": u6points = 16; break;
+      }
+
+      unit_scores.push(u1points);
+      unit_scores.push(u2points);
+      unit_scores.push(u3points);
+      unit_scores.push(u4points);
+      unit_scores.push(u5points);
+      unit_scores.push(u6points);
+
+      // sum all scores in array
+      let sum = 0;
+      for (const value of unit_scores) {
+        sum += value;
+      }
+
+      // check number of points and select grade according to range
+      if (sum <= 50) {
+        document.getElementById("score").innerHTML = 'You do not have enough credits to pass the course.';
+      }
+
+      else if (sum >= 51 && sum <= 72) {
+        document.getElementById("score").innerHTML = 'Pass';
+      }
+
+      else if (sum >= 73 && sum <= 103) {
+        document.getElementById("score").innerHTML = 'Merit';
+      }
+
+      else if (sum >= 104 && sum <= 129) {
+        document.getElementById("score").innerHTML = 'Distinction';
+      }
+
+      else if (sum >= 130) {
+        document.getElementById("score").innerHTML = 'Distinction * ';
+      }
+
+      // print total score on page
+      document.getElementById("number").innerHTML = sum;
+
+      //print total score in console for debugging purposes
+      console.log(sum);
+    }
+  </script>
+  <title>Level 3 HW Y1 Grade Calculator</title>
+</head>
+
+  <body>
+    <h1>Level 3 Hardware and Networking Y1 Grade Calculator</h1>
+    <h3>BTEC National Level 3 Foundation Diploma</h3>
+
+    <table>
+      <tr>
+        <th>Unit number</th><th>Unit title</th><th>GLH</th><th>Grade</th>
+      </tr>
+
+      <tr>
+        <td>1</td><td>Information Technology Systems </td><td>120</td><td>
+          <select name="u1" id="u1">
+            <option value="u1u">U</option> <option value="u1n">N</option><option value="u1p">P</option><option value="u1m">M</option><option value="u1d">D</option>
+          </select>
+        </td>
+    </tr>
+
+    <tr>
+      <td>2</td>
+      <td>Creating Systems to Manage Information </td>
+      <td>90</td>
+      <td>
+        <select name="u2" id="u2">
+          <option value="u2u">U</option><option value="u2n">N</option><option value="u2p">P</option><option value="u2m">M</option><option value="u2d">D</option>
+        </select>
+      </td>
+    </tr>
+
+    <tr>
+      <td>3</td>
+      <td>Using Social Media in Business</td>
+      <td>60</td>
+      <td>
+        <select name="u3" id="u3">
+          <option value="u3u">U</option><option value="u3p">P</option><option value="u3m">M</option><option value="u3d">D</option>
+        </select>
+      </td>
+    </tr>
+
+    <tr>
+      <td>4</td>
+      <td>Programming</td>
+      <td>90</td>
+      <td>
+        <select name="u4" id="u4">
+          <option value="u4u">U</option><option value="u4p">P</option><option value="u4m">M</option><option value="u4d">D</option>
+        </select>
+      </td>
+    </tr>
+
+    <tr>
+      <td>5</td>
+      <td>Data Modelling</td>
+      <td>60</td>
+      <td>
+        <select name="u5" id="u5">
+          <option value="u5u">U</option><option value="u5p">P</option><option value="u5m">M</option><option value="u5d">D</option>
+        </select>
+      </td>
+    </tr>
+
+    <tr>
+      <td>6</td>
+      <td>Website Development</td>
+      <td>60</td>
+      <td>
+        <select name="u6" id="u6">
+          <option value="u6u">U</option><option value="u6p">P</option><option value="u6m">M</option><option value="u6d">D</option>
+        </select>
+      </td>
+    </tr>
+  </table>
+
+  <p>Click to below to calculate your grade: </p>
+  <input type="submit" onclick="main()" value="Calculate" />
+  <input type="submit" onclick="resetScores()" value="Reset" />
+
+  <!-- This is where the calculated grade will be printed to the user -->
+  <div id="print_grade">
+    <p>Total number of points: <span id="number"></span></p>
+    <p>Your expected grade is: <span id="score"></span></p>
+  </div>
+  
+</body>
+</html>
