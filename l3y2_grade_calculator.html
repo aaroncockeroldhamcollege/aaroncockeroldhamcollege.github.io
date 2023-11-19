@@ -1,0 +1,413 @@
+<!--
+	Written by Aaron Cocker-Swanick, 2023-09-17
+	For BTEC National Level 3 Extended Diploma in IT,
+	To allow students to calculate their BTEC Extended Diploma grade.
+
+	Based on Unit values and grade boundaries published in Specification
+	601/7576/X Pearson Education Ltd, 2016
+
+	This code is licensed under the LGPLv2.  You may use it and adapt it,
+	as long as you credit its source
+
+	Comments and layout is largely for the benefit of Web and Software Development students, it is to be refactored at a later date.
+
+	If you have anything to say about it, please use aaron.cocker-swanick@oldham.ac.uk
+-->
+<html>
+  <head>
+    <style>
+    h1 {
+      font-family: "arial";
+    }
+
+    table,td,th {
+      border: 1px solid;
+    }
+
+    #score{
+      font-weight:bold;
+    }
+  </style>
+  <script>
+    function resetScores() {
+      // reset all selects to default '---' option
+      document.getElementById('u1').selectedIndex = '---';
+      document.getElementById('u2').selectedIndex = '---';
+      document.getElementById('u3').selectedIndex = '---';
+      document.getElementById('u4').selectedIndex = '---';
+      document.getElementById('u5').selectedIndex = '---';
+      document.getElementById('u6').selectedIndex = '---';
+      document.getElementById('u9').selectedIndex = '---';
+      document.getElementById('u11').selectedIndex = '---';
+      document.getElementById('u12').selectedIndex = '---';
+      document.getElementById('u14').selectedIndex = '---';
+      document.getElementById('u16').selectedIndex = '---';
+      document.getElementById('u20').selectedIndex = '---';
+      document.getElementById('u21').selectedIndex = '---';
+    }
+
+    function main() {
+      var u1grade = document.getElementById('u1').value;
+      var u2grade = document.getElementById('u2').value;
+      var u3grade = document.getElementById('u3').value;
+      var u4grade = document.getElementById('u4').value;
+      var u5grade = document.getElementById('u5').value;
+      var u6grade = document.getElementById('u6').value;
+      var u9grade = document.getElementById('u9').value;
+      var u11grade = document.getElementById('u11').value;
+      var u12grade = document.getElementById('u12').value;
+      var u14grade = document.getElementById('u14').value;
+      var u16grade = document.getElementById('u16').value;
+      var u20grade = document.getElementById('u20').value;
+      var u21grade = document.getElementById('u21').value;
+
+      var unit_scores = []
+
+      var u1points = 0;
+      var u2points = 0;
+      var u3points = 0;
+      var u4points = 0;
+      var u5points = 0;
+      var u6points = 0;
+      var u9points = 0;
+      var u11points = 0;
+      var u12points = 0;
+      var u14points = 0;
+      var u16points = 0;
+      var u20points = 0;
+      var u21points = 0;
+
+      switch (u1grade) {
+        case "u1u": u1points = 0; break;
+        case "u1n": u1points = 8; break;
+        case "u1p": u1points = 12; break;
+        case "u1m": u1points = 20; break;
+        case "u1d": u1points = 32; break;
+      }
+
+      switch (u2grade) {
+        case "u2u": u2points = 0; break;
+        case "u2n": u2points = 6; break;
+        case "u2p": u2points = 9; break;
+        case "u2m": u2points = 15; break;
+        case "u2d": u2points = 24; break;
+      }
+      
+      switch (u3grade) {
+        case "u3u": u3points = 0; break;
+        case "u3p": u3points = 9; break;
+        case "u3m": u3points = 15; break;
+        case "u3d": u3points = 24; break;
+      }
+      
+      switch (u4grade) {
+        case "u4u": u4points = 0; break;
+        case "u4p": u4points = 9; break;
+        case "u4m": u4points = 15; break;
+        case "u4d": u4points = 24; break;
+      }
+
+      switch (u5grade) {
+        case "u5u": u5points = 0; break;
+        case "u5p": u5points = 6; break;
+        case "u5m": u5points = 10; break;
+        case "u5d": u5points = 16; break;
+      }
+
+      switch (u6grade) {
+        case "u6u": u6points = 0; break;
+        case "u6p": u6points = 6; break;
+        case "u6m": u6points = 10; break;
+        case "u6d": u6points = 16; break;
+      }
+
+      switch (u9grade) {
+        case "u9u": u9points = 0; break;
+        case "u9n": u9points = 6; break;
+        case "u9p": u9points = 9; break;
+        case "u9m": u9points = 15; break;
+        case "u9d": u9points = 24; break;
+      }
+
+      switch (u11grade) {
+        case "u11u": u11points = 0; break;
+        case "u11n": u11points = 8; break;
+        case "u11p": u11points = 12; break;
+        case "u11m": u11points = 20; break;
+        case "u11d": u11points = 32; break;
+      }
+
+      switch (u12grade) {
+        case "u12u": u12points = 0; break;
+        case "u12p": u12points = 6; break;
+        case "u12m": u12points = 10; break;
+        case "u12d": u12points = 16; break;
+      }
+
+       switch (u14grade) {
+        case "u14u": u14points = 0; break;
+        case "u14n": u14points = 8; break;
+        case "u14p": u14points = 12; break;
+        case "u14m": u14points = 20; break;
+        case "u14d": u14points = 32; break;
+      }
+
+      switch (u16grade) {
+        case "u16u": u16points = 0; break;
+        case "u16p": u16points = 6; break;
+        case "u16m": u16points = 10; break;
+        case "u16d": u16points = 16; break;
+      }
+
+      switch (u20grade) {
+        case "u20u": u20points = 0; break;
+        case "u20p": u20points = 6; break;
+        case "u20m": u20points = 10; break;
+        case "u20d": u20points = 16; break;
+      }
+
+      switch (u21grade) {
+        case "u21u": u21points = 0; break;
+        case "u21p": u21points = 6; break;
+        case "u21m": u21points = 10; break;
+        case "u21d": u21points = 16; break;
+      }
+
+      unit_scores.push(u1points);
+      unit_scores.push(u2points);
+      unit_scores.push(u3points);
+      unit_scores.push(u4points);
+      unit_scores.push(u5points);
+      unit_scores.push(u6points);
+      unit_scores.push(u9points);
+      unit_scores.push(u11points);
+      unit_scores.push(u12points);
+      unit_scores.push(u14points);
+      unit_scores.push(u16points);
+      unit_scores.push(u20points);
+      unit_scores.push(u21points);
+
+      // sum all scores in array
+      let sum = 0;
+      for (const value of unit_scores) {
+        sum += value;
+      }
+
+      // check number of points and select grade according to range
+   if (sum <= 107) {
+        document.getElementById("score").innerHTML = 'You do not have enough credits to pass the course.';
+      }
+
+      else if (sum >= 108 && sum <= 123) {
+        document.getElementById("score").innerHTML = 'PPP';
+      }
+
+      else if (sum >= 124 && sum <= 139) {
+        document.getElementById("score").innerHTML = 'MPP';
+      }
+
+      else if (sum >= 140 && sum <= 155) {
+        document.getElementById("score")    .innerHTML = 'MMP';
+      }
+
+      else if (sum >= 156 && sum <= 175) {
+        document.getElementById("score").innerHTML = 'MMM';
+      }
+
+      else if (sum >= 176 && sum <= 195) {
+        document.getElementById("score").innerHTML = 'DMM';
+      }
+
+      else if (sum >= 196 && sum <= 215) {
+        document.getElementById("score").innerHTML = 'DDM';
+      }
+
+      else if (sum >= 216 && sum <= 233) {
+        document.getElementById("score").innerHTML = 'DDD';
+      }
+
+      else if (sum >= 234 && sum <= 251) {
+        document.getElementById("score").innerHTML = 'D*DD';
+      }
+
+      else if (sum >= 252 && sum <= 269) {
+        document.getElementById("score").innerHTML = 'D*D*D';
+      }
+
+      else if (sum >= 270) {
+        document.getElementById("score").innerHTML = 'D*D*D*';
+      }
+
+      // print total score on page
+      document.getElementById("number").innerHTML = sum;
+
+      //print total score in console for debugging purposes
+      console.log(sum);
+    }
+  </script>
+  <title>Level 3 HW Grade Calculator</title>
+</head>
+
+  <body>
+    <h1>Level 3 Hardware and Networking Grade Calculator</h1>
+    <h3>BTEC National Level 3 Extended Diploma in IT (RQF)</h3>
+
+    <table>
+      <tr>
+        <th>Unit number</th><th>Unit title</th><th>GLH</th><th>Grade</th>
+      </tr>
+
+      <tr>
+        <td>1</td><td>Information Technology Systems </td><td>120</td><td>
+          <select name="u1" id="u1">
+            <option value="u1u">U</option> <option value="u1n">N</option><option value="u1p">P</option><option value="u1m">M</option><option value="u1d">D</option>
+          </select>
+        </td>
+    </tr>
+
+    <tr>
+      <td>2</td>
+      <td>Creating Systems to Manage Information </td>
+      <td>90</td>
+      <td>
+        <select name="u2" id="u2">
+          <option value="u2u">U</option><option value="u2n">N</option><option value="u2p">P</option><option value="u2m">M</option><option value="u2d">D</option>
+        </select>
+      </td>
+    </tr>
+
+    <tr>
+      <td>3</td>
+      <td> Using Social Media in Business</td>
+      <td>60</td>
+      <td>
+        <select name="u3" id="u3">
+          <option value="u3u">U</option><option value="u3p">P</option><option value="u3m">M</option><option value="u3d">D</option>
+        </select>
+      </td>
+    </tr>
+
+    <tr>
+      <td>4</td>
+      <td>Programming</td>
+      <td>90</td>
+      <td>
+        <select name="u4" id="u4">
+          <option value="u4u">U</option><option value="u4p">P</option><option value="u4m">M</option><option value="u4d">D</option>
+        </select>
+      </td>
+    </tr>
+
+    <tr>
+      <td>5</td>
+      <td>Data Modelling</td>
+      <td>60</td>
+      <td>
+        <select name="u5" id="u5">
+          <option value="u5u">U</option><option value="u5p">P</option><option value="u5m">M</option><option value="u5d">D</option>
+        </select>
+      </td>
+    </tr>
+
+    <tr>
+      <td>6</td>
+      <td>Website Development</td>
+      <td>60</td>
+      <td>
+        <select name="u6" id="u6">
+          <option value="u6u">U</option><option value="u6p">P</option><option value="u6m">M</option><option value="u6d">D</option>
+        </select>
+      </td>
+    </tr>
+
+     <tr>
+      <td>9</td>
+      <td>IT Project Management</td>
+      <td>90</td>
+      <td>
+        <select name="u9" id="u9">
+          <option value="u9u">U</option><option value="u9p">P</option><option value="u9m">M</option><option value="u9d">D</option>
+        </select>
+      </td>
+    </tr>
+
+    <tr>
+      <td>11</td>
+      <td>Cyber Security and Incident Management</td>
+      <td>120</td>
+      <td>
+        <select name="u11" id="u11">
+          <option value="u11u">U</option><option value="u11n">N</option><option value="u11p">P</option><option value="u11m">M</option><option value="u11d">D</option>
+        </select>
+      </td>
+    </tr>
+
+    <tr>
+      <td>12</td>
+      <td>IT Technical Support and Management</td>
+      <td>60</td>
+      <td>
+        <select name="u12" id="u12">
+          <option value="u12u">U</option><option value="u12p">P</option><option value="u12m">M</option><option value="u12d">D</option>
+        </select>
+      </td>
+    </tr>
+
+    <tr>
+      <td>14</td>
+      <td>IT Service Delivery</td>
+      <td>120</td>
+      <td>
+        <select name="u14" id="u14">
+          <option value="u14u">U</option><option value="u14n">N</option><option value="u14p">P</option><option value="u14m">M</option><option value="u14d">D</option>
+        </select>
+      </td>
+    </tr>
+
+     <tr>
+      <td>16</td>
+      <td>Cloud Storage and Collaboration Tools</td>
+      <td>60</td>
+      <td>
+        <select name="u16" id="u16">
+          <option value="u16u">U</option><option value="u16p">P</option><option value="u16m">M</option><option value="u16d">D</option>
+        </select>
+      </td>
+    </tr>
+
+     <tr>
+      <td>20</td>
+      <td>Enterprise in IT</td>
+      <td>60</td>
+      <td>
+        <select name="u20" id="u20">
+          <option value="u20u">U</option><option value="u20p">P</option><option value="u20m">M</option><option value="u20d">D</option>
+        </select>
+      </td>
+    </tr>
+
+    <tr>
+      <td>21</td>
+      <td>Business Process Modelling Tools</td>
+      <td>60</td>
+      <td>
+        <select name="u21" id="u21">
+          <option value="u21u">U</option><option value="u21p">P</option><option value="u21m">M</option><option value="u21d">D</option>
+        </select>
+      </td>
+    </tr>
+
+  </table>
+
+  <p>Click to below to calculate your grade: </p>
+  <input type="submit" onclick="main()" value="Calculate" />
+  <input type="submit" onclick="resetScores()" value="Reset" />
+
+  <!-- This is where the calculated grade will be printed to the user -->
+  <div id="print_grade">
+    <p>Total number of points: <span id="number"></span></p>
+    <p>Your expected grade is: <span id="score"></span></p>
+  </div>
+  
+</body>
+</html>
