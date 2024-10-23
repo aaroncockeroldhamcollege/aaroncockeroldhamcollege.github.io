@@ -30,20 +30,20 @@
   </style>
   <script>
     function resetScores() {
-      // reset all selects to default '---' option
-      document.getElementById('u1').selectedIndex = '---';
-      document.getElementById('u2').selectedIndex = '---';
-      document.getElementById('u3').selectedIndex = '---';
-      document.getElementById('u4').selectedIndex = '---';
-      document.getElementById('u5').selectedIndex = '---';
-      document.getElementById('u6').selectedIndex = '---';
-      document.getElementById('u9').selectedIndex = '---';
-      document.getElementById('u11').selectedIndex = '---';
-      document.getElementById('u12').selectedIndex = '---';
-      document.getElementById('u14').selectedIndex = '---';
-      document.getElementById('u16').selectedIndex = '---';
-      document.getElementById('u20').selectedIndex = '---';
-      document.getElementById('u21').selectedIndex = '---';
+      // reset all selects to default 'U' option
+      document.getElementById('u1').selectedIndex = 'U';
+      document.getElementById('u2').selectedIndex = 'U';
+      document.getElementById('u3').selectedIndex = 'U';
+      document.getElementById('u4').selectedIndex = 'U';
+      document.getElementById('u5').selectedIndex = 'U';
+      document.getElementById('u6').selectedIndex = 'U';
+      document.getElementById('u9').selectedIndex = 'U';
+      document.getElementById('u11').selectedIndex = 'U';
+      document.getElementById('u12').selectedIndex = 'U';
+      document.getElementById('u14').selectedIndex = 'U';
+      document.getElementById('u16').selectedIndex = 'U';
+      document.getElementById('u8').selectedIndex = 'U';
+      document.getElementById('u21').selectedIndex = 'U';
     }
 
     function main() {
@@ -58,7 +58,7 @@
       var u12grade = document.getElementById('u12').value;
       var u14grade = document.getElementById('u14').value;
       var u16grade = document.getElementById('u16').value;
-      var u20grade = document.getElementById('u20').value;
+      var u8grade = document.getElementById('u8').value;
       var u21grade = document.getElementById('u21').value;
 
       var unit_scores = []
@@ -74,7 +74,7 @@
       var u12points = 0;
       var u14points = 0;
       var u16points = 0;
-      var u20points = 0;
+      var u8points = 0;
       var u21points = 0;
 
       switch (u1grade) {
@@ -159,11 +159,11 @@
         case "u16d": u16points = 16; break;
       }
 
-      switch (u20grade) {
-        case "u20u": u20points = 0; break;
-        case "u20p": u20points = 6; break;
-        case "u20m": u20points = 10; break;
-        case "u20d": u20points = 16; break;
+      switch (u8grade) {
+        case "u8u": u8points = 0; break;
+        case "u8p": u8points = 6; break;
+        case "u8m": u8points = 10; break;
+        case "u8d": u8points = 16; break;
       }
 
       switch (u21grade) {
@@ -184,7 +184,7 @@
       unit_scores.push(u12points);
       unit_scores.push(u14points);
       unit_scores.push(u16points);
-      unit_scores.push(u20points);
+      unit_scores.push(u8points);
       unit_scores.push(u21points);
 
       // sum all scores in array
@@ -353,6 +353,17 @@
       </td>
     </tr>
 
+	<tr>
+      <td>8</td>
+      <td>Computer Games Development</td>
+      <td>60</td>
+      <td>
+        <select name="u8" id="u8">
+          <option value="u8u">U</option><option value="u8p">P</option><option value="u8m">M</option><option value="u8d">D</option>
+        </select>
+      </td>
+    </tr>
+	    
     <tr>
       <td>14</td>
       <td>IT Service Delivery</td>
@@ -371,17 +382,6 @@
       <td>
         <select name="u16" id="u16">
           <option value="u16u">U</option><option value="u16p">P</option><option value="u16m">M</option><option value="u16d">D</option>
-        </select>
-      </td>
-    </tr>
-
-     <tr>
-      <td>20</td>
-      <td>Enterprise in IT</td>
-      <td>60</td>
-      <td>
-        <select name="u20" id="u20">
-          <option value="u20u">U</option><option value="u20p">P</option><option value="u20m">M</option><option value="u20d">D</option>
         </select>
       </td>
     </tr>
