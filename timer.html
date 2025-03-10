@@ -1,0 +1,80 @@
+<!-- by Aaron Cocker-Swanick -->
+<html>
+    <head>
+        <title>GMCG Competition Timer</title>
+        <script src="js/countdown.js"></script>
+        <script>
+        let interval;
+
+        function startCountdown()
+        {
+            if (interval) clearInterval(interval); // Stop any previous timer
+
+            const targetTime = new Date();
+            targetTime.setTime(targetTime.getTime() + (3 * 60 * 60 * 1000)); // Add 3 hours
+
+            function updateTimer()
+            {
+                const now = new Date();
+                const timeLeft = countdown(now, targetTime); // Use countdown with 2 arguments
+
+                if (timeLeft.hours <= 0 && timeLeft.minutes <= 0 && timeLeft.seconds <= 0)
+                {
+                    clearInterval(interval);
+                    document.getElementById("timer").innerText = "Time's up!";
+                    return;
+                }
+
+                document.getElementById("timer").innerText = `${timeLeft.hours}h ${timeLeft.minutes}m ${timeLeft.seconds}s`;
+            }
+
+            updateTimer(); // Run once immediately
+            interval = setInterval(updateTimer, 1000);
+        }
+        </script>
+        <style>
+            body
+            {
+                font-family: Arial, sans-serif;
+                text-align:center;
+                margin-top: 50px;
+            }
+
+            #timer
+            {
+                font-size:2rem;
+                font-weight:bold;
+                margin-top: 20px;
+            }
+
+            button
+            {
+                padding: 10px 20px;
+                font-size: 1rem;
+                cursor: pointer;
+            }
+
+            img
+            {
+                display: inline-block;
+                margin-right: 10px;
+                padding: 5px;
+                vertical-align: middle;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="header">
+            <img src="images/oldham_logo.jpg">
+            <img src="images/gmcg.png" width=250px height=100px >
+            <h1>GMCG Competitions March 2025</h1>
+            <h2>Oldham College</h2>
+            <h3>Web Development Competition</h3>
+        </div>
+        <div id="clock">
+            <h4>Time remaining:</h4>
+            <div id="timer">Not started</div>
+        <button onclick="startCountdown()">Start Timer</button>
+        </div>
+    </body>
+</html>
