@@ -1,0 +1,568 @@
+<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><link rel="icon" href="favicon.svg" type="image/svg+xml"><script>try{var t=localStorage.getItem("labs-theme");if(t)document.documentElement.setAttribute("data-theme",t);if(localStorage.getItem("labs-term")==="white")document.documentElement.classList.add("tt-white");}catch(e){}</script><script>/* ============================================================
+   Network topology symbols — shared across every activity.
+   Original SVG drawings in the conventional Cisco/Packet Tracer
+   topology style (functional diagram symbols). viewBox 0 0 64 64,
+   device centred. Two-tone: light body + Cisco-blue outline, so
+   they read on both light and dark stages.
+   Use:  <svg viewBox="0 0 64 64">  + NETSYM[type]  </svg>
+============================================================ */
+(function(){
+  // palette (fixed so icons look identical on every page/theme)
+  var B='#cfe7f5',   // body fill
+      L='#0a7cad',   // outline
+      A='#0a9ad4',   // accent fill
+      D='#07485f',   // deep accent
+      W='#ffffff';
+  function arrow(d){ return '<path d="'+d+'" fill="none" stroke="'+W+'" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>'; }
+
+  var S={};
+
+  // ---- Router: 3-D cylinder with the classic 4-way arrows on top ----
+  S.router =
+   '<path d="M8 34 v4 a24 8 0 0 0 48 0 v-4" fill="'+L+'"/>'+
+   '<ellipse cx="32" cy="34" rx="24" ry="8.5" fill="'+A+'" stroke="'+L+'" stroke-width="2"/>'+
+   // 4-way arrows (left,right,up,down) on the top face
+   arrow('M20 34 h9 m-3.5 -3 l3.5 3 -3.5 3')+        // right
+   arrow('M44 34 h-9 m3.5 -3 l-3.5 3 3.5 3')+        // left
+   arrow('M32 27.5 v-3 M29.5 26 l2.5 -2.5 2.5 2.5')+ // up (small)
+   arrow('M32 40.5 v3 M29.5 42 l2.5 2.5 2.5 -2.5');  // down (small)
+
+  // ---- Switch: flat 3-D slab with 4 parallel arrows (2 each way) ----
+  S['switch'] =
+   '<path d="M10 30 L22 22 H58 L46 30 Z" fill="'+A+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>'+   // top face
+   '<path d="M10 30 H46 V40 H10 Z" fill="'+B+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>'+          // front
+   '<path d="M46 30 L58 22 V32 L46 40 Z" fill="'+L+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>'+    // side
+   arrow('M16 33 h16 m-4 -2.5 l4 2.5 -4 2.5')+
+   arrow('M40 37 h-16 m4 -2.5 l-4 2.5 4 2.5');
+
+  // ---- Multilayer (L3) switch: slab + routing ring ----
+  S.l3switch =
+   '<path d="M10 32 L22 24 H58 L46 32 Z" fill="'+A+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>'+
+   '<path d="M10 32 H46 V42 H10 Z" fill="'+B+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>'+
+   '<path d="M46 32 L58 24 V34 L46 42 Z" fill="'+L+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>'+
+   arrow('M16 35 h12 m-3.5 -2.5 l3.5 2.5 -3.5 2.5')+
+   arrow('M40 39 h-12 m3.5 -2.5 l-3.5 2.5 3.5 2.5')+
+   '<circle cx="47" cy="20" r="9" fill="'+W+'" stroke="'+L+'" stroke-width="2"/>'+
+   arrow('M43 20 h8 m-2.5 -2.5 l2.5 2.5 -2.5 2.5').replace(/#ffffff/,L);
+
+  // ---- PC / desktop: monitor + tower ----
+  S.pc =
+   '<rect x="12" y="14" width="34" height="24" rx="2" fill="'+B+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<rect x="16" y="18" width="26" height="16" rx="1" fill="'+A+'"/>'+
+   '<rect x="25" y="38" width="8" height="5" fill="#9bbdd4"/>'+
+   '<rect x="18" y="43" width="22" height="4" rx="2" fill="'+L+'"/>'+
+   '<rect x="48" y="20" width="12" height="27" rx="2" fill="'+B+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<circle cx="54" cy="25" r="1.6" fill="'+L+'"/><path d="M51 42 h6" stroke="'+L+'" stroke-width="2"/>';
+
+  // ---- Laptop ----
+  S.laptop =
+   '<path d="M16 16 h32 v20 h-32 Z" fill="'+B+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<rect x="19" y="19" width="26" height="14" rx="1" fill="'+A+'"/>'+
+   '<path d="M10 44 L16 36 h32 l6 8 Z" fill="'+B+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>'+
+   '<path d="M27 40 h10" stroke="'+L+'" stroke-width="2" stroke-linecap="round"/>';
+
+  // ---- Server ----
+  S.server =
+   '<rect x="20" y="10" width="24" height="44" rx="3" fill="'+B+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<rect x="24" y="15" width="16" height="7" rx="1" fill="'+A+'"/><circle cx="41" cy="18.5" r="1.4" fill="'+W+'"/>'+
+   '<rect x="24" y="25" width="16" height="7" rx="1" fill="'+A+'"/><circle cx="41" cy="28.5" r="1.4" fill="'+W+'"/>'+
+   '<rect x="24" y="35" width="16" height="7" rx="1" fill="'+A+'"/><circle cx="41" cy="38.5" r="1.4" fill="'+W+'"/>'+
+   '<path d="M25 48 h14" stroke="'+L+'" stroke-width="2" stroke-linecap="round"/>';
+
+  // ---- Firewall: brick wall ----
+  S.firewall =
+   '<rect x="8" y="16" width="48" height="32" rx="2" fill="'+B+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<g stroke="'+L+'" stroke-width="2">'+
+   '<path d="M8 27 h48 M8 37 h48"/>'+
+   '<path d="M24 16 v11 M40 16 v11"/>'+        // top row bricks
+   '<path d="M16 27 v10 M32 27 v10 M48 27 v10"/>'+ // mid row offset
+   '<path d="M24 37 v11 M40 37 v11"/>'+        // bottom row
+   '</g>';
+
+  // ---- Access point: puck + radio waves ----
+  S.ap =
+   '<ellipse cx="32" cy="42" rx="22" ry="7" fill="'+B+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<rect x="30" y="20" width="4" height="18" rx="2" fill="'+L+'"/>'+
+   '<circle cx="32" cy="18" r="3.5" fill="'+A+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<g fill="none" stroke="'+A+'" stroke-width="2.4" stroke-linecap="round">'+
+   '<path d="M22 14 a14 14 0 0 1 20 0"/><path d="M26 18 a9 9 0 0 1 12 0"/></g>';
+
+  // ---- IP phone ----
+  S.phone =
+   '<path d="M18 12 h24 a4 4 0 0 1 4 4 v30 a4 4 0 0 1 -4 4 h-24 a4 4 0 0 1 -4 -4 v-30 a4 4 0 0 1 4 -4 Z" fill="'+B+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<rect x="19" y="17" width="22" height="13" rx="1" fill="'+A+'"/>'+
+   '<g fill="'+L+'"><circle cx="23" cy="36" r="2"/><circle cx="30" cy="36" r="2"/><circle cx="37" cy="36" r="2"/><circle cx="23" cy="43" r="2"/><circle cx="30" cy="43" r="2"/><circle cx="37" cy="43" r="2"/></g>';
+
+  // ---- Printer ----
+  S.printer =
+   '<rect x="18" y="12" width="28" height="12" rx="1" fill="'+B+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<rect x="10" y="24" width="44" height="18" rx="3" fill="'+A+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<rect x="20" y="36" width="24" height="14" rx="1" fill="'+W+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<circle cx="48" cy="30" r="2" fill="'+W+'"/>';
+
+  // ---- Cloud (internet / WAN) ----
+  S.cloud =
+   '<path d="M16 46 a12 12 0 0 1 1 -24 a15 14 0 0 1 28 -4 a12 12 0 0 1 4 28 Z" fill="'+B+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>';
+
+  // ---- Hub: plain 3-D box with vertical slats (no arrows — it just repeats) ----
+  S.hub =
+   '<path d="M14 24 L24 17 H54 L44 24 Z" fill="'+A+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>'+
+   '<path d="M14 24 H44 V46 H14 Z" fill="'+B+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>'+
+   '<path d="M44 24 L54 17 V39 L44 46 Z" fill="'+L+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>'+
+   '<path d="M20 29v12M26 29v12M32 29v12M38 29v12" stroke="'+L+'" stroke-width="2.4" stroke-linecap="round"/>';
+
+  // aliases
+  S.multiswitch=S.l3switch; S.asa=S.firewall; S.internet=S.cloud; S.desktop=S.pc;
+
+  window.NETSYM=S;
+})();
+</script>
+<style>[hidden]{display:none!important}body{margin:0}</style>
+<title>Network Components Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#eef5f9; --panel:#fff; --ink:#132430; --muted:#5a6b78; --line:#cfe0ec; --accent:#0a9ad4; --accent-dark:#0a7cad; --accent-soft:#d6f1fb;
+  --ok:#1a9c5b; --oks:#e7f6ec; --bad:#d23d3d; --bads:#fbe9e9; --stage:#f6fafc;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace; --display:"Chivo",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#081219;--panel:#10212c;--ink:#dcebf3;--muted:#8fa6b4;--line:#223644;--accent:#2cb8e8;--accent-dark:#6fd2f2;--accent-soft:#06344a;--oks:#13331f;--bads:#3a1c1c;--stage:#0c1a23;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#081219;--panel:#10212c;--ink:#dcebf3;--muted:#8fa6b4;--line:#223644;--accent:#2cb8e8;--accent-dark:#6fd2f2;--accent-soft:#06344a;--oks:#13331f;--bads:#3a1c1c;--stage:#0c1a23;color-scheme:dark}
+*{box-sizing:border-box}html,body{background:var(--bg);color:var(--ink)}body{margin:0;font:14px/1.5 var(--display)}
+button,input,select{font:inherit;color:inherit}:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.cq-app{max-width:1180px;margin:0 auto;padding:18px 16px 44px}
+.cq-eyebrow{font:600 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--accent-dark)}
+.cq-app h1{font:800 clamp(24px,4vw,32px)/1.05 var(--display);margin:6px 0 0}
+.cq-lead{color:var(--muted);margin:8px 0 0;max-width:80ch}
+.cq-card{border:1px solid var(--line);background:var(--panel);border-radius:12px;padding:16px;margin-top:14px}
+.cq-bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.cq-seg{display:flex;border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.cq-seg button{border:0;background:var(--panel);padding:8px 13px;font-weight:600;cursor:pointer}
+.cq-seg button+button{border-left:1px solid var(--line)}
+.cq-seg button.on{background:var(--accent);color:#fff}
+.cq-btn{font:600 13px var(--display);border:1px solid var(--line);background:var(--panel);padding:8px 13px;border-radius:8px;cursor:pointer}
+.cq-btn:hover{border-color:var(--accent)}.cq-btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.cq-btn:disabled{opacity:.45;cursor:default}
+.cq-stat{margin-left:auto;font:600 13px var(--mono);color:var(--muted)}
+.cq-hint{color:var(--muted);font-size:13px;margin:10px 0 0}
+
+/* quiz grid */
+.cq-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;margin-top:14px}
+.cq-item{border:1px solid var(--line);border-radius:12px;background:var(--panel);overflow:hidden;display:flex;flex-direction:column;transition:border-color .2s,box-shadow .2s}
+.cq-item.ok{border-color:var(--ok);box-shadow:0 0 0 2px var(--oks)}
+.cq-item.bad{border-color:var(--bad);box-shadow:0 0 0 2px var(--bads)}
+.cq-sym{background:var(--stage);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:center;height:118px;position:relative}
+.cq-sym svg{width:96px;height:96px;filter:drop-shadow(0 3px 4px rgba(0,40,70,.18))}
+.cq-num{position:absolute;left:10px;top:8px;font:700 12px var(--mono);color:var(--muted)}
+.cq-mark{position:absolute;right:10px;top:8px;font:800 16px var(--display)}
+.cq-body{padding:10px;display:flex;flex-direction:column;gap:8px;flex:1}
+.cq-body label{font:700 11px var(--display);text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.cq-sel{width:100%;padding:7px 8px;border:1px solid var(--line);border-radius:8px;background:var(--panel);font-weight:600;cursor:pointer}
+.cq-sel.ok{border-color:var(--ok);background:var(--oks)}.cq-sel.bad{border-color:var(--bad);background:var(--bads)}
+.cq-drop{min-height:78px;border:2px dashed var(--line);border-radius:9px;padding:6px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12.5px;text-align:center;transition:background .15s,border-color .15s;cursor:pointer}
+.cq-drop.over,.cq-drop.target{border-color:var(--accent);background:var(--accent-soft)}
+.cq-drop.filled{border-style:solid;padding:0;cursor:default}
+.cq-drop.ok{border-color:var(--ok)}.cq-drop.bad{border-color:var(--bad)}
+.cq-fix{font-size:12.5px;border-radius:8px;padding:7px 9px;background:var(--bads);display:none}
+.cq-fix.show{display:block}
+.cq-fix b{color:var(--bad)}
+.cq-layer{font:600 11px var(--mono);color:var(--accent-dark);display:none}
+.cq-layer.show{display:block}
+
+/* definition bank */
+.cq-bank{display:flex;flex-wrap:wrap;gap:8px;min-height:60px;border:2px dashed var(--line);border-radius:12px;padding:10px;margin-top:10px;transition:background .15s}
+.cq-bank.over{background:var(--accent-soft);border-color:var(--accent)}
+.cq-bank:empty::after{content:"All definitions placed — press Check answers.";color:var(--muted);font-size:13px;align-self:center}
+.cq-def{flex:1 1 250px;max-width:360px;border:1px solid var(--line);border-left:4px solid var(--accent);background:var(--panel);border-radius:8px;padding:8px 10px;font-size:13px;line-height:1.4;cursor:grab;user-select:none;box-shadow:0 1px 2px rgba(0,30,50,.08);transition:transform .12s,box-shadow .12s}
+.cq-def:hover{box-shadow:0 3px 10px rgba(0,60,90,.16);transform:translateY(-1px)}
+.cq-def.sel{outline:2px solid var(--accent);outline-offset:2px;background:var(--accent-soft)}
+.cq-def.drag{opacity:.4}
+.cq-drop .cq-def{max-width:none;width:100%;border:0;border-left:4px solid var(--accent);border-radius:7px;box-shadow:none;cursor:grab;text-align:left;color:var(--ink)}
+.cq-drop.ok .cq-def{border-left-color:var(--ok)}.cq-drop.bad .cq-def{border-left-color:var(--bad)}
+
+.cq-sticky{position:sticky;top:0;z-index:5}
+.cq-result{display:none;margin-top:14px;border-radius:12px;padding:14px 16px;border:1px solid var(--ok);background:var(--oks)}
+.cq-result.show{display:block}
+.cq-result.part{border-color:var(--accent);background:var(--accent-soft)}
+.cq-result h2{margin:0;font:800 22px var(--display)}
+.cq-result p{margin:6px 0 0}
+
+/* study */
+.cq-study{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;margin-top:14px}
+.cq-scard{display:flex;gap:12px;border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--panel)}
+.cq-scard svg{width:72px;height:72px;flex:none;background:var(--stage);border-radius:10px;border:1px solid var(--line)}
+.cq-scard h3{margin:0;font:800 16px var(--display)}
+.cq-scard p{margin:4px 0 0;font-size:13px;color:var(--ink)}
+.cq-scard .cq-l{font:600 11px var(--mono);color:var(--accent-dark);margin-top:4px}
+.cq-hide{display:none!important}
+</style>
+<style>
+/* ===== site header / controls ===== */
+.site-hdr{display:flex;align-items:center;gap:12px;background:#fff;border-bottom:3px solid #0a9ad4;padding:7px 16px;font-family:"Chivo","Segoe UI",system-ui,sans-serif;flex-wrap:wrap}
+.site-hdr .site-brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+.site-hdr .logo-ol{height:50px;background:#fff;border-radius:6px;padding:2px}
+.site-hdr .logo-ci{height:34px;border-radius:4px}
+.site-hdr .site-div{width:1px;height:30px;background:#d2dae2}
+.site-hdr .site-title{font:700 15px/1 "Chivo",system-ui,sans-serif;color:#0a7cad}
+.site-hdr .site-sp{flex:1}
+.site-ctl,.site-hdr .site-link{font:600 12.5px "Chivo",system-ui,sans-serif;color:#0a7cad;text-decoration:none;border:1px solid #bfe4f3;border-radius:7px;padding:7px 11px;white-space:nowrap;background:#fff;cursor:pointer}
+.site-ctl:hover,.site-hdr .site-link:hover{background:#e8f6fc}
+@media (prefers-color-scheme:dark){html:not([data-theme="light"]) .site-hdr{background:#0e1a23;border-bottom-color:#2cb8e8}
+ html:not([data-theme="light"]) .site-hdr .site-title{color:#6fd2f2}
+ html:not([data-theme="light"]) .site-ctl,html:not([data-theme="light"]) .site-hdr .site-link{background:#13232e;color:#6fd2f2;border-color:#28485c}
+ html:not([data-theme="light"]) .site-hdr .site-div{background:#28485c}}
+html[data-theme="dark"] .site-hdr{background:#0e1a23;border-bottom-color:#2cb8e8}
+html[data-theme="dark"] .site-hdr .site-title{color:#6fd2f2}
+html[data-theme="dark"] .site-ctl,html[data-theme="dark"] .site-hdr .site-link{background:#13232e;color:#6fd2f2;border-color:#28485c}
+html[data-theme="dark"] .site-hdr .site-div{background:#28485c}
+.wb-fab{position:fixed;right:16px;bottom:16px;z-index:70;border:0;border-radius:24px;cursor:pointer;background:#0a9ad4;color:#fff;font:600 13px "Chivo",system-ui,sans-serif;padding:11px 16px;box-shadow:0 6px 18px rgba(10,120,170,.4);display:inline-flex;align-items:center;gap:7px}
+.wb-fab:hover{background:#088ec5}
+@media (max-width:640px){.site-hdr .site-title{display:none}.site-ctl .lbl{display:none}.wb-fab .t{display:none}}
+/* ===== Tera Term terminal colours (green default, white toggle) ===== */
+.term{background:#071a0e!important;color:#45dd68!important}
+.term pre,.term .out{color:inherit!important}
+#prompt,.ps1,.term .ps1{color:#88ffb0!important}
+.l-cmd{color:#9dffc2!important}.l-dim{color:#7fae8c!important}.l-warn{color:#ecc06a!important}.l-bad{color:#ff8575!important}
+#cmd,.cin,.term input{color:#45dd68!important;caret-color:#45dd68!important;background:transparent!important}
+html.tt-white .term{color:#e7eef1!important}
+html.tt-white #prompt,html.tt-white .ps1,html.tt-white .term .ps1{color:#bfe3ff!important}
+html.tt-white .l-cmd{color:#d4e9ff!important}
+html.tt-white #cmd,html.tt-white .cin,html.tt-white .term input{color:#e7eef1!important;caret-color:#e7eef1!important}
+/* ===== Windows-7 (Aero) style GUI windows + resizeable ===== */
+.win{resize:both!important;overflow:hidden!important;min-width:300px;min-height:200px;border:1px solid #2f6aa8!important;border-radius:8px 8px 6px 6px!important;box-shadow:0 20px 44px rgba(0,0,0,.42), inset 0 0 0 1px rgba(255,255,255,.45)!important}
+.win-bar,.win-title{background:linear-gradient(#fdfefe,#dbe9f8 46%,#c2d8f0)!important;border-bottom:1px solid #8fb0d6!important;color:#13314e!important;border-radius:7px 7px 0 0}
+.win-bar b,.win-title b{text-shadow:0 1px 0 rgba(255,255,255,.75)}
+.win-bar .x,.win-title .x{background:linear-gradient(#f7a19a,#d9453b)!important;border:1px solid #b23026!important;color:#fff!important;border-radius:4px!important;text-shadow:0 1px 1px rgba(0,0,0,.3)}
+.win-bar .x:hover,.win-title .x:hover{background:linear-gradient(#ff8f86,#c9382e)!important}
+html[data-theme="dark"] .win-bar,html[data-theme="dark"] .win-title{background:linear-gradient(#2b3b4c,#1c2a38 46%,#152230)!important;border-bottom-color:#3a556c!important;color:#dceaf5!important}
+@media (prefers-color-scheme:dark){html:not([data-theme="light"]) .win-bar,html:not([data-theme="light"]) .win-title{background:linear-gradient(#2b3b4c,#1c2a38 46%,#152230)!important;border-bottom-color:#3a556c!important;color:#dceaf5!important}}
+</style>
+</head><body>
+<header class="site-hdr"><a class="site-brand" href="index.html"><img class="logo-ol" src="oldham-college.png" alt="Oldham College"><span class="site-div"></span><img class="logo-ci" src="cisco-netacad.png" alt="Cisco Networking Academy"></a><span class="site-title">Network Components Quiz</span><span class="site-sp"></span><a class="site-link" href="components-quiz.pdf" target="_blank" rel="noopener">📄 <span class="lbl">Instructions (PDF)</span></a><button id="themeBtn" class="site-ctl" type="button" onclick="toggleTheme()" title="Light / dark">🌙 <span class="lbl">Dark</span></button><a class="site-link" href="index.html">← <span class="lbl">All labs</span></a></header><button class="wb-fab" type="button" onclick="wbToggle()" aria-label="Open whiteboard" title="Whiteboard">✎ <span class="t">Whiteboard</span></button>
+
+
+<div class="cq-app">
+  <div class="cq-eyebrow">Cisco Networking Academy</div>
+  <h1>Network Components Quiz</h1>
+  <p class="cq-lead">Each card shows a network topology symbol. Choose the component's <b>name</b> from the list, then <b>drag the matching definition</b> onto the card. On a tablet or touchscreen, tap a definition and then tap the card's box. Press <b>Check answers</b> when every card is complete.</p>
+
+  <div class="cq-card cq-sticky">
+    <div class="cq-bar">
+      <div class="cq-seg" id="tabs"><button data-t="quiz" class="on" type="button">Quiz</button><button data-t="study" type="button">Study cards</button></div>
+      <div class="cq-seg" id="size"><button data-n="6" class="on" type="button">6 components</button><button data-n="12" type="button">All 12</button></div>
+      <button class="cq-btn pri" id="check" type="button">Check answers</button>
+      <button class="cq-btn" id="newR" type="button">New round</button>
+      <span class="cq-stat" id="stat"></span>
+    </div>
+  </div>
+
+  <div id="quizView">
+    <div class="cq-grid" id="grid"></div>
+    <div class="cq-card">
+      <b>Definitions</b> <span style="color:var(--muted);font-size:13px">— drag each one onto the right symbol. Drag a placed definition back here (or click it) to remove it.</span>
+      <div class="cq-bank" id="bank"></div>
+    </div>
+    <div class="cq-result" id="result"></div>
+  </div>
+
+  <div id="studyView" class="cq-hide">
+    <p class="cq-hint">Revise all twelve components before you try the quiz. The layer shows where each device mainly works in the OSI model.</p>
+    <div class="cq-study" id="study"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+const SKEY='components-quiz-v1';
+const COMP=[
+ {id:'router',  name:'Router', sym:'router', layer:'Layer 3 — Network',
+  def:'Joins different networks together and forwards packets between them, choosing the best path using IP addresses and its routing table.'},
+ {id:'switch',  name:'Switch', sym:'switch', layer:'Layer 2 — Data Link',
+  def:'Connects devices on the same LAN and sends each frame only out of the port where the destination MAC address is, using its MAC address table.'},
+ {id:'l3switch',name:'Multilayer switch', sym:'l3switch', layer:'Layers 2 & 3',
+  def:'A LAN switch that can also route between VLANs and subnets at high speed, combining Layer 2 switching with Layer 3 routing in one box.'},
+ {id:'hub',     name:'Hub', sym:'hub', layer:'Layer 1 — Physical',
+  def:'A basic device that repeats every incoming signal out of all its other ports, so every connected device shares one collision domain.'},
+ {id:'firewall',name:'Firewall', sym:'firewall', layer:'Layers 3–7 (security)',
+  def:'Sits between trusted and untrusted zones and permits or blocks traffic by checking it against a set of security rules.'},
+ {id:'ap',      name:'Wireless access point', sym:'ap', layer:'Layers 1 & 2',
+  def:'Lets Wi-Fi devices join a wired network by sending and receiving radio signals and bridging that traffic onto the LAN.'},
+ {id:'server',  name:'Server', sym:'server', layer:'End device (Layers 1–7)',
+  def:'Provides services or shared resources — such as web pages, files, email, DHCP or DNS — to client devices across the network.'},
+ {id:'pc',      name:'PC (desktop)', sym:'pc', layer:'End device (Layers 1–7)',
+  def:'A fixed end device used by a person at a desk; it sends and receives data, usually through a wired network interface card.'},
+ {id:'laptop',  name:'Laptop', sym:'laptop', layer:'End device (Layers 1–7)',
+  def:'A portable, battery-powered end device that normally connects using Wi-Fi but can also use a wired port.'},
+ {id:'phone',   name:'IP phone', sym:'phone', layer:'End device (Layers 1–7)',
+  def:'An end device that carries voice calls as data packets over the network (VoIP), often powered through the cable by PoE.'},
+ {id:'printer', name:'Network printer', sym:'printer', layer:'End device (Layers 1–7)',
+  def:'A shared output device with its own IP address, so many users can send jobs to it over the network.'},
+ {id:'cloud',   name:'Cloud / Internet (WAN)', sym:'cloud', layer:'WAN',
+  def:'Represents networks outside your control — the Internet or a wide area network — usually reached through an ISP.'}
+];
+// names that appear in the dropdown but match no card (distractors)
+const EXTRA=['Modem','Repeater','Bridge','Patch panel'];
+const BYID={};COMP.forEach(c=>BYID[c.id]=c);
+
+const $=s=>document.querySelector(s);
+const grid=$('#grid'), bank=$('#bank'), res=$('#result');
+let N=6, round=[], placed={}, checked=false, selDef=null;
+let ST=(()=>{try{return JSON.parse(localStorage.getItem(SKEY))||{best6:null,best12:null,rounds:0};}catch(e){return {best6:null,best12:null,rounds:0};}})();
+function save(){try{localStorage.setItem(SKEY,JSON.stringify(ST));}catch(e){}}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function symSVG(t){const g=(window.NETSYM&&window.NETSYM[t])||'<rect x="12" y="12" width="40" height="40" rx="6" fill="#cfe7f5" stroke="#0a7cad" stroke-width="2"/>';return '<svg viewBox="0 0 64 64" aria-hidden="true">'+g+'</svg>';}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+
+function stat(){
+  const b=ST['best'+N];
+  $('#stat').textContent='Best ('+N+'): '+(b==null?'—':b+'/'+(N*2))+' · rounds: '+ST.rounds;
+}
+
+function defEl(id){
+  const d=document.createElement('div');
+  d.className='cq-def';d.draggable=true;d.dataset.id=id;d.textContent=BYID[id].def;d.tabIndex=0;
+  d.addEventListener('dragstart',e=>{if(checked){e.preventDefault();return;}e.dataTransfer.setData('text/plain',id);e.dataTransfer.effectAllowed='move';d.classList.add('drag');});
+  d.addEventListener('dragend',()=>d.classList.remove('drag'));
+  d.addEventListener('click',e=>{
+    e.stopPropagation(); if(checked) return;
+    if(d.parentElement!==bank){ unplace(id); return; }      // click a placed one → back to bank
+    selectDef(selDef===id?null:id);
+  });
+  d.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();d.click();}});
+  return d;
+}
+function selectDef(id){
+  selDef=id;
+  bank.querySelectorAll('.cq-def').forEach(x=>x.classList.toggle('sel',x.dataset.id===id));
+  grid.querySelectorAll('.cq-drop').forEach(z=>z.classList.toggle('target',!!id&&!z.classList.contains('filled')));
+}
+
+function newRound(){
+  checked=false; placed={}; selDef=null;
+  round=shuffle(COMP).slice(0,N);
+  const names=shuffle(COMP.map(c=>c.name).concat(EXTRA)).sort((a,b)=>a.localeCompare(b));
+  grid.innerHTML='';
+  round.forEach((c,i)=>{
+    const it=document.createElement('div');it.className='cq-item';it.dataset.id=c.id;
+    it.innerHTML='<div class="cq-sym"><span class="cq-num">'+(i+1)+'</span><span class="cq-mark"></span>'+symSVG(c.sym)+'</div>'+
+      '<div class="cq-body"><label>Component name</label><select class="cq-sel"><option value="">Choose…</option>'+
+      names.map(n=>'<option>'+esc(n)+'</option>').join('')+'</select>'+
+      '<label>Definition</label><div class="cq-drop" data-slot="'+c.id+'">Drag a definition here</div>'+
+      '<div class="cq-layer"></div><div class="cq-fix"></div></div>';
+    grid.appendChild(it);
+  });
+  grid.querySelectorAll('.cq-drop').forEach(wireDrop);
+  bank.innerHTML='';
+  shuffle(round.map(c=>c.id)).forEach(id=>bank.appendChild(defEl(id)));
+  res.className='cq-result';res.innerHTML='';
+  $('#check').disabled=false;
+  stat();
+}
+
+function wireDrop(z){
+  z.addEventListener('dragover',e=>{if(checked)return;e.preventDefault();z.classList.add('over');});
+  z.addEventListener('dragleave',()=>z.classList.remove('over'));
+  z.addEventListener('drop',e=>{e.preventDefault();z.classList.remove('over');if(checked)return;const id=e.dataTransfer.getData('text/plain');if(BYID[id])place(id,z.dataset.slot);});
+  z.addEventListener('click',()=>{if(checked||!selDef||z.classList.contains('filled'))return;place(selDef,z.dataset.slot);});
+}
+function zoneFor(slot){return grid.querySelector('.cq-drop[data-slot="'+slot+'"]');}
+function slotOf(id){for(const s in placed) if(placed[s]===id) return s; return null;}
+function place(id,slot){
+  const from=slotOf(id); if(from===slot) return;
+  if(from){ delete placed[from]; emptyZone(from); }
+  const prev=placed[slot]; if(prev){ delete placed[slot]; bank.appendChild(defEl(prev)); }
+  const old=document.querySelector('.cq-def[data-id="'+id+'"]'); if(old) old.remove();
+  const z=zoneFor(slot); z.innerHTML=''; z.classList.add('filled'); z.appendChild(defEl(id));
+  placed[slot]=id; selectDef(null);
+}
+function emptyZone(slot){const z=zoneFor(slot);z.innerHTML='Drag a definition here';z.classList.remove('filled','ok','bad');}
+function unplace(id){const s=slotOf(id);if(!s)return;delete placed[s];emptyZone(s);const old=document.querySelector('.cq-def[data-id="'+id+'"]');if(old)old.remove();bank.appendChild(defEl(id));selectDef(null);}
+
+// bank accepts drops too (return a definition)
+bank.addEventListener('dragover',e=>{if(checked)return;e.preventDefault();bank.classList.add('over');});
+bank.addEventListener('dragleave',()=>bank.classList.remove('over'));
+bank.addEventListener('drop',e=>{e.preventDefault();bank.classList.remove('over');if(checked)return;const id=e.dataTransfer.getData('text/plain');if(BYID[id])unplace(id);});
+
+function check(){
+  const items=[...grid.querySelectorAll('.cq-item')];
+  const missingName=items.filter(it=>!it.querySelector('.cq-sel').value).length;
+  const missingDef=round.length-Object.keys(placed).length;
+  if(missingName||missingDef){
+    res.className='cq-result part show';
+    res.innerHTML='<h2>Not finished yet</h2><p>'+(missingName?missingName+' card'+(missingName>1?'s still need':' still needs')+' a name. ':'')+(missingDef?missingDef+' definition'+(missingDef>1?'s are':' is')+' still in the bank.':'')+'</p>';
+    return;
+  }
+  checked=true; let score=0;
+  items.forEach(it=>{
+    const c=BYID[it.dataset.id], sel=it.querySelector('.cq-sel'), z=it.querySelector('.cq-drop');
+    const nOK=sel.value===c.name, dOK=placed[c.id]===c.id;
+    score+=(nOK?1:0)+(dOK?1:0);
+    sel.classList.add(nOK?'ok':'bad'); sel.disabled=true;
+    z.classList.add(dOK?'ok':'bad');
+    it.classList.add(nOK&&dOK?'ok':'bad');
+    it.querySelector('.cq-mark').innerHTML=nOK&&dOK?'<span style="color:var(--ok)">✓</span>':'<span style="color:var(--bad)">✕</span>';
+    const ly=it.querySelector('.cq-layer');ly.textContent=c.layer;ly.classList.add('show');
+    if(!(nOK&&dOK)){
+      const f=it.querySelector('.cq-fix');
+      f.innerHTML=(nOK?'':'<div><b>Name:</b> this is a <b style="color:var(--ink)">'+esc(c.name)+'</b>.</div>')+
+                  (dOK?'':'<div><b>Definition:</b> '+esc(c.def)+'</div>');
+      f.classList.add('show');
+    }
+  });
+  grid.querySelectorAll('.cq-def').forEach(d=>d.draggable=false);
+  const max=round.length*2, k='best'+N;
+  ST.rounds++; if(ST[k]==null||score>ST[k]) ST[k]=score; save(); stat();
+  const pct=Math.round(score/max*100);
+  res.className='cq-result show'+(pct<100?' part':'');
+  res.innerHTML='<h2>'+score+' / '+max+' ('+pct+'%)</h2><p>'+
+    (pct===100?'Perfect — every name and definition matched. Try <b>All 12</b> if you haven\'t yet.':
+     pct>=70?'Good work. Read the corrections on the red cards, then press <b>New round</b>.':
+     'Have a look at the <b>Study cards</b> tab, then try a new round.')+
+    '</p><p style="font-size:13px;color:var(--muted)">One mark for each correct name and one for each correct definition.</p>';
+  $('#check').disabled=true;
+  res.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function buildStudy(){
+  $('#study').innerHTML=COMP.map(c=>'<div class="cq-scard">'+symSVG(c.sym)+'<div><h3>'+esc(c.name)+'</h3><div class="cq-l">'+esc(c.layer)+'</div><p>'+esc(c.def)+'</p></div></div>').join('');
+}
+
+$('#check').onclick=check;
+$('#newR').onclick=newRound;
+document.querySelectorAll('#size button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('#size button').forEach(x=>x.classList.toggle('on',x===b));N=+b.dataset.n;newRound();});
+document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('#tabs button').forEach(x=>x.classList.toggle('on',x===b));
+  const q=b.dataset.t==='quiz';
+  $('#quizView').classList.toggle('cq-hide',!q);$('#studyView').classList.toggle('cq-hide',q);
+  ['#size','#check','#newR'].forEach(s=>$(s).classList.toggle('cq-hide',!q));
+});
+document.addEventListener('click',e=>{if(selDef&&!e.target.closest('.cq-drop,.cq-def'))selectDef(null);});
+
+buildStudy();newRound();
+})();
+</script>
+
+<script>window.__WB_KEY__="network-components-quiz";</script>
+<script>/* ============================================================
+   Oldham Cisco Labs — shared Whiteboard overlay.
+   Self-contained: injects its own CSS + DOM, persists per lab,
+   independent of the lab's own device switching. Styled after a
+   classroom whiteboard (aluminium frame, magnets, marker tray).
+   Toggle with window.wbToggle(). Set window.__WB_KEY__ per page.
+   ============================================================ */
+(function(){
+  'use strict';
+  if(window.__wbInit) return; window.__wbInit=true;
+  var KEY='wb-notes-'+(window.__WB_KEY__||'lab');
+  var W=1100, H=680; // fixed drawing resolution (persisted at this size)
+  var COLOURS={black:'#1c1c1c', blue:'#1d55c4', red:'#d7352b', green:'#1e8f45'};
+
+  var css=''+
+  '.wb-overlay{position:fixed;inset:0;z-index:9000;background:#2daaa4;display:none;flex-direction:column;padding:env(safe-area-inset-top,0) 0 0}'+
+  '.wb-overlay.open{display:flex}'+
+  '.wb-top{display:flex;align-items:center;gap:12px;padding:10px 16px;color:#eafaf8}'+
+  '.wb-top b{font:700 16px "Chivo",system-ui,sans-serif}'+
+  '.wb-top .sp{flex:1}'+
+  '.wb-top button{font:600 13px "Chivo",system-ui,sans-serif;border:0;border-radius:8px;padding:9px 14px;cursor:pointer;background:rgba(255,255,255,.18);color:#fff}'+
+  '.wb-top button:hover{background:rgba(255,255,255,.3)}'+
+  '.wb-stage{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:6px 16px 18px}'+
+  '.wb-frame{position:relative;width:min(1100px,100%);max-height:100%;aspect-ratio:1100/680;'+
+    'background:linear-gradient(#e9ecee,#c3c8cc 45%,#aeb4b8);border-radius:10px;padding:14px;'+
+    'box-shadow:0 14px 40px rgba(0,0,0,.35);border:1px solid #9aa0a4}'+
+  '.wb-inner{position:relative;width:100%;height:100%;background:#fff;border-radius:3px;box-shadow:inset 0 0 0 1px #d7dadd, inset 0 2px 8px rgba(0,0,0,.06);overflow:hidden}'+
+  '.wb-canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:crosshair;display:block}'+
+  '.wb-corner{position:absolute;width:30px;height:30px;background:#2b2f33;z-index:3}'+
+  '.wb-corner.tl{top:-2px;left:-2px;border-radius:9px 0 14px 0}'+
+  '.wb-corner.tr{top:-2px;right:-2px;border-radius:0 9px 0 14px}'+
+  '.wb-corner.bl{bottom:-2px;left:-2px;border-radius:0 14px 0 9px}'+
+  '.wb-corner.br{bottom:-2px;right:-2px;border-radius:14px 0 9px 0}'+
+  '.wb-mag{position:absolute;top:16px;right:18px;display:flex;flex-direction:column;gap:9px;z-index:4}'+
+  '.wb-mag i{width:19px;height:19px;border-radius:50%;box-shadow:0 2px 3px rgba(0,0,0,.3);background:radial-gradient(circle at 32% 30%, rgba(255,255,255,.75), transparent 45%)}'+
+  '.wb-tray{position:absolute;left:0;right:0;bottom:-13px;height:20px;background:linear-gradient(#c7cccf,#a6acb0);border-radius:0 0 7px 7px;z-index:2;box-shadow:0 5px 8px rgba(0,0,0,.18)}'+
+  '.wb-tools{position:absolute;left:18px;bottom:-6px;display:flex;align-items:flex-end;gap:10px;z-index:5}'+
+  '.wb-sponge{width:54px;height:30px;border-radius:5px;background:linear-gradient(#f3d58b,#e0b64e);border:1px solid #c69a3a;box-shadow:0 2px 4px rgba(0,0,0,.25);cursor:pointer;position:relative}'+
+  '.wb-sponge::after{content:"";position:absolute;left:0;right:0;bottom:0;height:11px;background:#6f706f;border-radius:0 0 5px 5px}'+
+  '.wb-pen{width:66px;height:15px;border-radius:3px;cursor:pointer;position:relative;box-shadow:0 2px 4px rgba(0,0,0,.25);transition:transform .1s}'+
+  '.wb-pen::before{content:"";position:absolute;right:-9px;top:1px;border-left:12px solid rgba(0,0,0,.35);border-top:6px solid transparent;border-bottom:6px solid transparent}'+
+  '.wb-pen .cap{position:absolute;left:0;top:0;bottom:0;width:16px;border-radius:3px 0 0 3px;background:rgba(0,0,0,.25)}'+
+  '.wb-tool{outline:0}'+
+  '.wb-tool.on{transform:translateY(-10px)}'+
+  '.wb-sponge.on{transform:translateY(-8px)}'+
+  '.wb-panel{display:flex;align-items:center;gap:10px;padding:6px 16px 0;color:#eafaf8;font:500 12.5px "Chivo",system-ui,sans-serif;flex-wrap:wrap;justify-content:center}'+
+  '.wb-panel label{display:flex;align-items:center;gap:6px}'+
+  '.wb-panel input[type=range]{accent-color:#fff}'+
+  '.wb-hint{opacity:.85}'+
+  '@media (max-width:620px){.wb-tools{left:8px;gap:6px}.wb-pen{width:48px}.wb-sponge{width:42px}}';
+
+  var sel=document.createElement('style'); sel.textContent=css; document.head.appendChild(sel);
+
+  var ov=document.createElement('div'); ov.className='wb-overlay'; ov.setAttribute('role','dialog'); ov.setAttribute('aria-label','Whiteboard');
+  ov.innerHTML=''+
+    '<div class="wb-top"><b>Whiteboard</b><span class="wb-hint">Your notes stay here while you work — they persist across devices and tabs.</span><span class="sp"></span>'+
+      '<button type="button" class="wb-save">Save PNG</button><button type="button" class="wb-clear">Clear board</button><button type="button" class="wb-close">Close ✕</button></div>'+
+    '<div class="wb-panel"><label>Pen size <input type="range" class="wb-size" min="2" max="10" value="4"></label><span class="wb-hint">Pick a marker or the sponge below · click a marker to change colour</span></div>'+
+    '<div class="wb-stage"><div class="wb-frame"><span class="wb-corner tl"></span><span class="wb-corner tr"></span><span class="wb-corner bl"></span><span class="wb-corner br"></span>'+
+      '<div class="wb-mag"><i style="background-color:#e0463c"></i><i style="background-color:#2fa54e"></i><i style="background-color:#f0b429"></i><i style="background-color:#e67a22"></i><i style="background-color:#2d63d6"></i></div>'+
+      '<div class="wb-inner"><canvas class="wb-canvas" width="'+W+'" height="'+H+'"></canvas></div>'+
+      '<div class="wb-tray"></div>'+
+      '<div class="wb-tools">'+
+        '<button class="wb-sponge wb-tool" data-tool="eraser" title="Eraser (sponge)" aria-label="Eraser"></button>'+
+        '<button class="wb-pen wb-tool on" data-tool="green" title="Green marker" aria-label="Green marker" style="background:#1e8f45"><span class="cap"></span></button>'+
+        '<button class="wb-pen wb-tool" data-tool="blue" title="Blue marker" aria-label="Blue marker" style="background:#1d55c4"><span class="cap"></span></button>'+
+        '<button class="wb-pen wb-tool" data-tool="red" title="Red marker" aria-label="Red marker" style="background:#d7352b"><span class="cap"></span></button>'+
+        '<button class="wb-pen wb-tool" data-tool="black" title="Black marker" aria-label="Black marker" style="background:#1c1c1c"><span class="cap"></span></button>'+
+      '</div>'+
+    '</div></div>';
+  document.body.appendChild(ov);
+
+  var canvas=ov.querySelector('.wb-canvas'), ctx=canvas.getContext('2d');
+  var tool='green', size=4, drawing=false, last=null, saveT=null, dirty=false;
+  ctx.lineCap='round'; ctx.lineJoin='round';
+
+  function load(){ try{ var d=localStorage.getItem(KEY); if(d){ var img=new Image(); img.onload=function(){ ctx.clearRect(0,0,W,H); ctx.drawImage(img,0,0,W,H); }; img.src=d; } }catch(e){} }
+  function save(){ try{ localStorage.setItem(KEY, canvas.toDataURL('image/png')); }catch(e){} }
+  function scheduleSave(){ clearTimeout(saveT); saveT=setTimeout(save,500); }
+
+  function pos(e){ var r=canvas.getBoundingClientRect(); return {x:(e.clientX-r.left)*(W/r.width), y:(e.clientY-r.top)*(H/r.height)}; }
+  function start(e){ drawing=true; last=pos(e); e.preventDefault(); stroke(e); }
+  function stroke(e){ if(!drawing) return; var p=pos(e);
+    ctx.globalCompositeOperation = tool==='eraser' ? 'destination-out' : 'source-over';
+    ctx.strokeStyle = tool==='eraser' ? 'rgba(0,0,0,1)' : COLOURS[tool];
+    ctx.lineWidth = tool==='eraser' ? 34 : size;
+    ctx.beginPath(); ctx.moveTo(last.x,last.y); ctx.lineTo(p.x,p.y); ctx.stroke(); last=p; dirty=true; }
+  function end(){ if(drawing){ drawing=false; if(dirty){ scheduleSave(); dirty=false; } } }
+  canvas.addEventListener('pointerdown',function(e){ canvas.setPointerCapture&&canvas.setPointerCapture(e.pointerId); start(e); });
+  canvas.addEventListener('pointermove',stroke);
+  canvas.addEventListener('pointerup',end); canvas.addEventListener('pointercancel',end); canvas.addEventListener('pointerleave',function(){ if(drawing){ /* keep drawing only while down */ } });
+  window.addEventListener('pointerup',end);
+
+  ov.querySelectorAll('.wb-tool').forEach(function(b){ b.addEventListener('click',function(){
+    tool=b.dataset.tool;
+    ov.querySelectorAll('.wb-tool').forEach(function(x){ x.classList.toggle('on',x===b); });
+  }); });
+  ov.querySelector('.wb-size').addEventListener('input',function(e){ size=+e.target.value; });
+  ov.querySelector('.wb-clear').addEventListener('click',function(){ ctx.clearRect(0,0,W,H); save(); });
+  ov.querySelector('.wb-close').addEventListener('click',function(){ ov.classList.remove('open'); });
+  ov.querySelector('.wb-save').addEventListener('click',function(){
+    try{ var a=document.createElement('a'); a.download='whiteboard-'+(window.__WB_KEY__||'notes')+'.png'; a.href=canvas.toDataURL('image/png'); document.body.appendChild(a); a.click(); a.remove(); }catch(e){} });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&ov.classList.contains('open')) ov.classList.remove('open'); });
+
+  window.wbToggle=function(){ ov.classList.toggle('open'); };
+  load();
+})();
+</script>
+<script>
+(function(){
+  function updThemeBtn(){var b=document.getElementById('themeBtn');if(!b)return;var dark=document.documentElement.getAttribute('data-theme')==='dark'||(!document.documentElement.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme:dark)').matches);b.innerHTML=dark?'☀️ <span class="lbl">Light</span>':'🌙 <span class="lbl">Dark</span>';}
+  function updTermBtn(){var b=document.getElementById('termBtn');if(!b)return;var w=document.documentElement.classList.contains('tt-white');b.innerHTML='⌨️ <span class="lbl">'+(w?'White':'Green')+'</span>';}
+  window.toggleTheme=function(){var d=document.documentElement;var cur=d.getAttribute('data-theme');var sys=matchMedia('(prefers-color-scheme:dark)').matches;var nx=(cur==='dark'||(!cur&&sys))?'light':'dark';d.setAttribute('data-theme',nx);try{localStorage.setItem('labs-theme',nx);}catch(e){}updThemeBtn();};
+  window.toggleTerm=function(){var d=document.documentElement;d.classList.toggle('tt-white');try{localStorage.setItem('labs-term',d.classList.contains('tt-white')?'white':'green');}catch(e){}updTermBtn();};
+  function init(){updThemeBtn();updTermBtn();}
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+})();
+</script>
+</body></html>

@@ -1,0 +1,1635 @@
+<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><link rel="icon" href="favicon.svg" type="image/svg+xml"><script>try{var t=localStorage.getItem("labs-theme");if(t)document.documentElement.setAttribute("data-theme",t);if(localStorage.getItem("labs-term")==="white")document.documentElement.classList.add("tt-white");}catch(e){}</script><script>/* ============================================================
+   Network topology symbols — shared across every activity.
+   Original SVG drawings in the conventional Cisco/Packet Tracer
+   topology style (functional diagram symbols). viewBox 0 0 64 64,
+   device centred. Two-tone: light body + Cisco-blue outline, so
+   they read on both light and dark stages.
+   Use:  <svg viewBox="0 0 64 64">  + NETSYM[type]  </svg>
+============================================================ */
+(function(){
+  // palette (fixed so icons look identical on every page/theme)
+  var B='#cfe7f5',   // body fill
+      L='#0a7cad',   // outline
+      A='#0a9ad4',   // accent fill
+      D='#07485f',   // deep accent
+      W='#ffffff';
+  function arrow(d){ return '<path d="'+d+'" fill="none" stroke="'+W+'" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>'; }
+
+  var S={};
+
+  // ---- Router: 3-D cylinder with the classic 4-way arrows on top ----
+  S.router =
+   '<path d="M8 34 v4 a24 8 0 0 0 48 0 v-4" fill="'+L+'"/>'+
+   '<ellipse cx="32" cy="34" rx="24" ry="8.5" fill="'+A+'" stroke="'+L+'" stroke-width="2"/>'+
+   // 4-way arrows (left,right,up,down) on the top face
+   arrow('M20 34 h9 m-3.5 -3 l3.5 3 -3.5 3')+        // right
+   arrow('M44 34 h-9 m3.5 -3 l-3.5 3 3.5 3')+        // left
+   arrow('M32 27.5 v-3 M29.5 26 l2.5 -2.5 2.5 2.5')+ // up (small)
+   arrow('M32 40.5 v3 M29.5 42 l2.5 2.5 2.5 -2.5');  // down (small)
+
+  // ---- Switch: flat 3-D slab with 4 parallel arrows (2 each way) ----
+  S['switch'] =
+   '<path d="M10 30 L22 22 H58 L46 30 Z" fill="'+A+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>'+   // top face
+   '<path d="M10 30 H46 V40 H10 Z" fill="'+B+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>'+          // front
+   '<path d="M46 30 L58 22 V32 L46 40 Z" fill="'+L+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>'+    // side
+   arrow('M16 33 h16 m-4 -2.5 l4 2.5 -4 2.5')+
+   arrow('M40 37 h-16 m4 -2.5 l-4 2.5 4 2.5');
+
+  // ---- Multilayer (L3) switch: slab + routing ring ----
+  S.l3switch =
+   '<path d="M10 32 L22 24 H58 L46 32 Z" fill="'+A+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>'+
+   '<path d="M10 32 H46 V42 H10 Z" fill="'+B+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>'+
+   '<path d="M46 32 L58 24 V34 L46 42 Z" fill="'+L+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>'+
+   arrow('M16 35 h12 m-3.5 -2.5 l3.5 2.5 -3.5 2.5')+
+   arrow('M40 39 h-12 m3.5 -2.5 l-3.5 2.5 3.5 2.5')+
+   '<circle cx="47" cy="20" r="9" fill="'+W+'" stroke="'+L+'" stroke-width="2"/>'+
+   arrow('M43 20 h8 m-2.5 -2.5 l2.5 2.5 -2.5 2.5').replace(/#ffffff/,L);
+
+  // ---- PC / desktop: monitor + tower ----
+  S.pc =
+   '<rect x="12" y="14" width="34" height="24" rx="2" fill="'+B+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<rect x="16" y="18" width="26" height="16" rx="1" fill="'+A+'"/>'+
+   '<rect x="25" y="38" width="8" height="5" fill="#9bbdd4"/>'+
+   '<rect x="18" y="43" width="22" height="4" rx="2" fill="'+L+'"/>'+
+   '<rect x="48" y="20" width="12" height="27" rx="2" fill="'+B+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<circle cx="54" cy="25" r="1.6" fill="'+L+'"/><path d="M51 42 h6" stroke="'+L+'" stroke-width="2"/>';
+
+  // ---- Laptop ----
+  S.laptop =
+   '<path d="M16 16 h32 v20 h-32 Z" fill="'+B+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<rect x="19" y="19" width="26" height="14" rx="1" fill="'+A+'"/>'+
+   '<path d="M10 44 L16 36 h32 l6 8 Z" fill="'+B+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>'+
+   '<path d="M27 40 h10" stroke="'+L+'" stroke-width="2" stroke-linecap="round"/>';
+
+  // ---- Server ----
+  S.server =
+   '<rect x="20" y="10" width="24" height="44" rx="3" fill="'+B+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<rect x="24" y="15" width="16" height="7" rx="1" fill="'+A+'"/><circle cx="41" cy="18.5" r="1.4" fill="'+W+'"/>'+
+   '<rect x="24" y="25" width="16" height="7" rx="1" fill="'+A+'"/><circle cx="41" cy="28.5" r="1.4" fill="'+W+'"/>'+
+   '<rect x="24" y="35" width="16" height="7" rx="1" fill="'+A+'"/><circle cx="41" cy="38.5" r="1.4" fill="'+W+'"/>'+
+   '<path d="M25 48 h14" stroke="'+L+'" stroke-width="2" stroke-linecap="round"/>';
+
+  // ---- Firewall: brick wall ----
+  S.firewall =
+   '<rect x="8" y="16" width="48" height="32" rx="2" fill="'+B+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<g stroke="'+L+'" stroke-width="2">'+
+   '<path d="M8 27 h48 M8 37 h48"/>'+
+   '<path d="M24 16 v11 M40 16 v11"/>'+        // top row bricks
+   '<path d="M16 27 v10 M32 27 v10 M48 27 v10"/>'+ // mid row offset
+   '<path d="M24 37 v11 M40 37 v11"/>'+        // bottom row
+   '</g>';
+
+  // ---- Access point: puck + radio waves ----
+  S.ap =
+   '<ellipse cx="32" cy="42" rx="22" ry="7" fill="'+B+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<rect x="30" y="20" width="4" height="18" rx="2" fill="'+L+'"/>'+
+   '<circle cx="32" cy="18" r="3.5" fill="'+A+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<g fill="none" stroke="'+A+'" stroke-width="2.4" stroke-linecap="round">'+
+   '<path d="M22 14 a14 14 0 0 1 20 0"/><path d="M26 18 a9 9 0 0 1 12 0"/></g>';
+
+  // ---- IP phone ----
+  S.phone =
+   '<path d="M18 12 h24 a4 4 0 0 1 4 4 v30 a4 4 0 0 1 -4 4 h-24 a4 4 0 0 1 -4 -4 v-30 a4 4 0 0 1 4 -4 Z" fill="'+B+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<rect x="19" y="17" width="22" height="13" rx="1" fill="'+A+'"/>'+
+   '<g fill="'+L+'"><circle cx="23" cy="36" r="2"/><circle cx="30" cy="36" r="2"/><circle cx="37" cy="36" r="2"/><circle cx="23" cy="43" r="2"/><circle cx="30" cy="43" r="2"/><circle cx="37" cy="43" r="2"/></g>';
+
+  // ---- Printer ----
+  S.printer =
+   '<rect x="18" y="12" width="28" height="12" rx="1" fill="'+B+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<rect x="10" y="24" width="44" height="18" rx="3" fill="'+A+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<rect x="20" y="36" width="24" height="14" rx="1" fill="'+W+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<circle cx="48" cy="30" r="2" fill="'+W+'"/>';
+
+  // ---- Cloud (internet / WAN) ----
+  S.cloud =
+   '<path d="M16 46 a12 12 0 0 1 1 -24 a15 14 0 0 1 28 -4 a12 12 0 0 1 4 28 Z" fill="'+B+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>';
+
+  // ---- Hub: plain 3-D box with vertical slats (no arrows — it just repeats) ----
+  S.hub =
+   '<path d="M14 24 L24 17 H54 L44 24 Z" fill="'+A+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>'+
+   '<path d="M14 24 H44 V46 H14 Z" fill="'+B+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>'+
+   '<path d="M44 24 L54 17 V39 L44 46 Z" fill="'+L+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>'+
+   '<path d="M20 29v12M26 29v12M32 29v12M38 29v12" stroke="'+L+'" stroke-width="2.4" stroke-linecap="round"/>';
+
+  // aliases
+  S.multiswitch=S.l3switch; S.asa=S.firewall; S.internet=S.cloud; S.desktop=S.pc;
+
+  window.NETSYM=S;
+})();
+</script>
+<style>[hidden]{display:none!important}body{margin:0}</style>
+<title>ASA Firewall Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#eef5f9; --panel:#fff; --ink:#132430; --muted:#5a6b78; --line:#cfe0ec; --accent:#0a9ad4; --accent-dark:#0a7cad; --accent-soft:#d6f1fb;
+  --ok:#1a9c5b; --oks:#e7f6ec; --bad:#d23d3d; --bads:#fbe9e9; --warn:#e68a00;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace; --display:"Chivo",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#081219;--panel:#10212c;--ink:#dcebf3;--muted:#8fa6b4;--line:#223644;--accent:#2cb8e8;--accent-dark:#6fd2f2;--accent-soft:#06344a;--oks:#13331f;--bads:#3a1c1c;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#081219;--panel:#10212c;--ink:#dcebf3;--muted:#8fa6b4;--line:#223644;--accent:#2cb8e8;--accent-dark:#6fd2f2;--accent-soft:#06344a;--oks:#13331f;--bads:#3a1c1c;color-scheme:dark}
+*{box-sizing:border-box}html,body{background:var(--bg);color:var(--ink)}body{margin:0;font:14px/1.5 var(--display)}
+button{font:inherit;color:inherit}:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.app{max-width:980px;margin:0 auto;padding:18px 16px 44px}
+.eyebrow{font:600 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--accent-dark)}
+h1{font:800 clamp(24px,4vw,32px)/1.05 var(--display);margin:6px 0 0}
+.lead{color:var(--muted);margin:8px 0 0;max-width:76ch}
+.card{border:1px solid var(--line);background:var(--panel);border-radius:12px;padding:16px;margin-bottom:14px}
+.card h2{font:800 18px var(--display);margin:0 0 4px}.card h3{font:700 12px var(--display);margin:14px 0 6px;color:var(--accent-dark);text-transform:uppercase;letter-spacing:.04em}
+.ref{font-size:13.5px}
+.levels{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0}
+.lvl{border:1px solid var(--line);border-radius:10px;padding:11px 12px;text-align:center}
+.lvl .n{font:800 22px var(--mono)}.lvl b{display:block;font:700 13px var(--display)}.lvl span{font-size:12px;color:var(--muted)}
+.lvl.in{border-color:var(--ok)}.lvl.in .n{color:var(--ok)}
+.lvl.dmz{border-color:var(--warn)}.lvl.dmz .n{color:var(--warn)}
+.lvl.out{border-color:var(--bad)}.lvl.out .n{color:var(--bad)}
+.rule{border-left:3px solid var(--accent);background:var(--accent-soft);border-radius:0 8px 8px 0;padding:8px 12px;margin:7px 0;font-size:13.5px}
+.rule b{color:var(--accent-dark)}
+.acl{font:600 13px/1.5 var(--mono);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:8px 0}
+.acl .p{color:var(--ok);font-weight:700}.acl .d{color:var(--bad);font-weight:700}
+.btn{font:600 13px var(--display);border:1px solid var(--line);background:var(--panel);color:var(--ink);padding:9px 14px;border-radius:8px;cursor:pointer}
+.btn:hover{border-color:var(--accent)}.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}.btn.primary:hover{background:var(--accent-dark)}.btn:disabled{opacity:.5;cursor:default}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.scorebar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.badge{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:3px 11px;font:600 12px var(--mono);color:var(--muted)}
+.prog{height:6px;background:var(--line);border-radius:3px;overflow:hidden;flex:1;min-width:120px}.prog i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+.score{font:800 16px var(--display)}
+.q .stem{font-weight:700;margin:2px 0 4px;font-size:15px}
+.q .stem .ip{font:700 15px var(--mono);color:var(--accent-dark)}
+.flow{font:700 14px var(--mono);background:var(--accent-soft);border:1px solid var(--line);border-radius:8px;padding:9px 12px;margin:8px 0;display:inline-block}
+.opts{display:grid;gap:7px;margin-top:9px}
+.opt{border:1px solid var(--line);background:var(--panel);border-radius:9px;padding:10px 12px;cursor:pointer;text-align:left;font:600 13.5px var(--display)}
+.opt .mono{font-family:var(--mono)}
+.opt:hover{border-color:var(--accent)}.opt.sel{border-color:var(--accent);background:var(--accent-soft)}
+.opt.right{border-color:var(--ok);background:var(--oks)}.opt.wrong{border-color:var(--bad);background:var(--bads)}
+.fb{margin-top:10px;border-radius:9px;padding:10px 13px;font-size:13.5px;display:none}.fb.show{display:block}
+.fb.ok{background:var(--oks);border:1px solid var(--ok)}.fb.no{background:var(--bads);border:1px solid var(--bad)}
+
+/* ===================== tabs ===================== */
+.app.wide{max-width:1560px}
+.fx-tabs{display:flex;gap:6px;margin:16px 0 14px;border-bottom:2px solid var(--line);flex-wrap:wrap}
+.fx-tab{border:1px solid var(--line);border-bottom:0;background:transparent;padding:10px 16px 9px;border-radius:10px 10px 0 0;font:700 14px var(--display);cursor:pointer;color:var(--muted);margin-bottom:-2px;display:flex;align-items:center;gap:8px}
+.fx-tab:hover{color:var(--ink)}
+.fx-tab .n{font:700 11px/1 var(--mono);background:var(--line);color:var(--ink);border-radius:999px;padding:4px 7px}
+.fx-tab.on{color:var(--accent-dark);background:var(--panel);border-color:var(--line);border-bottom:2px solid var(--panel)}
+.fx-tab.on .n{background:var(--accent);color:#fff}
+.fx-hide{display:none!important}
+.mono{font-family:var(--mono)}
+.fx-sub{color:var(--muted);font-size:13.5px;margin:2px 0 10px}
+.fx-seg{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:var(--panel)}
+.fx-seg button{border:0;background:transparent;padding:8px 13px;font:600 13px var(--display);cursor:pointer;color:var(--ink)}
+.fx-seg button+button{border-left:1px solid var(--line)}
+.fx-seg button.on{background:var(--accent);color:#fff}
+.fx-pill{display:inline-block;font:600 11.5px var(--mono);border-radius:999px;padding:2px 9px;border:1px solid var(--line);color:var(--muted)}
+.fx-pill.ok{border-color:var(--ok);color:var(--ok);background:var(--oks)}
+.fx-pill.bad{border-color:var(--bad);color:var(--bad);background:var(--bads)}
+
+/* ===================== rule practice ===================== */
+.fx-scn{font:700 16px/1.45 var(--display);background:var(--accent-soft);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:0 10px 10px 0;padding:12px 14px;margin:10px 0 12px}
+.fx-scn .mono{font-size:15px;color:var(--accent-dark)}
+.fx-net{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--muted);margin:4px 0 0}
+.fx-net b{color:var(--ink);font-weight:700}
+.fx-bld{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px 12px;margin-top:6px}
+.fx-f{display:flex;flex-direction:column;gap:4px}
+.fx-f>label{font:700 11px var(--display);text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.fx-f.wide{grid-column:span 2}
+.fx-in,.fx-sel{font:600 13.5px var(--mono);border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:8px;padding:7px 9px;width:100%;min-width:0}
+.fx-sel{font-family:var(--display);cursor:pointer}
+.fx-in.bad,.fx-sel.bad{border-color:var(--bad);background:var(--bads)}
+.fx-in.ok,.fx-sel.ok{border-color:var(--ok);background:var(--oks)}
+.fx-pair{display:flex;gap:6px}
+.fx-prev{margin-top:12px;background:#071a0e;color:#45dd68;border-radius:9px;padding:10px 13px;font:600 13.5px/1.6 var(--mono);overflow-x:auto;white-space:pre}
+.fx-prev .c{color:#7fae8c}
+.fx-type{width:100%;font:600 14px var(--mono);border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:8px;padding:9px 11px}
+.fx-fb{margin-top:12px;border-radius:10px;padding:10px 14px;font-size:13.5px;display:none}
+.fx-fb.show{display:block}.fx-fb.ok{background:var(--oks);border:1px solid var(--ok)}.fx-fb.no{background:var(--bads);border:1px solid var(--bad)}.fx-fb.info{background:var(--accent-soft);border:1px solid var(--accent)}
+.fx-fb ul{margin:6px 0 0;padding-left:20px}.fx-fb li{margin:2px 0}
+.fx-fb code{font:600 12.5px var(--mono)}
+/* order puzzle */
+.fx-acl{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:6px}
+.fx-ace{display:flex;align-items:center;gap:10px;border:1px solid var(--line);background:var(--panel);border-radius:9px;padding:7px 9px;font:600 13px var(--mono);cursor:grab;transition:background .15s,border-color .15s}
+.fx-ace.drag{opacity:.4}.fx-ace.over{border-color:var(--accent);box-shadow:0 -3px 0 var(--accent)}
+.fx-ace .no{flex:none;width:24px;height:24px;border-radius:6px;background:var(--accent-soft);color:var(--accent-dark);display:grid;place-items:center;font-size:12px}
+.fx-ace .tx{flex:1;overflow-wrap:anywhere}
+.fx-ace .tx .p{color:var(--ok)}.fx-ace .tx .d{color:var(--bad)}
+.fx-ace .mv{display:flex;gap:4px}
+.fx-ace .mv button{border:1px solid var(--line);background:var(--panel);border-radius:6px;width:28px;height:26px;cursor:pointer;color:var(--ink)}
+.fx-ace .mv button:hover{border-color:var(--accent)}
+.fx-ace.hit-p{border-color:var(--ok);background:var(--oks)}.fx-ace.hit-d{border-color:var(--bad);background:var(--bads)}
+.fx-ace.imp{cursor:default;color:var(--muted);border-style:dashed}
+.fx-tests{width:100%;border-collapse:collapse;margin-top:12px;font-size:13px}
+.fx-tests th{text-align:left;font:700 11px var(--display);text-transform:uppercase;letter-spacing:.04em;color:var(--muted);border-bottom:1px solid var(--line);padding:6px 8px}
+.fx-tests td{border-bottom:1px solid var(--line);padding:6px 8px;vertical-align:top}
+.fx-tests td.m{font:600 12.5px var(--mono)}
+.fx-tests tr.pass td:last-child{color:var(--ok);font-weight:800}.fx-tests tr.fail td:last-child{color:var(--bad);font-weight:800}
+
+/* ===================== configure tab ===================== */
+.fx-bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.fx-bar .sp{flex:1}
+.fx-task{margin-top:12px}
+.fx-task h2{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.fx-brief{font-size:13.5px;margin:4px 0 8px;max-width:110ch}
+.fx-objs{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:7px}
+.fx-obj{border:1px solid var(--line);border-radius:9px;padding:7px 10px 7px 34px;position:relative;font-size:13px;background:var(--panel)}
+.fx-obj::before{content:"";position:absolute;left:10px;top:9px;width:15px;height:15px;border-radius:50%;border:2px solid var(--line)}
+.fx-obj.done{border-color:var(--ok);background:var(--oks)}
+.fx-obj.done::before{background:var(--ok);border-color:var(--ok)}
+.fx-obj.done::after{content:"✓";position:absolute;left:13px;top:6px;color:#fff;font:800 12px var(--display)}
+.fx-obj.cur{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft)}
+.fx-obj b{font-weight:700}
+.fx-obj .auto{font:600 10.5px var(--mono);color:var(--accent-dark);margin-left:6px}
+.fx-obj details{margin-top:4px}
+.fx-obj summary{cursor:pointer;color:var(--accent-dark);font:600 12px var(--display)}
+.fx-obj .why{color:var(--muted);font-size:12.5px;margin:3px 0}
+.fx-cmds{font:600 12.5px/1.55 var(--mono);background:#071a0e;color:#9dffc2;border-radius:7px;padding:7px 10px;margin-top:5px;white-space:pre;overflow-x:auto}
+.fx-done{display:none;margin-top:10px;border:1px solid var(--ok);background:var(--oks);border-radius:10px;padding:10px 14px}
+.fx-done.show{display:block}
+.fx-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;margin-top:14px;align-items:start}
+@media (max-width:1050px){.fx-grid{grid-template-columns:1fr}}
+.fx-tcard{border:1px solid var(--line);background:var(--panel);border-radius:12px;overflow:hidden}
+.fx-thead{display:flex;align-items:center;gap:8px;padding:8px 10px;border-bottom:1px solid var(--line);font:700 13px var(--display)}
+.fx-thead .sp{flex:1}
+.fx-ib{border:1px solid var(--line);background:var(--panel);border-radius:7px;padding:5px 9px;font:600 12px var(--display);cursor:pointer;color:var(--ink)}
+.fx-ib:hover{border-color:var(--accent)}
+.fx-stage{position:relative;background:radial-gradient(circle,rgba(10,124,173,.13) 1px,transparent 1.3px) 0 0/22px 22px,var(--panel)}
+.fx-svg{display:block;width:100%;height:670px;touch-action:none;cursor:grab;user-select:none}
+.fx-svg.panning{cursor:grabbing}
+.fx-svg .nd{cursor:move}
+.fx-svg text{font-family:var(--display)}
+.fx-svg .nm{font:700 12px var(--display);fill:var(--ink)}
+.fx-svg .ip{font:600 10.5px var(--mono);fill:var(--muted)}
+.fx-svg .zl{font:800 12px var(--display);letter-spacing:.08em}
+.fx-svg .zi{font:600 11px var(--mono)}
+.fx-svg .pl{font:700 10px var(--mono);fill:var(--muted)}
+.fx-tcard:fullscreen{border-radius:0;display:flex;flex-direction:column}
+.fx-tcard:fullscreen .fx-stage{flex:1}.fx-tcard:fullscreen .fx-svg{height:100%}
+.fx-cap{min-height:44px;padding:9px 12px;border-top:1px solid var(--line);font-size:13.5px;display:flex;align-items:center;gap:8px}
+.fx-cap .ic{font-size:18px}
+.fx-cap.ok{background:var(--oks)}.fx-cap.no{background:var(--bads)}
+.fx-test{padding:10px 12px;border-top:1px solid var(--line);display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end}
+.fx-test .fx-f{flex:1 1 190px}
+.fx-log{max-height:190px;overflow:auto;border-top:1px solid var(--line);font:500 12px/1.5 var(--mono);padding:6px 12px}
+.fx-log div{padding:2px 0;border-bottom:1px dashed var(--line)}
+.fx-log .ok{color:var(--ok)}.fx-log .no{color:var(--bad)}
+/* console window */
+.fx-con{display:flex;flex-direction:column;height:720px;width:100%;background:#071a0e;resize:vertical!important}
+.fx-con .win-bar{display:flex;align-items:center;gap:8px;padding:6px 8px 6px 12px;font:700 12.5px var(--display)}
+.fx-con .win-bar .sp{flex:1}
+.fx-con .win-bar button{border:1px solid rgba(0,0,0,.25);background:rgba(255,255,255,.55);border-radius:5px;padding:3px 8px;font:600 11.5px var(--display);cursor:pointer;color:#13314e}
+.fx-term{flex:1;overflow:auto;padding:10px 12px;font:500 13.5px/1.45 var(--mono);background:#071a0e;color:#45dd68;cursor:text}
+.fx-term .ln{white-space:pre-wrap;word-break:break-word;min-height:1.45em}
+.fx-irow{display:flex;align-items:baseline}
+.fx-irow .ps1{white-space:pre;color:#88ffb0}
+.fx-irow input{flex:1;border:0;outline:0;background:transparent;font:inherit;padding:0;color:#45dd68;caret-color:#45dd68;min-width:40px}
+.fx-keys{font:500 11.5px var(--display);color:var(--muted);padding:6px 2px 0}
+.fx-keys kbd{font:600 11px var(--mono);border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 4px;background:var(--panel)}
+.fx-res{width:100%;border-collapse:collapse;font-size:12.5px}
+.fx-res th{text-align:left;font:700 10.5px var(--display);text-transform:uppercase;letter-spacing:.04em;color:var(--muted);border-bottom:1px solid var(--line);padding:5px 7px}
+.fx-res td{border-bottom:1px solid var(--line);padding:5px 7px}
+.fx-res td.m{font:600 12px var(--mono)}
+.fx-res .pass{color:var(--ok);font-weight:800}.fx-res .fail{color:var(--bad);font-weight:800}
+.fx-req{margin:4px 0 8px;padding-left:20px;font-size:13.5px}
+.fx-req li{margin:3px 0}
+.fx-req li.met{color:var(--ok)}
+
+.fx-term .l-bad{color:#ff8575}.fx-term .l-warn{color:#ecc06a}.fx-term .l-dim{color:#7fae8c}
+</style>
+<style>
+/* ===== site header / controls ===== */
+.site-hdr{display:flex;align-items:center;gap:12px;background:#fff;border-bottom:3px solid #0a9ad4;padding:7px 16px;font-family:"Chivo","Segoe UI",system-ui,sans-serif;flex-wrap:wrap}
+.site-hdr .site-brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+.site-hdr .logo-ol{height:50px;background:#fff;border-radius:6px;padding:2px}
+.site-hdr .logo-ci{height:34px;border-radius:4px}
+.site-hdr .site-div{width:1px;height:30px;background:#d2dae2}
+.site-hdr .site-title{font:700 15px/1 "Chivo",system-ui,sans-serif;color:#0a7cad}
+.site-hdr .site-sp{flex:1}
+.site-ctl,.site-hdr .site-link{font:600 12.5px "Chivo",system-ui,sans-serif;color:#0a7cad;text-decoration:none;border:1px solid #bfe4f3;border-radius:7px;padding:7px 11px;white-space:nowrap;background:#fff;cursor:pointer}
+.site-ctl:hover,.site-hdr .site-link:hover{background:#e8f6fc}
+@media (prefers-color-scheme:dark){html:not([data-theme="light"]) .site-hdr{background:#0e1a23;border-bottom-color:#2cb8e8}
+ html:not([data-theme="light"]) .site-hdr .site-title{color:#6fd2f2}
+ html:not([data-theme="light"]) .site-ctl,html:not([data-theme="light"]) .site-hdr .site-link{background:#13232e;color:#6fd2f2;border-color:#28485c}
+ html:not([data-theme="light"]) .site-hdr .site-div{background:#28485c}}
+html[data-theme="dark"] .site-hdr{background:#0e1a23;border-bottom-color:#2cb8e8}
+html[data-theme="dark"] .site-hdr .site-title{color:#6fd2f2}
+html[data-theme="dark"] .site-ctl,html[data-theme="dark"] .site-hdr .site-link{background:#13232e;color:#6fd2f2;border-color:#28485c}
+html[data-theme="dark"] .site-hdr .site-div{background:#28485c}
+.wb-fab{position:fixed;right:16px;bottom:16px;z-index:70;border:0;border-radius:24px;cursor:pointer;background:#0a9ad4;color:#fff;font:600 13px "Chivo",system-ui,sans-serif;padding:11px 16px;box-shadow:0 6px 18px rgba(10,120,170,.4);display:inline-flex;align-items:center;gap:7px}
+.wb-fab:hover{background:#088ec5}
+@media (max-width:640px){.site-hdr .site-title{display:none}.site-ctl .lbl{display:none}.wb-fab .t{display:none}}
+/* ===== Tera Term terminal colours (green default, white toggle) ===== */
+.term{background:#071a0e!important;color:#45dd68!important}
+.term pre,.term .out{color:inherit!important}
+#prompt,.ps1,.term .ps1{color:#88ffb0!important}
+.l-cmd{color:#9dffc2!important}.l-dim{color:#7fae8c!important}.l-warn{color:#ecc06a!important}.l-bad{color:#ff8575!important}
+#cmd,.cin,.term input{color:#45dd68!important;caret-color:#45dd68!important;background:transparent!important}
+html.tt-white .term{color:#e7eef1!important}
+html.tt-white #prompt,html.tt-white .ps1,html.tt-white .term .ps1{color:#bfe3ff!important}
+html.tt-white .l-cmd{color:#d4e9ff!important}
+html.tt-white #cmd,html.tt-white .cin,html.tt-white .term input{color:#e7eef1!important;caret-color:#e7eef1!important}
+/* ===== Windows-7 (Aero) style GUI windows + resizeable ===== */
+.win{resize:both!important;overflow:hidden!important;min-width:300px;min-height:200px;border:1px solid #2f6aa8!important;border-radius:8px 8px 6px 6px!important;box-shadow:0 20px 44px rgba(0,0,0,.42), inset 0 0 0 1px rgba(255,255,255,.45)!important}
+.win-bar,.win-title{background:linear-gradient(#fdfefe,#dbe9f8 46%,#c2d8f0)!important;border-bottom:1px solid #8fb0d6!important;color:#13314e!important;border-radius:7px 7px 0 0}
+.win-bar b,.win-title b{text-shadow:0 1px 0 rgba(255,255,255,.75)}
+.win-bar .x,.win-title .x{background:linear-gradient(#f7a19a,#d9453b)!important;border:1px solid #b23026!important;color:#fff!important;border-radius:4px!important;text-shadow:0 1px 1px rgba(0,0,0,.3)}
+.win-bar .x:hover,.win-title .x:hover{background:linear-gradient(#ff8f86,#c9382e)!important}
+html[data-theme="dark"] .win-bar,html[data-theme="dark"] .win-title{background:linear-gradient(#2b3b4c,#1c2a38 46%,#152230)!important;border-bottom-color:#3a556c!important;color:#dceaf5!important}
+@media (prefers-color-scheme:dark){html:not([data-theme="light"]) .win-bar,html:not([data-theme="light"]) .win-title{background:linear-gradient(#2b3b4c,#1c2a38 46%,#152230)!important;border-bottom-color:#3a556c!important;color:#dceaf5!important}}
+</style>
+</head><body>
+<header class="site-hdr"><a class="site-brand" href="index.html"><img class="logo-ol" src="oldham-college.png" alt="Oldham College"><span class="site-div"></span><img class="logo-ci" src="cisco-netacad.png" alt="Cisco Networking Academy"></a><span class="site-title">ASA Firewall Lab</span><span class="site-sp"></span><a class="site-link" href="asa-firewall.pdf" target="_blank" rel="noopener">📄 <span class="lbl">Instructions (PDF)</span></a><button id="termBtn" class="site-ctl" type="button" onclick="toggleTerm()" title="Terminal text colour">⌨️ <span class="lbl">Green</span></button><button id="themeBtn" class="site-ctl" type="button" onclick="toggleTheme()" title="Light / dark">🌙 <span class="lbl">Dark</span></button><a class="site-link" href="index.html">← <span class="lbl">All labs</span></a></header><button class="wb-fab" type="button" onclick="wbToggle()" aria-label="Open whiteboard" title="Whiteboard">✎ <span class="t">Whiteboard</span></button>
+
+
+<div class="app" id="app">
+  <div class="eyebrow">Cisco Networking Academy</div>
+  <h1>ASA Firewall Lab</h1>
+  <p class="lead">How a Cisco ASA 5505 decides what to allow — security levels, the default rules, stateful inspection and ACLs. Learn the rules, practise writing them, then configure an ASA yourself and fire packets at it to see what gets through.</p>
+  <div class="fx-tabs" role="tablist">
+    <button class="fx-tab on" data-tab="learn" type="button"><span class="n">1</span>Learn &amp; scenarios</button>
+    <button class="fx-tab" data-tab="rules" type="button"><span class="n">2</span>Rule practice</button>
+    <button class="fx-tab" data-tab="cfg" type="button"><span class="n">3</span>Configure the ASA</button>
+  </div>
+  <section id="tab-learn">
+<div class="card">
+    <div class="ref">
+      <h2>Security levels</h2>
+      <p>Every ASA interface has a <b>security level</b> from 0–100. The number says how trusted the network behind it is.</p>
+      <div class="levels">
+        <div class="lvl in"><div class="n">100</div><b>Inside</b><span>your LAN — most trusted</span></div>
+        <div class="lvl dmz"><div class="n">50</div><b>DMZ</b><span>public-facing servers</span></div>
+        <div class="lvl out"><div class="n">0</div><b>Outside</b><span>the internet — least trusted</span></div>
+      </div>
+      <h3>The default rules</h3>
+      <div class="rule"><b>Higher → lower is allowed.</b> Traffic starting on a more-trusted interface can reach a less-trusted one (Inside → Outside, Inside → DMZ, DMZ → Outside) with no rule needed.</div>
+      <div class="rule"><b>Lower → higher is denied.</b> A new connection from a less-trusted interface to a more-trusted one is blocked by default (Outside → Inside, Outside → DMZ, DMZ → Inside).</div>
+      <div class="rule"><b>Stateful inspection.</b> The ASA remembers connections it allowed out, so the <b>reply</b> traffic is let back in automatically — you don't write a rule for return traffic.</div>
+      <div class="rule"><b>An ACL makes the exceptions.</b> To allow a specific lower→higher flow (e.g. the internet reaching a DMZ web server), you add an access-list permit and apply it to that interface:</div>
+      <div class="acl"><span class="p">access-list</span> OUTSIDE_IN <span class="p">permit</span> tcp any host 203.0.113.10 eq 443<br><span style="color:var(--muted)">access-group OUTSIDE_IN in interface outside</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Scenarios</h2>
+    <div class="scorebar">
+      <span class="badge" id="qcount">Question 1 of 8</span>
+      <div class="prog"><i id="progbar"></i></div>
+      <span class="score" id="runscore"></span>
+      <span class="badge" id="best"></span>
+    </div>
+    <div id="qhost"></div>
+    <div class="row" style="margin-top:14px">
+      <button class="btn primary" id="qnext" type="button" disabled>Next ›</button>
+      <button class="btn" id="qrestart" type="button">Restart</button>
+      <span id="qdone" style="font-weight:700"></span>
+    </div>
+  </div>
+
+  </section>
+
+  <!-- ===================== TAB 2: rule practice ===================== -->
+  <section id="tab-rules" class="fx-hide">
+    <div class="card">
+      <div class="fx-bar">
+        <h2 style="margin:0">Practise writing firewall rules</h2><span class="sp"></span>
+        <div class="fx-seg" id="rpMode"><button class="on" data-m="build" type="button">Build a rule</button><button data-m="order" type="button">Put rules in order</button></div>
+      </div>
+      <p class="fx-sub">The same network is used in every tab: an ASA 5505 with the <b>inside</b> LAN on VLAN 10 and the <b>outside</b> (internet) on VLAN 20.</p>
+      <div class="fx-net">
+        <span><b>Inside 192.168.10.0 /24:</b> PC-A .10 · PC-B .11 · web server .50 · mail server .60</span>
+        <span><b>Outside:</b> internet user 198.51.100.20 · attacker 198.51.100.66 · public web site 198.51.100.80 · public DNS 198.51.100.53 · IT contractor 192.0.2.25 · partner network 192.0.2.0 /24</span>
+      </div>
+    </div>
+
+    <!-- build -->
+    <div class="card" id="rpBuild">
+      <div class="fx-bar">
+        <span class="badge" id="rpCount">Scenario 1 of 12</span>
+        <div class="fx-seg" id="rpHow"><button class="on" data-h="pick" type="button">Use the builder</button><button data-h="type" type="button">Type the command</button></div>
+        <span class="sp"></span><span class="badge" id="rpScore"></span>
+      </div>
+      <div class="fx-scn" id="rpScn"></div>
+
+      <div id="rpPick">
+        <div class="fx-bld">
+          <div class="fx-f"><label for="bIf">Apply to interface (in)</label><select class="fx-sel" id="bIf"><option value="">Choose…</option><option value="outside">outside</option><option value="inside">inside</option></select></div>
+          <div class="fx-f"><label for="bAct">Action</label><select class="fx-sel" id="bAct"><option value="">Choose…</option><option>permit</option><option>deny</option></select></div>
+          <div class="fx-f"><label for="bPro">Protocol</label><select class="fx-sel" id="bPro"><option value="">Choose…</option><option>tcp</option><option>udp</option><option>icmp</option><option>ip</option></select></div>
+          <div class="fx-f wide"><label for="bSrcT">Source</label><div class="fx-pair"><select class="fx-sel" id="bSrcT" style="max-width:120px"><option value="any">any</option><option value="host">host</option><option value="net">network</option></select><input class="fx-in" id="bSrcIp" placeholder="address" spellcheck="false" autocomplete="off"><input class="fx-in" id="bSrcMk" placeholder="subnet mask" spellcheck="false" autocomplete="off"></div></div>
+          <div class="fx-f wide"><label for="bDstT">Destination</label><div class="fx-pair"><select class="fx-sel" id="bDstT" style="max-width:120px"><option value="any">any</option><option value="host">host</option><option value="net">network</option></select><input class="fx-in" id="bDstIp" placeholder="address" spellcheck="false" autocomplete="off"><input class="fx-in" id="bDstMk" placeholder="subnet mask" spellcheck="false" autocomplete="off"></div></div>
+          <div class="fx-f" id="bPortF"><label for="bPort">Destination port</label><div class="fx-pair"><select class="fx-sel" id="bOp" style="max-width:95px"><option value="">any</option><option value="eq">eq</option></select><input class="fx-in" id="bPort" list="portNames" placeholder="e.g. 443" spellcheck="false" autocomplete="off"></div></div>
+          <div class="fx-f fx-hide" id="bIcmpF"><label for="bIcmp">ICMP type</label><select class="fx-sel" id="bIcmp"><option value="">any type</option><option>echo</option><option>echo-reply</option></select></div>
+        </div>
+        <datalist id="portNames"><option value="80">www (HTTP)</option><option value="443">https</option><option value="22">ssh</option><option value="23">telnet</option><option value="53">domain (DNS)</option><option value="25">smtp</option><option value="21">ftp</option><option value="3389">RDP</option></datalist>
+      </div>
+      <div id="rpType" class="fx-hide">
+        <div class="fx-f" style="max-width:260px;margin-bottom:8px"><label for="tIf">Apply to interface (in)</label><select class="fx-sel" id="tIf"><option value="">Choose…</option><option value="outside">outside</option><option value="inside">inside</option></select></div>
+        <div class="fx-f"><label for="tLine">Your access-list command</label><input class="fx-type" id="tLine" placeholder="access-list OUTSIDE_IN extended permit …" spellcheck="false" autocomplete="off"></div>
+      </div>
+      <div class="fx-prev" id="rpPrev"></div>
+      <div class="row" style="margin-top:12px">
+        <button class="btn primary" id="rpCheck" type="button">Check rule</button>
+        <button class="btn" id="rpShow" type="button">Show answer</button>
+        <button class="btn" id="rpNext" type="button">Next scenario ›</button>
+      </div>
+      <div class="fx-fb" id="rpFb"></div>
+    </div>
+
+    <!-- order -->
+    <div class="card fx-hide" id="rpOrder">
+      <div class="fx-bar"><span class="badge" id="poCount">Puzzle 1 of 4</span><span class="sp"></span><span class="badge" id="poScore"></span></div>
+      <h3 id="poTitle" style="margin-top:10px"></h3>
+      <div class="fx-scn" id="poGoal"></div>
+      <p class="fx-sub">The ASA reads the list <b>top to bottom</b> and stops at the <b>first match</b>. Drag the lines (or use ↑ ↓) so every test gets the right result, then run the tests.</p>
+      <ol class="fx-acl" id="poList"></ol>
+      <div class="row" style="margin-top:12px">
+        <button class="btn primary" id="poRun" type="button">Run the tests</button>
+        <button class="btn" id="poShuf" type="button">Shuffle</button>
+        <button class="btn" id="poNext" type="button">Next puzzle ›</button>
+      </div>
+      <table class="fx-tests" id="poTests"></table>
+      <div class="fx-fb" id="poFb"></div>
+    </div>
+  </section>
+
+  <!-- ===================== TAB 3: configure ===================== -->
+  <section id="tab-cfg" class="fx-hide">
+    <div class="card">
+      <div class="fx-bar">
+        <div class="fx-seg" id="cfgMode"><button class="on" data-m="guided" type="button">1 · Guided task</button><button data-m="indep" type="button">2 · Independent task</button><button data-m="free" type="button">Free practice</button></div>
+        <span class="sp"></span>
+        <button class="btn" id="autoBtn" type="button" title="Load the interface, VLAN and route config so you can concentrate on firewall rules">⚡ Auto-configure interfaces &amp; VLANs</button>
+        <button class="btn" id="resetBtn" type="button">Reset this task</button>
+      </div>
+      <div class="fx-task" id="task"></div>
+    </div>
+
+    <div class="fx-grid">
+      <!-- left: topology -->
+      <div class="fx-tcard" id="topoCard">
+        <div class="fx-thead">Network topology <span class="pill-mode fx-pill" id="testPill">Test mode</span><span class="sp"></span>
+          <button class="fx-ib" id="topoFit" type="button" title="Reset the view">⤢ Reset view</button>
+          <button class="fx-ib" id="topoFull" type="button" title="Full screen">⛶ Full screen</button></div>
+        <div class="fx-stage"><svg class="fx-svg" id="topo" viewBox="0 0 640 730" aria-label="Network topology"></svg></div>
+        <div class="fx-cap" id="cap"><span class="ic">ℹ️</span><span>Choose a source, destination and service, then press <b>Send packet</b> to test your firewall rules.</span></div>
+        <div class="fx-test">
+          <div class="fx-f"><label for="tSrc">From</label><select class="fx-sel" id="tSrc"></select></div>
+          <div class="fx-f"><label for="tDst">To</label><select class="fx-sel" id="tDst"></select></div>
+          <div class="fx-f"><label for="tSvc">Service</label><select class="fx-sel" id="tSvc"></select></div>
+          <div class="fx-f" style="flex:0 0 auto"><label for="tSpd">Speed</label><select class="fx-sel" id="tSpd"><option value="0.55">Slow</option><option value="1" selected>Normal</option><option value="2.4">Fast</option></select></div>
+          <button class="btn primary" id="sendBtn" type="button">✉ Send packet</button>
+          <button class="btn" id="runAll" type="button">▶ Run task tests</button>
+        </div>
+        <div class="fx-log" id="plog"></div>
+      </div>
+
+      <!-- right: console -->
+      <div>
+        <div class="win fx-con" id="conWin">
+          <div class="win-bar"><b id="conTitle">ASA 5505 — Console (COM1)</b><span class="sp"></span>
+            <button type="button" id="conClear" title="Clear the screen">Clear</button>
+            <button type="button" id="conShowRun" title="Type show running-config">show run</button></div>
+          <div class="term fx-term" id="term"><div id="tout"></div><div class="fx-irow"><span class="ps1" id="tps"></span><input id="tin" class="cin" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="ASA command line"></div></div>
+        </div>
+        <div class="fx-keys"><kbd>?</kbd> help · <kbd>Tab</kbd> complete · <kbd>↑</kbd><kbd>↓</kbd> history · abbreviations work (<span class="mono">conf t</span>, <span class="mono">int vlan 10</span>, <span class="mono">sh run</span>) · test from the CLI with <span class="mono">packet-tracer</span></div>
+        <div class="card" id="resCard" style="margin-top:12px">
+          <h2 style="font-size:15px">Test log</h2>
+          <p class="fx-sub" id="resSub">Run the task tests to fill this in.</p>
+          <table class="fx-res" id="resTbl"></table>
+          <div class="row" style="margin-top:8px"><button class="btn" id="copyLog" type="button">Copy test log</button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+'use strict';
+const SAVE_KEY='asa-firewall-v1';
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function pick(a){ return a[Math.floor(Math.random()*a.length)]; }
+const IF=[['Inside',100],['DMZ',50],['Outside',0]];
+function qDirection(){ const [s,d]=shuffle(IF).slice(0,2); const sN=s[0],sL=s[1],dN=d[0],dL=d[1];
+  const allowed=sL>dL;
+  const correct=allowed?'Allowed by default':'Denied by default — an ACL is needed to permit it';
+  const opts=[{t:'Allowed by default',ok:allowed},{t:'Denied by default — an ACL is needed to permit it',ok:!allowed},{t:'Always blocked, even with an ACL',ok:false},{t:'Allowed only after NAT is configured',ok:false}];
+  return {stem:`A host starts a <b>new connection</b> from the <b>${sN}</b> to the <b>${dN}</b>. What does the ASA do by default?`,
+    flow:`${sN} (${sL}) → ${dN} (${dL})`, options:shuffle(opts),
+    explain:`${sN} is level ${sL}, ${dN} is level ${dL}. ${allowed?`Higher → lower, so it is <b>allowed by default</b>.`:`Lower → higher, so it is <b>denied by default</b> — you'd need an ACL permit (applied inbound on the ${sN.toLowerCase()} interface) to allow it.`}`}; }
+function qStateful(){ return {stem:`An <b>Inside</b> user browses a website on the <b>Outside</b>. The web server's reply comes back to the ASA. Is the reply allowed in?`,
+  flow:'reply: Outside (0) → Inside (100)',
+  options:shuffle([{t:'Yes — stateful inspection allows return traffic for the established session',ok:true},{t:'No — Outside → Inside is always blocked',ok:false},{t:'Only if an ACL permits it',ok:false},{t:'Only if the firewall is disabled',ok:false}]),
+  explain:'The ASA is <b>stateful</b>: because it allowed the outbound connection, it tracks the session and automatically lets the matching reply back in. You never write a rule for return traffic.'}; }
+function qDMZneed(){ return {stem:`The public internet must be able to reach the <b>DMZ</b> web server on port 443. What is required?`,
+  flow:'Outside (0) → DMZ (50) :443',
+  options:shuffle([{t:'An ACL permitting outside → DMZ tcp eq 443, applied inbound on the outside interface',ok:true},{t:'Nothing — DMZ traffic is allowed by default',ok:false},{t:'Lower the DMZ security level to 0',ok:false},{t:'Raise the outside security level to 100',ok:false}]),
+  explain:'Outside (0) → DMZ (50) is lower → higher, so it’s denied by default. Add an <b>ACL permit</b> for exactly that traffic (tcp eq 443 to the server) and apply it inbound on the outside interface.'}; }
+function qDMZpurpose(){ return {stem:`Why put a public web server in the <b>DMZ</b> rather than on the <b>Inside</b> network?`,
+  options:shuffle([{t:'If the server is compromised, the DMZ can’t start connections to the Inside, so the trusted LAN stays protected',ok:true},{t:'The DMZ is faster than the inside network',ok:false},{t:'DMZ servers don’t need any security',ok:false},{t:'So the server gets a public IP automatically',ok:false}]),
+  explain:'The DMZ (level 50) sits between Outside and Inside. DMZ → Inside is lower → higher, so a hacked DMZ server cannot reach the trusted Inside LAN. That containment is the whole point of a DMZ.'}; }
+function qMostTrusted(){ return {stem:`Which interface is the <b>most trusted</b> on the ASA?`,
+  options:shuffle([{t:'Inside (security level 100)',ok:true},{t:'Outside (security level 0)',ok:false},{t:'DMZ (security level 50)',ok:false},{t:'They are all equal',ok:false}]),
+  explain:'The highest security level is the most trusted. <b>Inside = 100</b> is the most trusted; Outside = 0 is the least.'}; }
+function qNoACL(){ return {stem:`There is <b>no ACL</b> applied to the outside interface. What happens to a new connection from the Outside to the Inside?`,
+  flow:'Outside (0) → Inside (100), no ACL',
+  options:shuffle([{t:'It is dropped — the default deny for lower → higher applies',ok:true},{t:'It is allowed because there is no rule to block it',ok:false},{t:'It is allowed only on port 80',ok:false},{t:'The ASA crashes',ok:false}]),
+  explain:'With no permit rule, the default applies: lower → higher is <b>denied</b>. The ASA is default-deny for inbound — the opposite of "no rule means allow".'}; }
+const GENS=[qDirection,qDirection,qStateful,qDMZneed,qDMZpurpose,qMostTrusted,qNoACL];
+let QUIZ=[],qi=0,runScore=0,answered=false;
+function st(){ try{ return JSON.parse(localStorage.getItem(SAVE_KEY)||'{}'); }catch(e){ return {}; } }
+function setSt(o){ try{ localStorage.setItem(SAVE_KEY,JSON.stringify(o)); }catch(e){} }
+function start(){ QUIZ=[]; let g=0; while(QUIZ.length<8&&g++<200){ const q=pick(GENS)(); if(q.options.some(o=>o.ok)) QUIZ.push(q); } qi=0; runScore=0; showBest(); renderQ(); }
+function showBest(){ const b=st().best; $('#best').textContent=b!=null?('best '+b+'/8'):''; }
+function renderQ(){ const q=QUIZ[qi]; answered=false;
+  $('#qcount').textContent='Question '+(qi+1)+' of 8'; $('#progbar').style.width=(qi/8*100)+'%';
+  $('#runscore').textContent=runScore?('Score '+runScore+'/'+qi):''; $('#qdone').textContent='';
+  $('#qhost').innerHTML=`<div class="q"><div class="stem">${q.stem}</div>${q.flow?('<div class="flow">'+q.flow+'</div>'):''}<div class="opts" id="qopts"></div><div class="fb" id="qfb"></div></div>`;
+  $('#qopts').innerHTML=q.options.map((o,i)=>`<button class="opt" data-i="${i}" type="button">${o.t.replace(/(tcp eq 443|level \d+|security level \d+|port 443|443|ACL|DMZ|NAT)/g,'<span class="mono">$1</span>')}</button>`).join('');
+  $$('#qopts .opt').forEach(b=>b.onclick=()=>answer(+b.dataset.i)); $('#qnext').disabled=true;
+}
+function answer(i){ if(answered) return; answered=true; const q=QUIZ[qi];
+  $$('#qopts .opt').forEach((b,k)=>{ b.style.pointerEvents='none'; if(q.options[k].ok)b.classList.add('right'); if(k===i&&!q.options[k].ok)b.classList.add('wrong'); if(k===i)b.classList.add('sel'); });
+  const ok=q.options[i].ok; if(ok)runScore++;
+  const fb=$('#qfb'); fb.className='fb show '+(ok?'ok':'no'); fb.innerHTML=(ok?'<b>Correct. </b>':'<b>Not quite. </b>')+q.explain;
+  $('#runscore').textContent='Score '+runScore+'/'+(qi+1); $('#progbar').style.width=((qi+1)/8*100)+'%';
+  $('#qnext').disabled = qi>=QUIZ.length-1;
+  if(qi>=QUIZ.length-1){ const s=st(); if(s.best==null||runScore>s.best){ s.best=runScore; setSt(s); } showBest(); $('#qdone').textContent='Finished — '+runScore+'/8.'; }
+}
+$('#qnext').onclick=()=>{ if(qi<QUIZ.length-1){ qi++; renderQ(); } };
+$('#qrestart').onclick=start;
+start();
+
+/* =====================================================================
+   SHARED: tabs, addressing helpers, ACL parser & matcher, network data
+===================================================================== */
+(function tabs(){
+  const KEY='asa-firewall-tab';
+  function show(t){
+    $$('.fx-tab').forEach(b=>b.classList.toggle('on',b.dataset.tab===t));
+    ['learn','rules','cfg'].forEach(k=>$('#tab-'+k).classList.toggle('fx-hide',k!==t));
+    $('#app').classList.toggle('wide',t==='cfg');
+    try{localStorage.setItem(KEY,t);}catch(e){}
+    if(t==='cfg'&&window.CFG_SHOWN) window.CFG_SHOWN();
+  }
+  $$('.fx-tab').forEach(b=>b.onclick=()=>show(b.dataset.tab));
+  let t='learn'; try{t=localStorage.getItem(KEY)||'learn';}catch(e){}
+  window.showTab=show; setTimeout(()=>show(t),0);
+})();
+
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function ip2n(s){const p=String(s).split('.');if(p.length!==4)return null;let n=0;for(const x of p){if(!/^\d{1,3}$/.test(x)||+x>255)return null;n=n*256+(+x);}return n;}
+function n2ip(n){n=n>>>0;return [Math.floor(n/16777216)%256,Math.floor(n/65536)%256,Math.floor(n/256)%256,n%256].join('.');}
+function maskOK(m){const inv=(~m)>>>0;return (((inv+1)>>>0)&inv)===0;}
+function isWild(m){return !maskOK(m)&&maskOK((~m)>>>0);}
+function band(a,b){return (a&b)>>>0;}
+function inNet(ip,net,mask){return band(ip,mask)===band(net,mask);}
+
+const PORTN={www:80,http:80,https:443,ssh:22,telnet:23,domain:53,smtp:25,ftp:21,'ftp-data':20,pop3:110,imap4:143,ntp:123,snmp:161,tftp:69,ldap:389,sqlnet:1521};
+const PORTNAME={80:'www',443:'https',22:'ssh',23:'telnet',53:'domain',25:'smtp',21:'ftp',20:'ftp-data',110:'pop3',143:'imap4',123:'ntp',161:'snmp',69:'tftp',389:'ldap'};
+const ICMPT={'echo':8,'echo-reply':0,'unreachable':3,'time-exceeded':11};
+const ICMPNAME={8:'echo',0:'echo-reply',3:'unreachable',11:'time-exceeded'};
+
+/* address spec: {t:'any'} | {t:'host',ip} | {t:'net',ip,mask}   (numbers) */
+function parseAddr(tk,i){
+  const w=(tk[i]||'').toLowerCase();
+  if(!w) return {err:'incomplete',at:i};
+  if(w==='any'||w==='any4') return {a:{t:'any'},i:i+1};
+  if(w==='host'){const ip=ip2n(tk[i+1]);if(tk[i+1]==null)return {err:'incomplete',at:i+1};if(ip==null)return {err:'invalid',at:i+1};return {a:{t:'host',ip},i:i+2};}
+  if(w==='object'||w==='object-group') return {err:'object',at:i};
+  const ip=ip2n(w); if(ip==null) return {err:'invalid',at:i};
+  if(tk[i+1]==null) return {err:'incomplete',at:i+1,hint:'After a network address, give its subnet mask (e.g. 192.168.10.0 255.255.255.0) — or use host for a single address.'};
+  const m=ip2n(tk[i+1]); if(m==null) return {err:'invalid',at:i+1,hint:'A network address must be followed by a subnet mask, e.g. 255.255.255.0.'};
+  if(isWild(m)) return {err:'wild',at:i+1,mask:tk[i+1],ip:w};
+  if(!maskOK(m)) return {err:'invalid',at:i+1,hint:'That is not a valid subnet mask.'};
+  if(band(ip,(~m)>>>0)!==0) return {err:'pair',at:i,ip:w,mask:tk[i+1]};
+  if(m===0xFFFFFFFF) return {a:{t:'host',ip},i:i+2};
+  if(m===0&&ip===0) return {a:{t:'any'},i:i+2};
+  return {a:{t:'net',ip,mask:m},i:i+2};
+}
+function portOf(w){ if(w==null) return null; w=String(w).toLowerCase(); if(/^\d+$/.test(w)){const n=+w;return n>=1&&n<=65535?n:null;} return PORTN[w]??null; }
+/* parse from tokens starting at the action word; returns {ace} or {err,at,hint} */
+function parseACE(tk,i){
+  const act=(tk[i]||'').toLowerCase();
+  if(!act) return {err:'incomplete',at:i};
+  const A=kwm(act,['permit','deny']); if(!A||A.amb) return {err:'invalid',at:i};
+  const pw=(tk[i+1]||'').toLowerCase(); if(!pw) return {err:'incomplete',at:i+1};
+  const P=kwm(pw,['tcp','udp','icmp','ip']); if(!P||P.amb) return {err:'invalid',at:i+1,hint:'Protocol must be tcp, udp, icmp or ip.'};
+  const s=parseAddr(tk,i+2); if(s.err) return s;
+  // a port after the source is a common slip
+  if(['eq','range','gt','lt','neq'].includes((tk[s.i]||'').toLowerCase())) return {err:'invalid',at:s.i,hint:'Put the port after the destination: … source destination eq port.'};
+  const d=parseAddr(tk,s.i); if(d.err) return d;
+  const ace={action:A,proto:P,src:s.a,dst:d.a,port:null,icmp:null};
+  let j=d.i; const op=(tk[j]||'').toLowerCase();
+  if(op&&op!=='log'){
+    if(P==='tcp'||P==='udp'){
+      const O=kwm(op,['eq','range','gt','lt','neq']); if(!O||O.amb) return {err:'invalid',at:j};
+      if(O==='range'){const lo=portOf(tk[j+1]),hi=portOf(tk[j+2]);if(tk[j+2]==null)return {err:'incomplete',at:j+2};if(lo==null)return {err:'invalid',at:j+1};if(hi==null||hi<lo)return {err:'invalid',at:j+2};ace.port={op:'range',lo,hi};j+=3;}
+      else{const p=portOf(tk[j+1]);if(tk[j+1]==null)return {err:'incomplete',at:j+1};if(p==null)return {err:'invalid',at:j+1,hint:'Use a port number (1–65535) or a name such as www, https, ssh, telnet, domain, smtp.'};ace.port={op:O,lo:p,hi:p};j+=2;}
+    } else if(P==='icmp'){
+      const t=/^\d+$/.test(op)?+op:ICMPT[op]; if(t==null) return {err:'invalid',at:j,hint:'ICMP types: echo, echo-reply, unreachable, time-exceeded.'};
+      ace.icmp=t; j++;
+    } else return {err:'invalid',at:j,hint:'"ip" matches every protocol, so it cannot have a port. Use tcp or udp to match a port.'};
+  }
+  if((tk[j]||'').toLowerCase()==='log') j++;
+  if(j<tk.length) return {err:'invalid',at:j};
+  return {ace};
+}
+function kwm(tok,opts){tok=String(tok).toLowerCase();if(opts.includes(tok))return tok;const m=opts.filter(o=>o.startsWith(tok));if(m.length===1)return m[0];if(m.length>1)return {amb:m};return null;}
+function addrText(a){return a.t==='any'?'any':a.t==='host'?'host '+n2ip(a.ip):n2ip(a.ip)+' '+n2ip(a.mask);}
+function portText(p,numeric){if(!p)return '';const nm=x=>numeric?x:(PORTNAME[x]||x);return p.op==='range'?' range '+nm(p.lo)+' '+nm(p.hi):' '+p.op+' '+nm(p.lo);}
+function aceText(a,numeric){return 'extended '+a.action+' '+a.proto+' '+addrText(a.src)+' '+addrText(a.dst)+portText(a.port,numeric)+(a.icmp!=null?' '+(ICMPNAME[a.icmp]??a.icmp):'');}
+function aceHTML(a){return 'extended <span class="'+(a.action==='permit'?'p':'d')+'">'+a.action+'</span> '+a.proto+' '+addrText(a.src)+' '+addrText(a.dst)+portText(a.port,true)+(a.icmp!=null?' '+(ICMPNAME[a.icmp]??a.icmp):'');}
+function addrEq(x,y){return x.t===y.t&&(x.t==='any'||(x.ip===y.ip&&(x.t==='host'||x.mask===y.mask)));}
+function aceEq(a,b){return a.action===b.action&&a.proto===b.proto&&addrEq(a.src,b.src)&&addrEq(a.dst,b.dst)&&JSON.stringify(a.port)===JSON.stringify(b.port)&&a.icmp===b.icmp;}
+function addrMatch(a,ip){return a.t==='any'||(a.t==='host'?a.ip===ip:inNet(ip,a.ip,a.mask));}
+/* flow: {proto,src,dst,dport,icmp} (numbers) */
+function aceMatch(a,f){
+  if(a.proto!=='ip'&&a.proto!==f.proto) return false;
+  if(!addrMatch(a.src,f.src)||!addrMatch(a.dst,f.dst)) return false;
+  if(a.port){ if(f.proto!=='tcp'&&f.proto!=='udp') return false; const p=f.dport;
+    if(a.port.op==='eq'&&p!==a.port.lo) return false; if(a.port.op==='neq'&&p===a.port.lo) return false;
+    if(a.port.op==='gt'&&!(p>a.port.lo)) return false; if(a.port.op==='lt'&&!(p<a.port.lo)) return false;
+    if(a.port.op==='range'&&(p<a.port.lo||p>a.port.hi)) return false; }
+  if(a.icmp!=null&&(f.proto!=='icmp'||f.icmp!==a.icmp)) return false;
+  return true;
+}
+/* list: array of {ace} or {remark}; returns {n (1-based line incl. remarks), e} or null */
+function aclFirst(list,f){let n=0;for(const e of list){n++;if(e.remark!=null)continue;if(aceMatch(e.ace,f))return {n,e};}return null;}
+
+/* ---------------- the lab network ---------------- */
+const HOSTS={
+  user: {name:'Internet user',ip:'198.51.100.20',side:'out',sym:'laptop'},
+  atk:  {name:'Attacker',ip:'198.51.100.66',side:'out',sym:'pc',bad:true},
+  admin:{name:'IT contractor',ip:'192.0.2.25',side:'out',sym:'laptop'},
+  web:  {name:'Public web site',ip:'198.51.100.80',side:'out',sym:'server'},
+  dns:  {name:'Public DNS',ip:'198.51.100.53',side:'out',sym:'server'},
+  pca:  {name:'PC-A',ip:'192.168.10.10',side:'in',sym:'pc'},
+  pcb:  {name:'PC-B',ip:'192.168.10.11',side:'in',sym:'pc'},
+  srv:  {name:'Web server',ip:'192.168.10.50',side:'in',sym:'server'},
+};
+const SVCS={
+  https:{label:'HTTPS (tcp 443)',proto:'tcp',port:443}, http:{label:'HTTP (tcp 80)',proto:'tcp',port:80},
+  ssh:{label:'SSH (tcp 22)',proto:'tcp',port:22}, telnet:{label:'Telnet (tcp 23)',proto:'tcp',port:23},
+  dns:{label:'DNS (udp 53)',proto:'udp',port:53}, smtp:{label:'SMTP (tcp 25)',proto:'tcp',port:25},
+  ftp:{label:'FTP (tcp 21)',proto:'tcp',port:21}, rdp:{label:'RDP (tcp 3389)',proto:'tcp',port:3389},
+  ping:{label:'Ping (ICMP echo)',proto:'icmp',icmp:8},
+};
+function sideOfIp(ipn){return inNet(ipn,ip2n('192.168.10.0'),ip2n('255.255.255.0'))?'in':'out';}
+function hostByIp(s){for(const k in HOSTS) if(HOSTS[k].ip===s) return k; return null;}
+function hostLabel(ip){const k=hostByIp(ip);return k?HOSTS[k].name+' ('+ip+')':ip;}
+
+/* =====================================================================
+   TAB 2: RULE PRACTICE — build a rule & put rules in order
+===================================================================== */
+(function rulePractice(){
+const RK='asa-rules-v1';
+let RS=(()=>{try{return JSON.parse(localStorage.getItem(RK))||{};}catch(e){return {};}})();
+function rsave(){try{localStorage.setItem(RK,JSON.stringify(RS));}catch(e){}}
+const M=s=>'<span class="mono">'+s+'</span>';
+const SCN=[
+ {t:'Allow <b>anyone on the internet</b> to reach the web server '+M('192.168.10.50')+' using <b>HTTPS</b>.',f:'outside',a:['permit tcp any host 192.168.10.50 eq 443'],svc:'HTTPS'},
+ {t:'Allow <b>anyone on the internet</b> to reach the web server '+M('192.168.10.50')+' using <b>HTTP</b>.',f:'outside',a:['permit tcp any host 192.168.10.50 eq 80'],svc:'HTTP'},
+ {t:'Allow <b>only</b> the IT contractor at '+M('192.0.2.25')+' to manage the web server '+M('192.168.10.50')+' using <b>SSH</b>.',f:'outside',a:['permit tcp host 192.0.2.25 host 192.168.10.50 eq 22'],svc:'SSH'},
+ {t:'The attacker at '+M('198.51.100.66')+' must be <b>blocked from reaching anything</b> on the inside network, using any protocol.',f:'outside',a:['deny ip host 198.51.100.66 any','deny ip host 198.51.100.66 192.168.10.0 255.255.255.0']},
+ {t:'Stop <b>every PC on the inside network</b> '+M('192.168.10.0 /24')+' using <b>Telnet</b> to any host on the internet.',f:'inside',a:['deny tcp 192.168.10.0 255.255.255.0 any eq 23','deny tcp any any eq 23'],svc:'Telnet'},
+ {t:'Inside users ping internet hosts. Without ICMP inspection, allow the <b>ping replies</b> from any host back in to <b>any</b> inside host.',f:'outside',a:['permit icmp any any echo-reply','permit icmp any 192.168.10.0 255.255.255.0 echo-reply']},
+ {t:'Allow the web server '+M('192.168.10.50')+' to look up names with the public DNS server '+M('198.51.100.53')+' (and nowhere else).',f:'inside',a:['permit udp host 192.168.10.50 host 198.51.100.53 eq 53'],svc:'DNS'},
+ {t:'Stop <b>PC-B</b> '+M('192.168.10.11')+' browsing <b>any</b> web site using unencrypted <b>HTTP</b>.',f:'inside',a:['deny tcp host 192.168.10.11 any eq 80'],svc:'HTTP'},
+ {t:'Allow <b>any</b> mail server on the internet to deliver email to the inside mail server '+M('192.168.10.60')+' using <b>SMTP</b>.',f:'outside',a:['permit tcp any host 192.168.10.60 eq 25'],svc:'SMTP'},
+ {t:'The whole range '+M('203.0.113.128 /25')+' is on a block list. <b>Deny everything</b> from that network to any inside address.',f:'outside',a:['deny ip 203.0.113.128 255.255.255.128 any','deny ip 203.0.113.128 255.255.255.128 192.168.10.0 255.255.255.0']},
+ {t:'Allow <b>anyone</b> on the internet to <b>ping</b> the web server '+M('192.168.10.50')+' — incoming ping <i>requests</i> only.',f:'outside',a:['permit icmp any host 192.168.10.50 echo']},
+ {t:'The partner network '+M('192.0.2.0 /24')+' uploads files to the web server '+M('192.168.10.50')+' using <b>FTP</b>. Allow it.',f:'outside',a:['permit tcp 192.0.2.0 255.255.255.0 host 192.168.10.50 eq 21'],svc:'FTP'},
+];
+SCN.forEach(s=>s.ace=s.a.map(t=>parseACE(t.split(' '),0).ace));
+let si=0, how='pick', tries=0, solved=false, score=RS.score||0, seen=RS.seen||0;
+const ACLN={outside:'OUTSIDE_IN',inside:'INSIDE_IN'};
+
+function upd(){ $('#rpScore').textContent='Correct first time: '+score+' / '+seen; }
+function load(){
+  const s=SCN[si]; tries=0; solved=false;
+  $('#rpCount').textContent='Scenario '+(si+1)+' of '+SCN.length; $('#rpScn').innerHTML=s.t;
+  ['bIf','bAct','bPro','bOp','bIcmp','tIf'].forEach(id=>$('#'+id).value='');
+  ['bSrcT','bDstT'].forEach(id=>$('#'+id).value='any');
+  ['bSrcIp','bSrcMk','bDstIp','bDstMk','bPort','tLine'].forEach(id=>$('#'+id).value='');
+  $$('#rpBuild .bad,#rpBuild .ok').forEach(e=>e.classList.remove('bad','ok'));
+  $('#rpFb').className='fx-fb'; syncFields(); preview(); upd();
+}
+function syncFields(){
+  const p=$('#bPro').value;
+  $('#bPortF').classList.toggle('fx-hide',p==='icmp'||p==='ip');
+  $('#bIcmpF').classList.toggle('fx-hide',p!=='icmp');
+  ['Src','Dst'].forEach(k=>{const t=$('#b'+k+'T').value;
+    $('#b'+k+'Ip').classList.toggle('fx-hide',t==='any'); $('#b'+k+'Mk').classList.toggle('fx-hide',t!=='net');
+    $('#b'+k+'Ip').placeholder=t==='host'?'host address':'network address';});
+  $('#bPort').disabled=!$('#bOp').value;
+}
+function builderTokens(){
+  const v=id=>$('#'+id).value.trim();
+  const tk=[v('bAct')||'<action>',v('bPro')||'<protocol>'];
+  ['Src','Dst'].forEach(k=>{const t=v('b'+k+'T');
+    if(t==='any') tk.push('any'); else if(t==='host') tk.push('host',v('b'+k+'Ip')||'<address>'); else tk.push(v('b'+k+'Ip')||'<network>',v('b'+k+'Mk')||'<mask>');});
+  const p=v('bPro');
+  if((p==='tcp'||p==='udp')&&v('bOp')) tk.push('eq',v('bPort')||'<port>');
+  if(p==='icmp'&&v('bIcmp')) tk.push(v('bIcmp'));
+  return tk;
+}
+function preview(){
+  let iface, line;
+  if(how==='pick'){ iface=$('#bIf').value; line='access-list '+(ACLN[iface]||'<NAME>')+' extended '+builderTokens().join(' '); }
+  else { iface=$('#tIf').value; line=$('#tLine').value.trim()||'access-list …'; }
+  const nm=how==='pick'?(ACLN[iface]||'<NAME>'):((line.split(/\s+/)[1])||'<NAME>');
+  $('#rpPrev').innerHTML=esc(line)+'\n'+esc('access-group '+nm+' in interface '+(iface||'<interface>'))+'\n<span class="c">! ACL applied to traffic arriving IN on that interface</span>';
+}
+function describe(a){return a.t==='any'?'<code>any</code>':a.t==='host'?'<code>host '+n2ip(a.ip)+'</code> (one device)':'<code>'+n2ip(a.ip)+' '+n2ip(a.mask)+'</code> (the whole network)';}
+function errText(r,tk){
+  if(r.err==='wild') return 'The ASA uses a <b>subnet mask</b>, not a wildcard mask. <code>'+esc(r.mask)+'</code> is a wildcard — use <code>'+n2ip((~ip2n(r.mask))>>>0)+'</code> instead. (Wildcard masks are for router ACLs.)';
+  if(r.err==='pair') return 'The address <code>'+esc(r.ip)+'</code> is not the network address for mask <code>'+esc(r.mask)+'</code> — use the first address of the network, or <code>host</code> for a single device.';
+  if(r.err==='incomplete') return 'The rule is incomplete — something is missing after <code>'+esc(tk.slice(0,r.at).join(' '))+'</code>.';
+  if(r.err==='object') return 'Objects are not used in this lab — write the address directly (<code>any</code>, <code>host x.x.x.x</code> or <code>network mask</code>).';
+  const bad=tk[r.at]; return (bad&&bad.startsWith('<')?'Fill in '+esc(bad)+'. ':'Invalid input at <code>'+esc(bad||'')+'</code>. ')+(r.hint||'');
+}
+function check(){
+  const s=SCN[si], fb=$('#rpFb'); let iface, r, tk;
+  $$('#rpBuild .bad,#rpBuild .ok').forEach(e=>e.classList.remove('bad','ok'));
+  if(how==='pick'){
+    iface=$('#bIf').value;
+    const miss=[['bIf','the interface'],['bAct','an action'],['bPro','a protocol']].filter(([id])=>!$('#'+id).value);
+    if(miss.length){ miss.forEach(([id])=>$('#'+id).classList.add('bad')); fb.className='fx-fb show no'; fb.innerHTML='Choose '+miss.map(m=>m[1]).join(', ')+'.'; return; }
+    tk=builderTokens(); r=parseACE(tk,0);
+  } else {
+    iface=$('#tIf').value; tk=$('#tLine').value.trim().split(/\s+/).filter(Boolean);
+    if(!iface){ $('#tIf').classList.add('bad'); fb.className='fx-fb show no'; fb.innerHTML='Choose the interface the ACL will be applied to.'; return; }
+    if(!tk.length||kwm(tk[0],['access-list'])!=='access-list'){ fb.className='fx-fb show no'; fb.innerHTML='Start the command with <code>access-list</code>, then a name, e.g. <code>access-list OUTSIDE_IN extended permit …</code>'; return; }
+    if(!tk[1]){ fb.className='fx-fb show no'; fb.innerHTML='Give the access list a name after <code>access-list</code>.'; return; }
+    let i=2; if(kwm(tk[2]||'',['extended'])==='extended') i=3;
+    r=parseACE(tk,i);
+  }
+  tries++;
+  if(r.err){ fb.className='fx-fb show no'; fb.innerHTML='<b>The ASA would reject that.</b> '+errText(r,tk); return; }
+  const a=r.ace;
+  // closest answer
+  let best=null,bs=-1;
+  s.ace.forEach(e=>{const sc=(e.action===a.action)+(e.proto===a.proto)+addrEq(e.src,a.src)+addrEq(e.dst,a.dst)+(JSON.stringify(e.port)===JSON.stringify(a.port))+(e.icmp===a.icmp);if(sc>bs){bs=sc;best=e;}});
+  const issues=[];
+  if(iface!==s.f) issues.push(s.f==='outside'?'Traffic from the internet arrives on the <b>outside</b> interface, so the ACL is applied <code>in</code> on <b>outside</b>.':'This traffic starts on the inside LAN, so it arrives on the <b>inside</b> interface. Apply the ACL <code>in</code> on <b>inside</b>.');
+  if(a.action!==best.action) issues.push('The scenario wants this traffic '+(best.action==='permit'?'allowed — use <code>permit</code>.':'blocked — use <code>deny</code>.'));
+  if(a.proto!==best.proto) issues.push(best.proto==='ip'?'To block <i>everything</i>, use protocol <code>ip</code> — it matches every protocol.':best.proto==='icmp'?'Ping uses <b>ICMP</b> — not TCP or UDP.':best.proto==='udp'?'DNS look-ups use <b>UDP</b>.':(s.svc||'This service')+' uses <b>TCP</b>.');
+  if(!addrEq(a.src,best.src)) issues.push('Source should be '+describe(best.src)+'.');
+  if(!addrEq(a.dst,best.dst)) issues.push('Destination should be '+describe(best.dst)+'.');
+  if(a.proto===best.proto&&JSON.stringify(a.port)!==JSON.stringify(best.port)) issues.push(best.port?(s.svc||'The service')+' is port <b>'+best.port.lo+'</b> — <code>eq '+best.port.lo+'</code>'+(PORTNAME[best.port.lo]?' (or <code>eq '+PORTNAME[best.port.lo]+'</code>)':'')+'.':'Leave the port out — the rule must match every port.');
+  if(a.proto===best.proto&&a.icmp!==best.icmp) issues.push(best.icmp==null?'Leave the ICMP type out so it matches all ICMP.':best.icmp===0?'Replies coming back are ICMP type <code>echo-reply</code>.':'Incoming ping requests are ICMP type <code>echo</code>.');
+  if(how==='pick'){ // field highlights
+    $('#bIf').classList.add(iface===s.f?'ok':'bad'); $('#bAct').classList.add(a.action===best.action?'ok':'bad'); $('#bPro').classList.add(a.proto===best.proto?'ok':'bad');
+    $('#bSrcT').classList.add(addrEq(a.src,best.src)?'ok':'bad'); $('#bDstT').classList.add(addrEq(a.dst,best.dst)?'ok':'bad');
+  }
+  const ans='access-list '+ACLN[s.f]+' '+aceText(best,true)+'\naccess-group '+ACLN[s.f]+' in interface '+s.f;
+  if(!issues.length){
+    if(!solved){ solved=true; seen++; if(tries===1) score++; RS.score=score; RS.seen=seen; rsave(); upd(); }
+    fb.className='fx-fb show ok'; fb.innerHTML='<b>✓ Correct.</b> The ASA would accept this rule:<div class="fx-prev">'+esc(ans)+'</div>';
+  } else { fb.className='fx-fb show no'; fb.innerHTML='<b>Not quite — '+issues.length+' thing'+(issues.length>1?'s':'')+' to fix:</b><ul><li>'+issues.join('</li><li>')+'</li></ul>'; }
+}
+function showAns(){ const s=SCN[si], e=s.ace[0];
+  if(!solved){ solved=true; seen++; RS.seen=seen; rsave(); upd(); }
+  $('#rpFb').className='fx-fb show info';
+  $('#rpFb').innerHTML='<b>One correct answer:</b><div class="fx-prev">'+esc('access-list '+ACLN[s.f]+' '+aceText(e,true)+'\naccess-group '+ACLN[s.f]+' in interface '+s.f)+'</div>'+(s.ace.length>1?'Also accepted: <code>'+esc(aceText(s.ace[1],true))+'</code>':'');
+}
+$$('#rpBuild select,#rpBuild input').forEach(e=>{e.addEventListener('input',()=>{syncFields();preview();});e.addEventListener('change',()=>{syncFields();preview();});});
+$('#tLine').addEventListener('keydown',e=>{if(e.key==='Enter')check();});
+$('#rpCheck').onclick=check; $('#rpShow').onclick=showAns; $('#rpNext').onclick=()=>{si=(si+1)%SCN.length;load();};
+$$('#rpHow button').forEach(b=>b.onclick=()=>{how=b.dataset.h;$$('#rpHow button').forEach(x=>x.classList.toggle('on',x===b));
+  $('#rpPick').classList.toggle('fx-hide',how!=='pick');$('#rpType').classList.toggle('fx-hide',how!=='type');$('#rpFb').className='fx-fb';preview();});
+$$('#rpMode button').forEach(b=>b.onclick=()=>{$$('#rpMode button').forEach(x=>x.classList.toggle('on',x===b));
+  $('#rpBuild').classList.toggle('fx-hide',b.dataset.m!=='build');$('#rpOrder').classList.toggle('fx-hide',b.dataset.m!=='order');});
+load();
+
+/* ---------------- put rules in order ---------------- */
+const RPL={label:'Ping reply (ICMP echo-reply)',proto:'icmp',icmp:0};
+const PUZ=[
+ {title:'Block the attacker',acl:'OUTSIDE_IN',goal:'The public must reach the web server on HTTPS, but the attacker '+M('198.51.100.66')+' must be blocked from everything.',
+  lines:['permit tcp any host 192.168.10.50 eq 443','deny ip host 198.51.100.66 any'],
+  tests:[['198.51.100.20','192.168.10.50','https','permit'],['198.51.100.66','192.168.10.50','https','deny'],['198.51.100.66','192.168.10.10','ssh','deny']],
+  why:'A specific <b>deny</b> must come <b>above</b> a broader <b>permit</b> that would also match it. With the permit first, the attacker\'s HTTPS matches line 1 and is let in.'},
+ {title:'No Telnet — but everything else works',acl:'INSIDE_IN',goal:'Inside PCs must not use Telnet to the internet, but all their other traffic must still be allowed.',
+  lines:['deny tcp 192.168.10.0 255.255.255.0 any eq telnet','permit ip any any'],
+  tests:[['192.168.10.10','198.51.100.80','telnet','deny'],['192.168.10.10','198.51.100.80','https','permit'],['192.168.10.11','198.51.100.53','dns','permit']],
+  why:'<code>permit ip any any</code> matches <i>every</i> packet, so anything below it is never reached. It belongs at the bottom. (Without it, the implicit deny would block all other outbound traffic.)'},
+ {title:'Only the contractor may use SSH',acl:'OUTSIDE_IN',goal:'The IT contractor '+M('192.0.2.25')+' may SSH to the web server. The rest of the partner network '+M('192.0.2.0 /24')+' is blocked. Everyone else may use HTTPS to the web server.',
+  lines:['permit tcp host 192.0.2.25 host 192.168.10.50 eq ssh','deny ip 192.0.2.0 255.255.255.0 any','permit tcp any host 192.168.10.50 eq https'],
+  tests:[['192.0.2.25','192.168.10.50','ssh','permit'],['192.0.2.77','192.168.10.50','https','deny'],['198.51.100.20','192.168.10.50','https','permit'],['198.51.100.20','192.168.10.50','ssh','deny']],
+  why:'Order from <b>most specific</b> to <b>least specific</b>: the single host first, then the network it belongs to, then the rule for <i>any</i>. The last test is denied by the <b>implicit deny</b> — no line needed.'},
+ {title:'Ping — but not to the PCs',acl:'OUTSIDE_IN',goal:'Replies to inside users\' pings must get back in, and the public may ping the web server — but nobody may ping the PCs.',
+  lines:['permit icmp any any echo-reply','permit icmp any host 192.168.10.50 echo','deny icmp any any'],
+  tests:[['198.51.100.80','192.168.10.10',RPL,'permit'],['198.51.100.20','192.168.10.50','ping','permit'],['198.51.100.20','192.168.10.10','ping','deny']],
+  why:'The broad <code>deny icmp any any</code> must go <b>last</b>; above either permit it would block that ICMP too.'},
+ {title:'Block a bad range first',acl:'OUTSIDE_IN',goal:'The range '+M('203.0.113.128 /25')+' is on a block list. Everyone else may use HTTP and HTTPS to the web server, and the contractor may use SSH.',
+  lines:['deny ip 203.0.113.128 255.255.255.128 any','permit tcp any host 192.168.10.50 eq www','permit tcp any host 192.168.10.50 eq https','permit tcp host 192.0.2.25 host 192.168.10.50 eq ssh'],
+  tests:[['203.0.113.200','192.168.10.50','www','deny'],['198.51.100.20','192.168.10.50','http','permit'],['192.0.2.25','192.168.10.50','ssh','permit'],['203.0.113.140','192.168.10.50','https','deny']],
+  why:'Block lists go at the <b>top</b>, so they win before any permit can match. The order of the permits below doesn\'t matter here — none overlaps another.'},
+];
+PUZ.forEach(p=>{p.aces=p.lines.map(l=>parseACE(l.split(' '),0).ace);});
+let pi=0, order=[], pDone=RS.puz||{};
+function svcOf(s){ if(typeof s==='object') return s; if(s==='www') s='http'; return SVCS[s]; }
+function flowOf(t){ const v=svcOf(t[2]); return {proto:v.proto,src:ip2n(t[0]),dst:ip2n(t[1]),dport:v.port,icmp:v.icmp}; }
+function pLoad(sh=true){
+  const p=PUZ[pi]; $('#poCount').textContent='Puzzle '+(pi+1)+' of '+PUZ.length; $('#poTitle').textContent=p.title; $('#poGoal').innerHTML=p.goal;
+  if(sh){ const idx=p.lines.map((_,i)=>i); let g=0;
+    const allPass=o=>p.tests.every(t=>{const m=aclFirst(o.map(k=>({ace:p.aces[k]})),flowOf(t));return (m?m.e.ace.action:'deny')===t[3];});
+    do{ order=shuffle(idx); }while(allPass(order)&&g++<200); }
+  $('#poTests').innerHTML=''; $('#poFb').className='fx-fb'; pRender(); pScore();
+}
+function pScore(){ $('#poScore').textContent='Solved '+Object.keys(pDone).length+' / '+PUZ.length; }
+function pRender(hits){
+  const p=PUZ[pi];
+  $('#poList').innerHTML=order.map((k,i)=>'<li class="fx-ace" draggable="true" data-i="'+i+'"><span class="no">'+(i+1)+'</span><span class="tx">access-list '+p.acl+' '+aceHTML(p.aces[k])+'</span><span class="mv"><button type="button" data-u="'+i+'" aria-label="Move up">↑</button><button type="button" data-d="'+i+'" aria-label="Move down">↓</button></span></li>').join('')
+   +'<li class="fx-ace imp"><span class="no">✕</span><span class="tx">(implicit deny ip any any — always last, not shown in the config)</span></li>';
+  $$('#poList [data-u]').forEach(b=>b.onclick=()=>mv(+b.dataset.u,-1));
+  $$('#poList [data-d]').forEach(b=>b.onclick=()=>mv(+b.dataset.d,1));
+  let from=null;
+  $$('#poList .fx-ace[draggable]').forEach(li=>{
+    li.addEventListener('dragstart',e=>{from=+li.dataset.i;li.classList.add('drag');e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',li.dataset.i);});
+    li.addEventListener('dragend',()=>li.classList.remove('drag'));
+    li.addEventListener('dragover',e=>{e.preventDefault();li.classList.add('over');});
+    li.addEventListener('dragleave',()=>li.classList.remove('over'));
+    li.addEventListener('drop',e=>{e.preventDefault();li.classList.remove('over');const to=+li.dataset.i;if(from==null||from===to)return;const [x]=order.splice(from,1);order.splice(to,0,x);clearRes();pRender();});
+  });
+}
+function clearRes(){ $('#poTests').innerHTML=''; $('#poFb').className='fx-fb'; }
+function mv(i,d){ const j=i+d; if(j<0||j>=order.length) return; [order[i],order[j]]=[order[j],order[i]]; clearRes(); pRender(); }
+function pRun(){
+  const p=PUZ[pi]; const list=order.map(k=>({ace:p.aces[k]})); let pass=0;
+  const rows=p.tests.map((t,ti)=>{ const m=aclFirst(list,flowOf(t)); const got=m?m.e.ace.action:'deny'; const ok=got===t[3]; if(ok)pass++;
+    return '<tr class="'+(ok?'pass':'fail')+'" data-l="'+(m?m.n-1:-1)+'"><td>'+(ti+1)+'</td><td class="m">'+esc(hostLabel(t[0]))+' → '+esc(hostLabel(t[1]))+'</td><td>'+esc(svcOf(t[2]).label)+'</td><td>'+t[3]+'</td><td>'+(m?got+' (line '+m.n+')':'deny (implicit)')+'</td><td>'+(ok?'✓':'✕')+'</td></tr>'; });
+  $('#poTests').innerHTML='<tr><th>#</th><th>Packet</th><th>Service</th><th>Should be</th><th>ASA result</th><th></th></tr>'+rows.join('');
+  $$('#poTests tr[data-l]').forEach(tr=>{tr.onmouseenter=()=>{const l=+tr.dataset.l;$$('#poList .fx-ace[draggable]').forEach((li,i)=>{li.classList.remove('hit-p','hit-d');if(i===l)li.classList.add(order.length&&p.aces[order[i]].action==='permit'?'hit-p':'hit-d');});};
+    tr.onmouseleave=()=>$$('#poList .fx-ace').forEach(li=>li.classList.remove('hit-p','hit-d'));});
+  const fb=$('#poFb');
+  if(pass===p.tests.length){ fb.className='fx-fb show ok'; fb.innerHTML='<b>✓ All '+pass+' tests pass.</b> '+p.why; pDone[pi]=1; RS.puz=pDone; rsave(); pScore(); }
+  else { fb.className='fx-fb show no'; fb.innerHTML='<b>'+pass+' of '+p.tests.length+' tests pass.</b> Hover a failing test to see which line matched it first, then move the lines and run again.'; }
+}
+$('#poRun').onclick=pRun; $('#poShuf').onclick=()=>pLoad(true); $('#poNext').onclick=()=>{pi=(pi+1)%PUZ.length;pLoad(true);};
+pLoad(true);
+})();
+
+/* =====================================================================
+   TAB 3: CONFIGURE THE ASA — topology + IOS-style console + tasks
+===================================================================== */
+(function asaConfig(){
+const SK='asa-ios-lab-v1';
+const DEF_INSPECT=['dns preset_dns_map','ftp','h323 h225','h323 ras','rsh','rtsp','esmtp','sqlnet','skinny','sunrpc','xdmcp','sip','netbios','tftp','ip-options'];
+function blankCfg(){ const ports={}; for(let i=0;i<8;i++) ports['Ethernet0/'+i]={vlan:1,shut:true,desc:''};
+  return {hostname:'ciscoasa',vlans:{},ports,acls:{},groups:{},routes:[],inspect:{icmp:false},saved:false}; }
+let ST=(()=>{try{const s=JSON.parse(localStorage.getItem(SK));if(s&&s.d)return s;}catch(e){}return {mode:'guided',d:{}};})();
+function persist(){try{localStorage.setItem(SK,JSON.stringify(ST));}catch(e){}}
+function D(){const m=ST.mode;if(!ST.d[m])ST.d[m]={cfg:blankCfg(),ev:[],res:{},auto:false};return ST.d[m];}
+let C=D().cfg;
+const AUTO_CMDS=['interface Vlan10',' nameif inside',' security-level 100',' ip address 192.168.10.1 255.255.255.0',
+ 'interface Vlan20',' nameif outside',' security-level 0',' ip address 203.0.113.2 255.255.255.248',
+ 'interface Ethernet0/0',' switchport access vlan 20',' no shutdown','interface Ethernet0/1',' switchport access vlan 10',' no shutdown',
+ 'exit','route outside 0.0.0.0 0.0.0.0 203.0.113.1'];
+
+/* ---------------- evaluation ---------------- */
+function sideIf(side){
+  const pn=side==='in'?'Ethernet0/1':'Ethernet0/0', p=C.ports[pn];
+  if(p.shut) return {why:pn+' is shut down (no shutdown needed)',pn};
+  const v=C.vlans[p.vlan];
+  if(!v) return {why:pn+' is in VLAN '+p.vlan+', which has no interface Vlan'+p.vlan,pn};
+  if(v.shut) return {why:'interface Vlan'+p.vlan+' is shut down',pn};
+  if(!v.nameif) return {why:'interface Vlan'+p.vlan+' has no nameif',pn};
+  if(!v.ip) return {why:'interface Vlan'+p.vlan+' ('+v.nameif+') has no IP address',pn};
+  return {ok:true,pn,vlan:p.vlan,v,nameif:v.nameif,sec:v.sec==null?0:v.sec};
+}
+function gwWhy(side,I){
+  const n=ip2n(I.v.ip),m=ip2n(I.v.mask);
+  if(side==='in'){ if(!inNet(ip2n('192.168.10.10'),n,m)) return 'the inside hosts are on 192.168.10.0/24 but the ASA "'+I.nameif+'" interface is '+I.v.ip+' '+I.v.mask;
+    if(I.v.ip!=='192.168.10.1') return 'the inside hosts use 192.168.10.1 as their default gateway, but the ASA inside address is '+I.v.ip; }
+  else { if(!inNet(ip2n('203.0.113.1'),n,m)) return 'the ISP router 203.0.113.1 is not on the same subnet as the ASA "'+I.nameif+'" interface ('+I.v.ip+' '+I.v.mask+')';
+    if(I.v.ip!=='203.0.113.2') return 'the ISP sends traffic for the college to 203.0.113.2, but the ASA outside address is '+I.v.ip; }
+  return null;
+}
+function routeTo(ipn,I){
+  if(inNet(ipn,ip2n(I.v.ip),ip2n(I.v.mask))) return true;
+  return C.routes.some(r=>r.if===I.nameif&&inNet(ipn,ip2n(r.net),ip2n(r.mask))&&inNet(ip2n(r.gw),ip2n(I.v.ip),ip2n(I.v.mask)));
+}
+function decide(f,noCount){
+  const sS=sideOfIp(f.src), dS=sideOfIp(f.dst), R={ok:false};
+  if(sS===dS){R.at='none';R.why='Both hosts are on the same side of the firewall, so this traffic never passes through the ASA.';return R;}
+  const A=sideIf(sS); if(!A.ok){R.at='link';R.why='It cannot enter the ASA: '+A.why+'.';R.dropReason='(ifc-down) Interface is down';return R;}
+  let g=gwWhy(sS,A); if(g){R.at='link';R.why='It never reaches the ASA: '+g+'.';R.dropReason='(no-adjacency) No valid adjacency';return R;}
+  R.inIf=A.nameif;
+  const B=sideIf(dS); if(!B.ok){R.at='asa';R.why='The ASA has no working interface towards the destination: '+B.why+'.';R.dropReason='(no-route) No route to host';return R;}
+  g=gwWhy(dS,B); if(g){R.at='asa';R.why='The ASA cannot deliver it: '+g+'.';R.dropReason='(no-route) No route to host';return R;}
+  R.outIf=B.nameif;
+  if(dS==='out'&&!routeTo(f.dst,B)){R.at='asa';R.noRoute=true;R.why='The ASA has no route to '+n2ip(f.dst)+'. It needs a default route to the ISP: route '+B.nameif+' 0.0.0.0 0.0.0.0 203.0.113.1';R.dropReason='(no-route) No route to host';return R;}
+  R.routeOK=true;
+  const acl=C.groups[A.nameif];
+  if(acl&&C.acls[acl]){ const m=aclFirst(C.acls[acl],f);
+    if(m){ if(!noCount)m.e.hits=(m.e.hits||0)+1; R.rule={acl,n:m.n,text:'access-list '+acl+' '+aceText(m.e.ace)}; }
+    R.aclName=acl;
+    if(m&&m.e.ace.action==='permit'){R.ok=true;R.how='Permitted by access-list '+acl+' line '+m.n+'.';}
+    else{R.at='asa';R.acl=true;R.why=m?'Denied by access-list '+acl+' line '+m.n+' ('+aceText(m.e.ace)+').':'No line in access-list '+acl+' matches, so the implicit deny at the end drops it.';R.dropReason='(acl-drop) Flow is denied by configured rule';return R;}
+  } else {
+    if(A.sec>B.sec){R.ok=true;R.how='No ACL on '+A.nameif+': '+A.nameif+' ('+A.sec+') → '+B.nameif+' ('+B.sec+') is higher → lower security, so it is allowed.';R.implicit=true;}
+    else{R.at='asa';R.acl=true;R.implicit=true;R.why=A.sec===B.sec?'Both interfaces are security level '+A.sec+' — traffic between equal levels is denied by default.':'No ACL on '+A.nameif+': '+A.nameif+' ('+A.sec+') → '+B.nameif+' ('+B.sec+') is lower → higher security, so it is denied by default.';R.dropReason='(acl-drop) Flow is denied by configured rule';return R;}
+  }
+  if(sS==='out'&&!routeTo(f.src,A)){R.rep={ok:false,why:'the ASA has no route back to '+n2ip(f.src)+' — add a default route to the ISP.'};return R;}
+  if(f.proto!=='icmp') R.rep={ok:true,how:'The reply is allowed back automatically — the ASA is stateful and remembers the '+f.proto.toUpperCase()+' connection.'};
+  else if(C.inspect.icmp) R.rep={ok:true,how:'The echo-reply is allowed back — ICMP inspection tracks the ping like a connection.'};
+  else { const rf={proto:'icmp',src:f.dst,dst:f.src,icmp:0}, acl2=C.groups[B.nameif];
+    if(acl2&&C.acls[acl2]){ const m=aclFirst(C.acls[acl2],rf); if(m&&!noCount)m.e.hits=(m.e.hits||0)+1;
+      R.rep=(m&&m.e.ace.action==='permit')?{ok:true,how:'The echo-reply is permitted by access-list '+acl2+' line '+m.n+'.'}:{ok:false,why:'ICMP is not inspected, so the echo-reply is treated as a new packet and '+(m?'access-list '+acl2+' line '+m.n+' denies it.':'nothing in access-list '+acl2+' permits it (implicit deny).')+' Turn on inspect icmp.'}; }
+    else R.rep=B.sec>A.sec?{ok:true,how:'The echo-reply is allowed: '+B.nameif+' → '+A.nameif+' is higher → lower security.'}:{ok:false,why:'ICMP is not inspected by default, so the echo-reply looks like a new lower → higher packet and is dropped. Turn on inspect icmp in the global policy.'};
+  }
+  return R;
+}
+
+/* ---------------- topology ---------------- */
+const SVG='http://www.w3.org/2000/svg', svg=$('#topo');
+const POS0={user:[70,95],atk:[190,55],admin:[320,45],web:[450,55],dns:[570,95],cloud:[320,175],isp:[320,280],asa:[320,425],sw:[320,545],pca:[160,655],pcb:[320,655],srv:[480,655]};
+let POS=JSON.parse(JSON.stringify(POS0));
+const NINFO={cloud:{sym:'cloud',name:'Internet',sc:1.45},isp:{sym:'router',name:'ISP router',ip:'203.0.113.1',sc:1.25},asa:{sym:'firewall',name:'ASA 5505',sc:1.1},sw:{sym:'switch',name:'Inside switch'}};
+for(const k in HOSTS) NINFO[k]={sym:HOSTS[k].sym,name:HOSTS[k].name,ip:HOSTS[k].ip,bad:HOSTS[k].bad};
+const LINKS=[['user','cloud'],['atk','cloud'],['admin','cloud'],['web','cloud'],['dns','cloud'],['cloud','isp'],['isp','asa','E0/0','out'],['asa','sw','E0/1','in'],['sw','pca'],['sw','pcb'],['sw','srv']];
+const VB0=[0,0,640,730]; let VB=VB0.slice();
+function setVB(){svg.setAttribute('viewBox',VB.join(' '));}
+svg.innerHTML='<g id="gZ"></g><g id="gL"></g><g id="gN"></g><g id="gT"></g><g id="gF"></g>';
+function el(tag,at,parent){const e=document.createElementNS(SVG,tag);for(const k in at){if((k==='fill'||k==='stroke')&&String(at[k]).includes('var('))e.style[k]=at[k];else e.setAttribute(k,at[k]);}if(parent)parent.appendChild(e);return e;}
+function glyph(sym,sc){const s=(sc||1)*0.95;return '<g transform="translate('+(-32*s)+','+(-32*s)+') scale('+s+')">'+((window.NETSYM||{})[sym]||'<circle cx="32" cy="32" r="22" fill="#cfe7f5" stroke="#0a7cad" stroke-width="2"/>')+'</g>';}
+function prefix(m){let c=0;const n=ip2n(m);for(let i=31;i>=0;i--){if(Math.floor(n/Math.pow(2,i))%2)c++;else break;}return c;}
+function draw(){
+  const gZ=$('#gZ'),gL=$('#gL'),gN=$('#gN'),gT=$('#gT'); gZ.innerHTML=gL.innerHTML=gN.innerHTML=gT.innerHTML='';
+  // zones
+  [['out',['user','atk','admin','web','dns','cloud','isp'],'OUTSIDE — INTERNET','var(--bad)','rgba(210,61,61,.05)'],['in',['sw','pca','pcb','srv'],'INSIDE — LAN','var(--ok)','rgba(26,156,91,.06)']].forEach(([side,ids,title,col,fill])=>{
+    const xs=ids.map(i=>POS[i][0]),ys=ids.map(i=>POS[i][1]);
+    const x=Math.min(...xs)-62,y=Math.min(...ys)-(side==='out'?36:52),w=Math.max(...xs)-Math.min(...xs)+124,h=Math.max(...ys)-Math.min(...ys)+(side==='out'?108:122);
+    el('rect',{x,y,width:w,height:h,rx:14,fill,stroke:col,'stroke-width':1.5,'stroke-dasharray':'6 5'},gZ);
+    const t1=side==='out'?el('text',{x:x+12,y:y+h-12,class:'zl',fill:col},gZ):el('text',{x:x+w-12,y:y+18,'text-anchor':'end',class:'zl',fill:col},gZ); t1.textContent=title;
+  });
+  // interface info beside the ASA links
+  [['out',-48],['in',50]].forEach(([side,dy])=>{ const I=sideIf(side),[ax,ay]=POS.asa,col=I.ok?(side==='out'?'var(--bad)':'var(--ok)'):'var(--muted)';
+    const l1=I.ok?(I.pn.replace('Ethernet','E')+' → Vlan'+I.vlan+' · '+I.nameif+' · sec '+I.sec):(I.pn.replace('Ethernet','E')+' not ready');
+    const l2=I.ok?(I.v.ip+'/'+prefix(I.v.mask)):I.why.replace(/^Ethernet0\/\d /,'').replace(/^interface /,'');
+    const a=el('text',{x:ax-48,y:ay+dy,'text-anchor':'end',class:'zi',fill:col},gZ); a.textContent=l1;
+    const b=el('text',{x:ax-48,y:ay+dy+14,'text-anchor':'end',class:'zi',fill:col},gZ); b.textContent=l2.length>42?l2.slice(0,41)+'…':l2; });
+  // links
+  LINKS.forEach(([a,b,lab,side])=>{const A=POS[a],B=POS[b];
+    let col='#7f97a8', ok=true; if(side){ const I=sideIf(side); ok=!!I.ok; col=ok?'#1a9c5b':'#d23d3d'; }
+    el('line',{x1:A[0],y1:A[1],x2:B[0],y2:B[1],stroke:side?col:'#8aa4b6','stroke-width':side?3:2.2,'stroke-dasharray':side&&!ok?'7 5':'none'},gL);
+    if(side){ const dx=B[0]-A[0],dy=B[1]-A[1],L=Math.hypot(dx,dy)||1,ux=dx/L,uy=dy/L;
+      const ax=a==='asa'?A:B, sgn=a==='asa'?1:-1; const px=ax[0]+ux*sgn*36,py=ax[1]+uy*sgn*36;
+      el('circle',{cx:px,cy:py,r:5,fill:col,stroke:'#fff','stroke-width':1.5},gL);
+      const o=a==='asa'?B:A, qd=(a==='isp'||b==='isp')?76:30, qx=o[0]-ux*sgn*qd, qy=o[1]-uy*sgn*qd; el('circle',{cx:qx,cy:qy,r:5,fill:col,stroke:'#fff','stroke-width':1.5},gL);
+      const t=el('text',{x:px+10,y:py+4,class:'pl'},gL); t.textContent=lab; }
+  });
+  // nodes
+  for(const k in POS){ const n=NINFO[k],[x,y]=POS[k]; const g=el('g',{class:'nd',transform:'translate('+x+','+y+')','data-id':k},gN);
+    g.innerHTML=glyph(n.sym,n.sc); const off=k==='cloud'?32:34;
+    if(k==='asa'){ const a=el('text',{x:-44,y:-2,'text-anchor':'end',class:'nm'},g); a.textContent=C.hostname; const b2=el('text',{x:-44,y:12,'text-anchor':'end',class:'ip'},g); b2.textContent='ASA 5505'; continue; }
+    const t=el('text',{x:0,y:off+8,'text-anchor':'middle',class:'nm'},g); t.textContent=n.name; if(n.bad) t.setAttribute('fill','var(--bad)');
+    if(n.ip){const t2=el('text',{x:0,y:off+21,'text-anchor':'middle',class:'ip'},g);t2.textContent=n.ip;} }
+  // tags beside the ASA
+  const tags=[]; for(const i in C.groups) tags.push(['ACL '+C.groups[i]+' — in on '+i,'var(--accent-dark)']);
+  if(C.inspect.icmp) tags.push(['inspect icmp','var(--ok)']);
+  const [ax,ay]=POS.asa; tags.forEach(([txt,col],i)=>{const y=ay-24+i*21,w=txt.length*6.3+16; el('rect',{x:ax+46,y:y-13,width:w,height:18,rx:9,fill:'var(--panel)',stroke:col,'stroke-width':1.2},gT); const t=el('text',{x:ax+54,y:y,class:'pl'},gT); t.style.fill=col; t.textContent=txt;});
+}
+/* drag nodes / pan */
+let drag=null;
+function svgPt(e,ctm){const p=svg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;return p.matrixTransform((ctm||svg.getScreenCTM()).inverse());}
+svg.addEventListener('pointerdown',e=>{const nd=e.target.closest('.nd');const ctm=svg.getScreenCTM();const p=svgPt(e,ctm);
+  if(nd){const id=nd.dataset.id;drag={id,dx:p.x-POS[id][0],dy:p.y-POS[id][1]};}else{drag={pan:true,ctm,x:p.x,y:p.y,vb:VB.slice()};svg.classList.add('panning');}
+  svg.setPointerCapture(e.pointerId);});
+svg.addEventListener('pointermove',e=>{if(!drag)return;
+  if(drag.pan){const p=svgPt(e,drag.ctm);VB[0]=drag.vb[0]-(p.x-drag.x);VB[1]=drag.vb[1]-(p.y-drag.y);setVB();}
+  else{const p=svgPt(e);POS[drag.id]=[Math.round(p.x-drag.dx),Math.round(p.y-drag.dy)];draw();}});
+const endDrag=()=>{drag=null;svg.classList.remove('panning');};
+svg.addEventListener('pointerup',endDrag);svg.addEventListener('pointercancel',endDrag);
+$('#topoFit').onclick=()=>{POS=JSON.parse(JSON.stringify(POS0));VB=VB0.slice();setVB();draw();};
+$('#topoFull').onclick=()=>{const c=$('#topoCard');if(document.fullscreenElement)document.exitFullscreen();else if(c.requestFullscreen)c.requestFullscreen();};
+
+/* ---------------- packet animation ---------------- */
+let busy=false;
+const spd=()=>+$('#tSpd').value*(RUN.fast?2.2:1);
+const wait=ms=>new Promise(r=>setTimeout(r,ms/spd()));
+function mkEnv(kind,label){const g=el('g',{class:'env'},$('#gF'));const reply=kind==='rep';
+  g.innerHTML='<g transform="scale(1.35)"><rect x="-11" y="-7.5" width="22" height="15" rx="2" fill="'+(reply?'#dff5e7':'#ffffff')+'" stroke="'+(reply?'#1a9c5b':'#0a7cad')+'" stroke-width="1.8"/><path d="M-11 -7.5 L0 1.8 L11 -7.5" fill="none" stroke="'+(reply?'#1a9c5b':'#0a7cad')+'" stroke-width="1.6"/></g>'
+   +'<text y="-16" text-anchor="middle" style="font:700 10px var(--mono);fill:'+(reply?'#1a9c5b':'#0a7cad')+'">'+esc(label)+'</text>';
+  return g;}
+function place(g,x,y){g.setAttribute('transform','translate('+x+','+y+')');}
+function seg(g,a,b,upto){return new Promise(res=>{const A=POS[a],B=POS[b],k1=upto||1;const dur=Math.max(160,Math.hypot(B[0]-A[0],B[1]-A[1])*k1/(240*spd())*1000);const t0=performance.now();
+  (function st(t){const k=Math.min(1,(t-t0)/dur)*k1;place(g,A[0]+(B[0]-A[0])*k,A[1]+(B[1]-A[1])*k);if(k<k1)requestAnimationFrame(st);else res();})(t0);});}
+async function travel(g,ids){place(g,POS[ids[0]][0],POS[ids[0]][1]);for(let i=0;i<ids.length-1;i++)await seg(g,ids[i],ids[i+1]);}
+async function badge(ok,txt,at){const [x,y]=POS[at||'asa'];const g=el('g',{transform:'translate('+x+','+(y-6)+')'},$('#gF'));
+  const col=ok?'#1a9c5b':'#d23d3d', w=txt.length*7.4+46;
+  g.innerHTML='<circle r="19" fill="'+col+'" opacity=".18"><animate attributeName="r" from="14" to="34" dur=".7s" repeatCount="2"/><animate attributeName="opacity" from=".35" to="0" dur=".7s" repeatCount="2"/></circle>'
+   +'<circle r="15" fill="'+col+'" stroke="#fff" stroke-width="2.5"/><text y="6" text-anchor="middle" style="font:800 17px var(--display);fill:#fff">'+(ok?'✓':'✕')+'</text>'
+   +'<g transform="translate(-'+(w/2)+',-48)"><rect width="'+w+'" height="22" rx="11" fill="'+col+'"/><text x="'+(w/2)+'" y="15" text-anchor="middle" style="font:700 11.5px var(--display);fill:#fff;letter-spacing:.04em">'+esc(txt)+'</text></g>';
+  await wait(1100); g.remove();}
+async function dropEnv(g){g.querySelector('rect').setAttribute('fill','#fbe2e2');g.querySelectorAll('rect,path').forEach(e=>e.setAttribute('stroke','#d23d3d'));
+  const m=(g.getAttribute('transform')||'').match(/translate\(([-\d.]+),([-\d.]+)\)/);const x=+m[1],y=+m[2];
+  for(let i=0;i<6;i++){place(g,x+(i%2?-5:5),y);await wait(55);}
+  const t0=performance.now();await new Promise(r=>{(function st(t){const k=Math.min(1,(t-t0)/(600/spd()));place(g,x,y+36*k);g.setAttribute('opacity',1-k);if(k<1)requestAnimationFrame(st);else r();})(t0);});g.remove();}
+async function tick(at){const [x,y]=POS[at];const g=el('g',{transform:'translate('+(x+24)+','+(y-26)+')'},$('#gF'));g.innerHTML='<circle r="11" fill="#1a9c5b" stroke="#fff" stroke-width="2"/><text y="4.5" text-anchor="middle" style="font:800 13px var(--display);fill:#fff">✓</text>';await wait(650);g.remove();}
+function setCap(kind,ic,html){const c=$('#cap');c.className='fx-cap'+(kind==='ok'?' ok':kind==='no'?' no':'');c.innerHTML='<span class="ic">'+ic+'</span><span>'+html+'</span>';}
+function up(k){return HOSTS[k].side==='out'?[k,'cloud','isp','asa']:[k,'sw','asa'];}
+function short(sv){return sv.proto==='icmp'?'PING':(PORTNAME[sv.port]==='www'?'HTTP':(PORTNAME[sv.port]||sv.proto+'/'+sv.port).toUpperCase());}
+function logLine(ok,txt){const d=document.createElement('div');d.className=ok?'ok':'no';d.textContent=new Date().toLocaleTimeString('en-GB')+'  '+(ok?'✓ ':'✕ ')+txt;$('#plog').prepend(d);}
+/* animate one test; returns {req,rep,overall,R} */
+async function send(s,d,sv,src){
+  const H1=HOSTS[s],H2=HOSTS[d];
+  const f={proto:sv.proto,src:ip2n(H1.ip),dst:ip2n(H2.ip),dport:sv.port,icmp:sv.icmp};
+  const R=decide(f,src==='packet-tracer'), lab=short(sv), title='<b>'+esc(H1.name)+'</b> → <b>'+esc(H2.name)+'</b> · '+esc(sv.label);
+  setCap('','✉️',title+' — on its way to the firewall…');
+  const p1=up(s), p2=up(d).slice().reverse(); const g=mkEnv('req',lab);
+  let res;
+  if(R.at==='link'){ await travel(g,p1.slice(0,-1)); await seg(g,p1[p1.length-2],'asa',.55); await dropEnv(g);
+    setCap('no','⛔',title+'<br>Dropped before the firewall — '+esc(R.why)); res={req:false,rep:false}; }
+  else { await travel(g,p1);
+    if(!R.ok){ await badge(false,R.acl?'DENY':'DROP'); await dropEnv(g); setCap('no','⛔',title+'<br><b>Denied by the ASA.</b> '+esc(R.why)); res={req:false,rep:false}; }
+    else { const b=badge(true,'PERMIT'); await wait(450); await travel(g,p2); g.remove(); await b; tick(d);
+      setCap('','↩️',title+'<br>'+esc(R.how)+' Now the reply comes back…');
+      const r=mkEnv('rep',sv.proto==='icmp'?'REPLY':lab); await travel(r,p2.slice().reverse());
+      if(!R.rep.ok){ await badge(false,'REPLY DROPPED'); await dropEnv(r); setCap('no','⚠️',title+'<br>The request got through, but <b>the reply was dropped</b>: '+esc(R.rep.why)); res={req:true,rep:false}; }
+      else { const b2=badge(true,'REPLY OK'); await wait(450); await travel(r,p1.slice().reverse()); r.remove(); await b2; await tick(s);
+        setCap('ok','✅',title+'<br><b>Success.</b> '+esc(R.how)+' '+esc(R.rep.how)); res={req:true,rep:true}; } } }
+  res.overall=res.req&&res.rep; res.R=R;
+  logLine(res.overall,H1.name+' → '+H2.name+' '+lab+(res.overall?' — allowed':res.req?' — reply dropped':' — denied')+(src?' ('+src+')':''));
+  const key=Object.keys(SVCS).find(k=>SVCS[k]===sv)||'x';
+  addEv('f:'+s+'>'+d+':'+key+':'+(res.req?1:0)+(res.rep?1:0));
+  return res;
+}
+
+/* ---------------- tasks ---------------- */
+const EVS=()=>new Set(D().ev);
+function addEv(e){const d=D();if(!d.ev.includes(e)){d.ev.push(e);if(d.ev.length>400)d.ev.shift();}persist();}
+const evAny=re=>D().ev.some(e=>re.test(e));
+const OUTH='(user|atk|admin|web|dns)',INH='(pca|pcb|srv)';
+function vok(n,nm,sec,ip,mk){const v=C.vlans[n];return !!v&&v.nameif===nm&&v.sec===sec&&v.ip===ip&&v.mask===mk&&!v.shut;}
+const GUIDED={title:'Guided task — set up the ASA, then make your first firewall rule',
+ brief:'Configure a blank ASA 5505 step by step. Each step ticks when it\'s done — open <b>Show me</b> if you need the commands. If your teacher wants you to skip the interface set-up, press <b>⚡ Auto-configure</b> and start at step 6. (NAT is left out so you can focus on the rules.)',
+ steps:[
+ {t:'Log in: go to <b>privileged EXEC</b> mode, then <b>global configuration</b> mode.',why:'Press Enter at the Password: prompt (no enable password is set yet).',cmds:'enable\nconfigure terminal',chk:()=>EVS().has('conf')},
+ {t:'Create <b>interface Vlan10</b>: nameif <b>inside</b>, security-level <b>100</b>, IP <b>192.168.10.1 255.255.255.0</b>.',why:'On an ASA 5505 the IP address and name go on a VLAN interface; the Ethernet ports are switch ports.',cmds:'interface vlan 10\n nameif inside\n security-level 100\n ip address 192.168.10.1 255.255.255.0',chk:()=>vok(10,'inside',100,'192.168.10.1','255.255.255.0'),auto:1},
+ {t:'Create <b>interface Vlan20</b>: nameif <b>outside</b>, security-level <b>0</b>, IP <b>203.0.113.2 255.255.255.248</b>.',why:'The ISP router is 203.0.113.1 on this /29.',cmds:'interface vlan 20\n nameif outside\n security-level 0\n ip address 203.0.113.2 255.255.255.248',chk:()=>vok(20,'outside',0,'203.0.113.2','255.255.255.248'),auto:1},
+ {t:'Put <b>Ethernet0/0</b> (to the ISP) in VLAN <b>20</b> and <b>Ethernet0/1</b> (to the inside switch) in VLAN <b>10</b>, and bring both ports up.',why:'Watch the link lights on the topology turn green.',cmds:'interface ethernet0/0\n switchport access vlan 20\n no shutdown\ninterface ethernet0/1\n switchport access vlan 10\n no shutdown',chk:()=>C.ports['Ethernet0/0'].vlan===20&&!C.ports['Ethernet0/0'].shut&&C.ports['Ethernet0/1'].vlan===10&&!C.ports['Ethernet0/1'].shut,auto:1},
+ {t:'Add a <b>default route</b> out of the outside interface to the ISP router <b>203.0.113.1</b>.',why:'Without it the ASA does not know how to reach internet addresses.',cmds:'exit\nroute outside 0.0.0.0 0.0.0.0 203.0.113.1',chk:()=>C.routes.some(r=>r.if==='outside'&&r.net==='0.0.0.0'&&r.mask==='0.0.0.0'&&r.gw==='203.0.113.1'),auto:1},
+ {t:'<b>Test:</b> PC-A → Public web site using <b>HTTPS</b>. It should be <b>allowed</b> with no ACL.',why:'inside (100) → outside (0) is higher → lower, and the reply is let back in because the ASA is stateful.',cmds:'Test panel → From: PC-A · To: Public web site · Service: HTTPS → Send packet',chk:()=>evAny(new RegExp('^f:'+INH+'>'+OUTH+':https:11'))},
+ {t:'<b>Test:</b> Internet user → Web server using <b>HTTPS</b>. It should be <b>denied</b>.',why:'outside (0) → inside (100) is lower → higher, so it is blocked by default.',cmds:'Test panel → From: Internet user · To: Web server · Service: HTTPS → Send packet',chk:()=>evAny(new RegExp('^f:'+OUTH+'>srv:https:0'))},
+ {t:'Create ACL <b>OUTSIDE_IN</b> permitting <b>HTTPS</b> from <b>any</b> host to the web server <b>192.168.10.50</b>, and apply it <b>in</b> on <b>outside</b>.',why:'ACLs on an ASA use subnet masks, not wildcard masks. The access-group binds the list to the interface.',cmds:'access-list OUTSIDE_IN extended permit tcp any host 192.168.10.50 eq https\naccess-group OUTSIDE_IN in interface outside',chk:()=>C.groups.outside==='OUTSIDE_IN'&&(C.acls.OUTSIDE_IN||[]).some(e=>e.ace&&e.ace.action==='permit'&&e.ace.proto==='tcp'&&e.ace.src.t==='any'&&e.ace.dst.t==='host'&&n2ip(e.ace.dst.ip)==='192.168.10.50'&&e.ace.port&&e.ace.port.op==='eq'&&e.ace.port.lo===443)},
+ {t:'<b>Re-test:</b> Internet user → Web server, <b>HTTPS</b> is now <b>allowed</b> — and <b>SSH</b> from the internet is still <b>denied</b>.',why:'Only what the ACL permits gets in; everything else hits the implicit deny.',cmds:'Send HTTPS, then SSH, from Internet user to Web server',chk:()=>evAny(new RegExp('^f:'+OUTH+'>srv:https:11'))&&evAny(new RegExp('^f:'+OUTH+'>srv:ssh:0'))},
+ {t:'<b>Test:</b> PC-A <b>pings</b> the Public web site. The request leaves, but the <b>reply is dropped</b>.',why:'By default the ASA does not inspect ICMP, so the echo-reply is treated as a new outside → inside packet.',cmds:'Test panel → From: PC-A · To: Public web site · Service: Ping → Send packet',chk:()=>evAny(new RegExp('^f:'+INH+'>'+OUTH+':ping:10'))},
+ {t:'Turn on <b>ICMP inspection</b> in the global policy, then ping again — it should now <b>succeed</b>.',why:'inspect icmp makes the ASA track pings statefully, so the replies are let back in.',cmds:'policy-map global_policy\n class inspection_default\n  inspect icmp\n  end',chk:()=>C.inspect.icmp&&evAny(new RegExp('^f:'+INH+'>'+OUTH+':ping:11'))},
+ {t:'Check the hit counts with <b>show access-list</b>, then <b>save</b> the configuration.',why:'Hit counts prove which rule your test traffic matched.',cmds:'show access-list\nwrite memory',chk:()=>EVS().has('showacl')&&C.saved},
+ ],
+ tests:[['pca','web','https','allow'],['user','srv','https','allow'],['user','srv','ssh','deny'],['user','pca','rdp','deny'],['pca','web','ping','allow']]};
+const INDEP={title:'Independent task — Northgate Dental Practice',
+ brief:'Northgate Dental Practice (a fictional client) has the same network. Configure the interfaces (or use ⚡ Auto-configure), then write and apply the ACLs to meet every requirement. No commands are given. Use the test panel and <span class="mono">packet-tracer</span> as you work, then press <b>▶ Run task tests</b> to produce your test log.',
+ reqs:[
+  {t:'The public can reach the practice web server <span class="mono">192.168.10.50</span> using <b>HTTP and HTTPS</b>.',tests:[0,1],hint:'Two permits in an ACL applied in on outside.'},
+  {t:'Only the IT contractor <span class="mono">192.0.2.25</span> may use <b>SSH</b> to the web server.',tests:[3,4],hint:'Use host for the source — everyone else is caught by the implicit deny.'},
+  {t:'The attacker <span class="mono">198.51.100.66</span> must be blocked from <b>everything</b> inside — including the website.',tests:[2],hint:'Order matters: this deny must be above your permits.'},
+  {t:'Nothing else from the internet may start a connection to an inside device (for example <b>RDP</b> to PC-A).',tests:[5],hint:'You get this for free from the implicit deny — just don\'t over-permit.'},
+  {t:'Staff PCs must <b>not</b> use <b>Telnet</b> to the internet, but <b>all their other traffic</b> must still work.',tests:[6,7,8],hint:'An ACL in on inside: deny telnet, then permit everything else (the implicit deny would block the rest).'},
+  {t:'Staff must be able to <b>ping</b> internet hosts to troubleshoot.',tests:[9],hint:'Replies need inspect icmp (or a permit for echo-reply).'},
+  {t:'<b>Save</b> the configuration.',save:1},
+ ],
+ tests:[['user','srv','https','allow'],['user','srv','http','allow'],['atk','srv','https','deny'],['admin','srv','ssh','allow'],['user','srv','ssh','deny'],['user','pca','rdp','deny'],['pca','web','https','allow'],['pca','web','telnet','deny'],['pcb','dns','dns','allow'],['pca','web','ping','allow']]};
+function curTests(){return ST.mode==='guided'?GUIDED.tests:ST.mode==='indep'?INDEP.tests:null;}
+
+let lastTask='';
+function renderTask(force){
+  const t=$('#task'), m=ST.mode, d=D();
+  const sig=m+'|'+d.auto+'|'+(m==='guided'?GUIDED.steps.map(s=>s.chk()?1:0).join(''):m==='indep'?JSON.stringify(d.res)+C.saved:'');
+  if(!force&&sig===lastTask) return; lastTask=sig;
+  $('#runAll').classList.toggle('fx-hide',m==='free'); $('#resCard').classList.toggle('fx-hide',m==='free');
+  if(m==='free'){ t.innerHTML='<h2>Free practice</h2><p class="fx-brief">A blank ASA with no task — configure anything you like and test it with packets. Try <span class="mono">packet-tracer input outside tcp 198.51.100.20 1025 192.168.10.50 443</span> once you have rules.</p>'; return; }
+  if(m==='guided'){
+    const st=GUIDED.steps.map(s=>!!s.chk()); const cur=st.indexOf(false);
+    t.innerHTML='<h2>'+GUIDED.title+' <span class="fx-pill'+(cur<0?' ok':'')+'">'+st.filter(Boolean).length+' / '+st.length+'</span>'+(d.auto?' <span class="fx-pill">interfaces auto-configured</span>':'')+'</h2><p class="fx-brief">'+GUIDED.brief+'</p><div class="fx-objs">'+
+     GUIDED.steps.map((s,i)=>'<div class="fx-obj'+(st[i]?' done':'')+(i===cur?' cur':'')+'"><b>'+(i+1)+'.</b> '+s.t+(s.auto&&d.auto&&st[i]?'<span class="auto">auto</span>':'')+
+      '<details'+(i===cur&&!st[i]?' open':'')+'><summary>Show me</summary><div class="why">'+s.why+'</div><div class="fx-cmds">'+esc(s.cmds)+'</div></details></div>').join('')+'</div>'+
+     '<div class="fx-done'+(cur<0?' show':'')+'"><b>✓ Guided task complete.</b> Run the task tests to fill in the test log, then move on to the <b>Independent task</b>.</div>';
+  } else {
+    const r=d.res||{}; const met=INDEP.reqs.map(q=>q.save?C.saved:q.tests.every(i=>r[i]&&r[i].pass));
+    const all=met.every(Boolean);
+    t.innerHTML='<h2>'+INDEP.title+' <span class="fx-pill'+(all?' ok':'')+'">'+met.filter(Boolean).length+' / '+met.length+' met</span>'+(d.auto?' <span class="fx-pill">interfaces auto-configured</span>':'')+'</h2><p class="fx-brief">'+INDEP.brief+'</p><ol class="fx-req">'+
+     INDEP.reqs.map((q,i)=>'<li class="'+(met[i]?'met':'')+'">'+(met[i]?'✓ ':'')+q.t+(q.hint?' <details style="display:inline"><summary style="display:inline;cursor:pointer;color:var(--accent-dark);font-size:12px">hint</summary> <span style="color:var(--muted);font-size:12.5px">'+q.hint+'</span></details>':'')+'</li>').join('')+'</ol>'+
+     '<div class="fx-done'+(all?' show':'')+'"><b>✓ All requirements met and saved.</b> Copy your test log for your evidence.</div>';
+  }
+}
+function renderRes(){
+  const T=curTests(); if(!T) return; const r=D().res||{};
+  $('#resTbl').innerHTML='<tr><th>#</th><th>From → To</th><th>Service</th><th>Expected</th><th>Actual</th><th></th></tr>'+T.map((t,i)=>{const x=r[i];
+    return '<tr><td>'+(i+1)+'</td><td class="m">'+esc(HOSTS[t[0]].name)+' → '+esc(HOSTS[t[1]].name)+'</td><td>'+esc(SVCS[t[2]].label)+'</td><td>'+(t[3]==='allow'?'Allowed':'Denied')+'</td><td>'+(x?esc(x.actual):'—')+'</td><td class="'+(x?(x.pass?'pass':'fail'):'')+'">'+(x?(x.pass?'✓ pass':'✕ fail'):'')+'</td></tr>';}).join('');
+  const n=Object.values(r).filter(x=>x.pass).length; $('#resSub').textContent=Object.keys(r).length?(n+' of '+T.length+' tests pass.'):'Run the task tests to fill this in. Single packets you send that match a test also update it.';
+}
+function recordTest(s,d,svc,res){const T=curTests();if(!T)return;T.forEach((t,i)=>{if(t[0]===s&&t[1]===d&&t[2]===svc){const actual=res.overall?'Allowed':res.req?'Reply dropped':'Denied';D().res[i]={actual,pass:t[3]==='allow'?res.overall:!res.overall};}});persist();}
+const RUN={fast:false};
+async function sendUI(s,d,svc,src){ if(busy) return; busy=true; $('#sendBtn').disabled=$('#runAll').disabled=true;
+  try{ const res=await send(s,d,SVCS[svc],src); recordTest(s,d,svc,res); } finally { busy=false; $('#sendBtn').disabled=$('#runAll').disabled=false; refresh(); } }
+async function runAll(){ const T=curTests(); if(!T||busy) return; busy=true; RUN.fast=true; $('#sendBtn').disabled=$('#runAll').disabled=true; D().res={};
+  try{ for(const t of T){ const res=await send(t[0],t[1],SVCS[t[2]],'task test'); recordTest(t[0],t[1],t[2],res); renderRes(); } }
+  finally{ RUN.fast=false; busy=false; $('#sendBtn').disabled=$('#runAll').disabled=false; refresh();
+    const r=D().res,n=Object.values(r).filter(x=>x.pass).length; setCap(n===T.length?'ok':'no',n===T.length?'✅':'📋','Task tests finished: <b>'+n+' of '+T.length+'</b> pass. See the test log under the console.'); } }
+$('#sendBtn').onclick=()=>sendUI($('#tSrc').value,$('#tDst').value,$('#tSvc').value);
+$('#runAll').onclick=runAll;
+$('#copyLog').onclick=()=>{const T=curTests();if(!T)return;const r=D().res||{};
+  const txt=['#\tFrom\tTo\tService\tExpected\tActual\tResult'].concat(T.map((t,i)=>[i+1,HOSTS[t[0]].name+' ('+HOSTS[t[0]].ip+')',HOSTS[t[1]].name+' ('+HOSTS[t[1]].ip+')',SVCS[t[2]].label,t[3]==='allow'?'Allowed':'Denied',r[i]?r[i].actual:'not run',r[i]?(r[i].pass?'PASS':'FAIL'):''].join('\t'))).join('\n')
+   +'\n\nRunning configuration:\n'+runCfg().join('\n');
+  const done=()=>{$('#copyLog').textContent='Copied ✓';setTimeout(()=>$('#copyLog').textContent='Copy test log',1500);};
+  if(navigator.clipboard)navigator.clipboard.writeText(txt).then(done,()=>{});else done();};
+// test selectors
+function fillSel(){ const o=k=>'<option value="'+k+'">'+esc(HOSTS[k].name)+' — '+HOSTS[k].ip+'</option>';
+  const ins=Object.keys(HOSTS).filter(k=>HOSTS[k].side==='in'),outs=Object.keys(HOSTS).filter(k=>HOSTS[k].side==='out');
+  $('#tSrc').innerHTML='<optgroup label="Inside">'+ins.map(o).join('')+'</optgroup><optgroup label="Outside">'+outs.map(o).join('')+'</optgroup>';
+  $('#tSvc').innerHTML=Object.keys(SVCS).map(k=>'<option value="'+k+'">'+SVCS[k].label+'</option>').join('');
+  $('#tSrc').value='pca'; fillDst(); }
+function fillDst(){ const s=$('#tSrc').value, other=HOSTS[s].side==='in'?'out':'in', prev=$('#tDst').value;
+  const ks=Object.keys(HOSTS).filter(k=>HOSTS[k].side===other); $('#tDst').innerHTML=ks.map(k=>'<option value="'+k+'">'+esc(HOSTS[k].name)+' — '+HOSTS[k].ip+'</option>').join('');
+  if(ks.includes(prev)) $('#tDst').value=prev; }
+$('#tSrc').onchange=fillDst;
+
+/* ---------------- the console ---------------- */
+const tout=$('#tout'), tin=$('#tin'), term=$('#term');
+const T={mode:'user',sub:null,pm:null,cls:null,hist:[],hp:0,pw:false};
+function P(){return C.hostname+({user:'>',priv:'#',config:'(config)#',if:'(config-if)#',pmap:'(config-pmap)#',pmapc:'(config-pmap-c)#'}[T.mode]);}
+function setPs(){$('#tps').textContent=T.pw?'Password: ':P()+' '; tin.type=T.pw?'password':'text';}
+function o(text,cls){String(text).split('\n').forEach(l=>{const d=document.createElement('div');d.className='ln'+(cls?' '+cls:'');d.textContent=l;tout.appendChild(d);});
+  while(tout.childNodes.length>1600) tout.removeChild(tout.firstChild); }
+function scrollEnd(){term.scrollTop=term.scrollHeight;}
+function caret(raw,ti){const re=/\S+/g;let m,i=0,pos=raw.length;while((m=re.exec(raw))){if(i===ti){pos=m.index;break;}i++;}
+  o(' '.repeat((P()+' ').length+pos)+'^','l-bad'); o("ERROR: % Invalid input detected at '^' marker.",'l-bad');}
+const inc=()=>o('ERROR: % Incomplete command','l-bad');
+const info=t=>o(t,'l-warn');
+const CMDS={
+ user:[['enable','Turn on privileged commands'],['exit','Exit from the EXEC'],['help','Interactive help for commands'],['ping','Test connectivity from the ASA'],['show','Show system information']],
+ priv:[['clear','Reset functions'],['configure','Configure from the terminal'],['copy','Copy the running configuration'],['disable','Turn off privileged commands'],['exit','Exit from the EXEC'],['help','Interactive help for commands'],['packet-tracer','Trace a packet through the ASA'],['ping','Test connectivity from the ASA'],['show','Show running system information'],['write','Write the running configuration to memory']],
+ config:[['access-group','Bind an access-list to an interface'],['access-list','Configure an access control element'],['clear','Clear configuration'],['end','Exit to privileged EXEC mode'],['exit','Exit from configuration mode'],['help','Interactive help'],['hostname','Set the system hostname'],['interface','Select an interface to configure'],['no','Negate a command'],['packet-tracer','Trace a packet through the ASA'],['ping','Test connectivity'],['policy-map','Configure the inspection policy'],['route','Configure a static route'],['show','Show running system information'],['write','Write the configuration to memory']],
+ ifv:[['description','Interface description'],['end','Exit to privileged EXEC mode'],['exit','Exit from interface configuration mode'],['ip','Configure the IP address'],['nameif','Assign a name to this interface'],['no','Negate a command'],['security-level','Set the security level (0-100)'],['shutdown','Shut down the interface']],
+ ife:[['description','Interface description'],['duplex','Set duplex'],['end','Exit to privileged EXEC mode'],['exit','Exit from interface configuration mode'],['no','Negate a command'],['shutdown','Shut down the switch port'],['speed','Set port speed'],['switchport','Set switch port characteristics']],
+ pmap:[['class','Policy criteria'],['description','Description'],['end','Exit to privileged EXEC mode'],['exit','Exit from policy-map mode']],
+ pmapc:[['end','Exit to privileged EXEC mode'],['exit','Exit from class mode'],['inspect','Protocol inspection'],['no','Negate a command']]};
+const SUB={
+ show:[['access-list','Access lists and hit counts'],['interface','Interfaces (show interface ip brief)'],['nameif','Interface names and security levels'],['route','Routing table'],['running-config','Current configuration'],['switch','VLANs and switch ports (show switch vlan)'],['version','System information']],
+ configure:[['terminal','Configure from the terminal']], write:[['memory','Save the running configuration']], copy:[['running-config','Copy the running configuration (… startup-config)']],
+ interface:[['ethernet','Ethernet0/0 – Ethernet0/7 (switch ports)'],['vlan','VLAN interface, e.g. vlan 10']],
+ ip:[['address','ip address A.B.C.D MASK']], switchport:[['access','switchport access vlan N']],
+ 'access-list':[['WORD','access-list NAME [line N] extended {permit|deny} {tcp|udp|icmp|ip} SOURCE DEST [eq PORT]'],['','SOURCE / DEST = any | host A.B.C.D | network mask (e.g. 192.168.10.0 255.255.255.0)']],
+ 'access-group':[['WORD','access-group ACL-NAME in interface IFNAME']], nameif:[['WORD','A name for the interface, e.g. inside or outside']],
+ 'security-level':[['<0-100>','0 = least trusted, 100 = most trusted']], route:[['WORD','route IFNAME NETWORK MASK GATEWAY']],
+ 'policy-map':[['global_policy','The global inspection policy']], class:[['inspection_default','The default inspection class']],
+ inspect:[['icmp','Inspect ICMP (lets ping replies back in)'],['dns','DNS'],['ftp','FTP'],['http','HTTP']],
+ 'packet-tracer':[['input','packet-tracer input IFNAME tcp|udp SRC SPORT DST DPORT'],['','packet-tracer input IFNAME icmp SRC 8 0 DST']],
+ clear:[['configure','clear configure access-list [NAME]'],['access-list','clear access-list [NAME] counters']], no:[['…','Type the command you want to remove after no']]};
+function modeCmds(){return T.mode==='if'?(T.sub.startsWith('Vlan')?CMDS.ifv:CMDS.ife):CMDS[T.mode];}
+function help(raw){
+  const tk=raw.trim().split(/\s+/).filter(Boolean), partial=raw.length&&!/\s$/.test(raw);
+  const pr=(list)=>list.forEach(([a,b])=>o('  '+(a?a.padEnd(16):' '.repeat(16))+b));
+  if(!tk.length||(tk.length===1&&partial)){ const list=modeCmds().filter(c=>!partial||c[0].startsWith(tk[0].toLowerCase())); if(list.length)pr(list); else o('ERROR: % Unrecognized command','l-bad'); return; }
+  const f=kwm(tk[0],modeCmds().map(c=>c[0]).concat(['show','write','access-list','access-group','route','packet-tracer','policy-map','interface']));
+  const key=typeof f==='string'?f:null; const s=key&&SUB[key];
+  if(s&&(tk.length===1||(tk.length===2&&partial))){ pr(s.filter(c=>!partial||tk.length<2||!c[0]||c[0].startsWith(tk[1].toLowerCase())||c[0]==='WORD')); return; }
+  if(key==='access-list') { pr(SUB['access-list']); return; }
+  o('  <cr>');
+}
+function complete(){ const raw=tin.value, tk=raw.split(/\s+/); const last=tk[tk.length-1]; if(!last) return;
+  let opts; if(tk.length===1) opts=modeCmds().map(c=>c[0]); else { const f=kwm(tk[0],Object.keys(SUB)); opts=(typeof f==='string'&&tk.length===2)?SUB[f].map(c=>c[0]).filter(x=>x&&x===x.toLowerCase()&&!/^[<…]/.test(x)):[]; }
+  const m=opts.filter(x=>x.startsWith(last.toLowerCase())); if(m.length===1){tk[tk.length-1]=m[0];tin.value=tk.join(' ')+' ';} }
+
+function enterConfigFromSub(){ if(['if','pmap','pmapc'].includes(T.mode)){T.mode='config';T.sub=null;} }
+function doLine(raw){
+  if(T.pw){T.pw=false;T.mode='priv';return;}
+  let tk=raw.trim().split(/\s+/).filter(Boolean); if(!tk.length) return;
+  if(tk[0].toLowerCase()==='do'&&T.mode!=='user'&&T.mode!=='priv'){ raw=raw.replace(/^\s*do\s+/i,''); tk=tk.slice(1); if(!tk.length){inc();return;} const r=common(tk,raw,true); if(r==='nomatch')caret(raw,0); return; }
+  const H={user:hUser,priv:hPriv,config:hConfig,if:hIf,pmap:hPmap,pmapc:hPmapc}[T.mode];
+  let r=H(tk,raw);
+  if(r==='nomatch'&&['if','pmap','pmapc'].includes(T.mode)) r=hConfig(tk,raw,true);
+  if(r==='nomatch'){ caret(raw,0);
+    if((T.mode==='user'||T.mode==='priv')&&typeof kwm(tk[0],['interface','access-list','access-group','route','hostname','policy-map','nameif','ip','switchport','security-level'])==='string')
+      info(T.mode==='user'?'INFO: That is a configuration command — type enable, then configure terminal.':'INFO: That is a configuration command — type configure terminal first.'); }
+}
+function amb(tk,w){ if(w&&w.amb){o('ERROR: % Ambiguous command:  "'+tk.join(' ')+'"','l-bad');return true;} return false; }
+/* commands available in several modes */
+function common(tk,raw,fromSub){
+  const w=kwm(tk[0],['show','write','copy','ping','packet-tracer','clear','help']); if(!w) return 'nomatch'; if(amb(tk,w)) return;
+  if(w==='help'){ o('Type ? after a partial command or at the prompt to list options. Abbreviations are accepted, e.g. "conf t", "sh run", "int vlan 10".'); return; }
+  if(w==='show') return show(tk,raw);
+  if(w==='write'){ const x=kwm(tk[1]||'memory',['memory','terminal','erase']); if(x==='terminal'){o(runCfg().join('\n'));return;} if(x!=='memory'){caret(raw,1);return;} save(); return; }
+  if(w==='copy'){ const a=kwm(tk[1]||'',['running-config']), b=kwm(tk[2]||'',['startup-config']); if(a!=='running-config'){tk[1]?caret(raw,1):inc();return;} if(b!=='startup-config'){tk[2]?caret(raw,2):inc();return;} o('\nSource filename [running-config]? \nCryptochecksum: 3f2a91c8 6b1d07e4 a95c22f1 0d8e7b36'); save(true); return; }
+  if(w==='ping') return ping(tk,raw);
+  if(w==='packet-tracer') return ptracer(tk,raw);
+  if(w==='clear') return clearCmd(tk,raw);
+}
+function hUser(tk,raw){
+  const w=kwm(tk[0],['enable','exit','logout','quit','show','ping','help']); if(!w) return 'nomatch'; if(amb(tk,w)) return;
+  if(w==='enable'){ T.pw=true; return; }
+  if(['exit','logout','quit'].includes(w)){ o('\nLogoff\n\nType help or \'?\' for a list of available commands.'); return; }
+  if(w==='show'&&kwm(tk[1]||'',['running-config'])==='running-config'){ caret(raw,1); info('INFO: show running-config needs privileged mode — type enable first.'); return; }
+  return common(tk,raw);
+}
+function hPriv(tk,raw){
+  const w=kwm(tk[0],['configure','disable','exit','logout','quit','enable']);
+  if(!w) return common(tk,raw); if(amb(tk,w)) return;
+  if(w==='configure'){ if(!tk[1]){inc();return;} const t=kwm(tk[1],['terminal']); if(t!=='terminal'){caret(raw,1);return;} T.mode='config'; addEv('conf'); return; }
+  if(w==='disable'){ T.mode='user'; return; }
+  if(w==='enable') return;
+  o('\nLogoff\n\nType help or \'?\' for a list of available commands.'); T.mode='user';
+}
+function hConfig(tk,raw,fromSub){
+  const L=['access-group','access-list','clear','end','exit','hostname','interface','no','policy-map','route','show','write','copy','ping','packet-tracer','help'];
+  const w=kwm(tk[0],L); if(!w) return 'nomatch'; if(amb(tk,w)) return;
+  if(['show','write','copy','ping','packet-tracer','help'].includes(w)) return common(tk,raw);
+  if(w==='clear') { return clearCmd(tk,raw); }
+  if(fromSub) enterConfigFromSub();
+  if(w==='end'){ T.mode='priv'; T.sub=null; return; }
+  if(w==='exit'){ T.mode='priv'; return; }
+  if(w==='hostname'){ if(!tk[1]){inc();return;} if(!/^[A-Za-z][\w-]{0,62}$/.test(tk[1])){caret(raw,1);return;} C.hostname=tk[1]; return; }
+  if(w==='interface') return intf(tk,raw);
+  if(w==='access-list') return aclCmd(tk,raw,false);
+  if(w==='access-group') return agCmd(tk,raw,false);
+  if(w==='route') return routeCmd(tk,raw,false);
+  if(w==='policy-map'){ if(!tk[1]){inc();return;} T.mode='pmap'; T.pm=tk[1]; if(tk[1]!=='global_policy') info('INFO: Only policy-map global_policy is active in this lab.'); return; }
+  if(w==='no'){ const x=kwm(tk[1]||'',['access-list','access-group','route','hostname','policy-map']); if(!tk[1]){inc();return;} if(!x){caret(raw,1);return;} if(amb(tk,x))return;
+    if(x==='access-list') return aclCmd(tk.slice(1),raw,true);
+    if(x==='access-group') return agCmd(tk.slice(1),raw,true);
+    if(x==='route') return routeCmd(tk.slice(1),raw,true);
+    if(x==='hostname'){ C.hostname='ciscoasa'; return; }
+    if(x==='policy-map'){ info('INFO: The global policy cannot be removed in this lab.'); return; } }
+}
+function intf(tk,raw){
+  if(!tk[1]){inc();return;}
+  const s=tk.slice(1).join('').toLowerCase(); let m;
+  if((m=s.match(/^vl?a?n?(\d+)$/))&&s.startsWith('v')){ const n=+m[1]; if(n<1||n>4094){caret(raw,tk.length>2?2:1);return;}
+    if(!C.vlans[n]) C.vlans[n]={nameif:null,sec:null,ip:null,mask:null,shut:false,desc:''}; T.mode='if'; T.sub='Vlan'+n; return; }
+  if((m=s.match(/^e(?:t(?:h(?:e(?:r(?:n(?:e(?:t)?)?)?)?)?)?)?0\/([0-7])$/))){ T.mode='if'; T.sub='Ethernet0/'+m[1]; return; }
+  if(/^e(t|th|ther|thernet)?$/.test(s)||s==='vlan'||s==='vl'){inc();return;}
+  caret(raw,1); if(/^(g|f|gigabit|fast)/.test(s)) info('INFO: The ASA 5505 has switch ports Ethernet0/0 – Ethernet0/7 and VLAN interfaces (interface vlan N).');
+}
+function hIf(tk,raw){
+  const isV=T.sub.startsWith('Vlan'), v=isV?C.vlans[+T.sub.slice(4)]:null, p=isV?null:C.ports[T.sub];
+  const L=isV?['description','end','exit','ip','nameif','no','security-level','shutdown']:['description','duplex','end','exit','no','shutdown','speed','switchport'];
+  if(tk[1]&&tk[0].length>=2&&'show'.startsWith(tk[0].toLowerCase())) return 'nomatch';
+  const w=kwm(tk[0],L.concat(isV?['switchport']:['nameif','ip','security-level']));
+  if(!w) return 'nomatch'; if(amb(tk,w)) return;
+  if(!L.includes(w)){ caret(raw,0); info(isV?'INFO: switchport commands go on the Ethernet ports, e.g. interface ethernet0/1.':'INFO: On an ASA 5505, nameif, security-level and ip address go on the VLAN interface (interface vlan N), not the switch port.'); return; }
+  if(w==='exit'){ T.mode='config'; T.sub=null; return; }
+  if(w==='end'){ T.mode='priv'; T.sub=null; return; }
+  if(w==='description'){ (isV?v:p).desc=raw.trim().replace(/^\S+\s*/,''); return; }
+  if(w==='shutdown'){ (isV?v:p).shut=true; return; }
+  if(w==='speed'||w==='duplex') return;
+  if(w==='no'){ const x=kwm(tk[1]||'',isV?['shutdown','nameif','ip','security-level','description']:['shutdown','description','switchport']); if(!tk[1]){inc();return;} if(!x) return 'nomatch'; if(amb(tk,x))return;
+    if(x==='shutdown'){ (isV?v:p).shut=false; return; }
+    if(x==='description'){ (isV?v:p).desc=''; return; }
+    if(x==='nameif'){ if(v.nameif){ delete C.groups[v.nameif]; C.routes=C.routes.filter(r=>r.if!==v.nameif);} v.nameif=null; v.sec=null; return; }
+    if(x==='ip'){ v.ip=v.mask=null; return; }
+    if(x==='security-level'){ v.sec=null; return; }
+    if(x==='switchport'){ p.vlan=1; return; } return; }
+  if(w==='nameif'){ const nm=tk[1]; if(!nm){inc();return;} if(!/^[A-Za-z][\w.-]{0,47}$/.test(nm)){caret(raw,1);return;}
+    for(const n in C.vlans) if(C.vlans[n]!==v&&C.vlans[n].nameif===nm){ o('ERROR: Name "'+nm+'" is already used by interface Vlan'+n,'l-bad'); return; }
+    if(v.nameif&&v.nameif!==nm){ if(C.groups[v.nameif]){C.groups[nm]=C.groups[v.nameif];delete C.groups[v.nameif];} C.routes.forEach(r=>{if(r.if===v.nameif)r.if=nm;}); }
+    v.nameif=nm; const lv=nm.toLowerCase()==='inside'?100:0; v.sec=lv; info('INFO: Security level for "'+nm+'" set to '+lv+' by default.'); return; }
+  if(w==='security-level'){ if(!tk[1]){inc();return;} if(!/^\d+$/.test(tk[1])||+tk[1]>100){caret(raw,1);return;} v.sec=+tk[1]; return; }
+  if(w==='ip'){ const x=kwm(tk[1]||'',['address']); if(!tk[1]){inc();return;} if(x!=='address'){caret(raw,1);return;}
+    if((tk[2]||'').toLowerCase()==='dhcp'){ info('INFO: Use a static address in this lab.'); return; }
+    const a=ip2n(tk[2]),m=ip2n(tk[3]); if(!tk[2]){inc();return;} if(a==null){caret(raw,2);return;} if(!tk[3]){inc();return;}
+    if(m==null||!maskOK(m)||m===0){caret(raw,3);if(m!=null&&isWild(m))info('INFO: That looks like a wildcard mask — the ASA uses subnet masks such as 255.255.255.0.');return;}
+    const host=band(a,(~m)>>>0); if(host===0||host===((~m)>>>0)){ o('ERROR: Invalid address '+tk[2]+' for mask '+tk[3]+' — it is the network or broadcast address.','l-bad'); return; }
+    for(const n in C.vlans){const o2=C.vlans[n]; if(o2!==v&&o2.ip&&(inNet(a,ip2n(o2.ip),ip2n(o2.mask))||inNet(ip2n(o2.ip),a,m))){o('ERROR: '+tk[2]+' overlaps with interface Vlan'+n+' ('+o2.ip+' '+o2.mask+')','l-bad');return;}}
+    v.ip=tk[2]; v.mask=tk[3]; return; }
+  if(w==='switchport'){ const x=kwm(tk[1]||'',['access','mode']); if(!tk[1]){inc();return;} if(!x){caret(raw,1);return;} if(x==='mode') return;
+    if(kwm(tk[2]||'',['vlan'])!=='vlan'){tk[2]?caret(raw,2):inc();return;} const n=tk[3]; if(!n){inc();return;} if(!/^\d+$/.test(n)||+n<1||+n>4094){caret(raw,3);return;} p.vlan=+n; return; }
+}
+function hPmap(tk,raw){
+  const w=kwm(tk[0],['class','description','end','exit']); if(!w) return 'nomatch'; if(amb(tk,w)) return;
+  if(w==='exit'){T.mode='config';return;} if(w==='end'){T.mode='priv';return;} if(w==='description') return;
+  if(!tk[1]){inc();return;} if(!['inspection_default','class-default'].includes(tk[1])){ o('ERROR: class-map '+tk[1]+' does not exist','l-bad'); return; }
+  T.mode='pmapc'; T.cls=tk[1];
+}
+function hPmapc(tk,raw){
+  const w=kwm(tk[0],['end','exit','inspect','no']); if(!w) return 'nomatch'; if(amb(tk,w)) return;
+  if(w==='exit'){T.mode='pmap';return;} if(w==='end'){T.mode='priv';return;}
+  const neg=w==='no', t2=neg?tk.slice(1):tk; if(neg&&kwm(t2[0]||'',['inspect'])!=='inspect'){ return 'nomatch'; }
+  const pr=(t2[1]||'').toLowerCase(); if(!pr){inc();return;}
+  const ok=['icmp','dns','ftp','http','h323','rsh','rtsp','esmtp','sqlnet','skinny','sunrpc','xdmcp','sip','netbios','tftp','ip-options','snmp'];
+  if(!ok.includes(pr)){caret(raw,neg?2:1);return;}
+  if(pr!=='icmp') return;
+  if(T.pm!=='global_policy'||T.cls!=='inspection_default'){ info('INFO: In this lab ICMP inspection only takes effect under policy-map global_policy → class inspection_default.'); return; }
+  C.inspect.icmp=!neg;
+}
+function save(silentHdr){ if(!silentHdr) o('Building configuration...\nCryptochecksum: 3f2a91c8 6b1d07e4 a95c22f1 0d8e7b36');
+  o('\n'+(1800+runCfg().join('\n').length)+' bytes copied in 0.410 secs\n[OK]'); C.saved=true; addEv('saved'); }
+/* access-list */
+function aclCmd(tk,raw,neg){
+  const off=neg?1:0, name=tk[1]; if(!name){inc();return;}
+  if(!/^[A-Za-z0-9_.\-]{1,240}$/.test(name)){caret(raw,1+off);return;}
+  let i=2, line=null;
+  if(kwm(tk[2]||'',['line'])==='line'&&tk[2]&&tk[2].length>1){ if(!tk[3]){inc();return;} if(!/^\d+$/.test(tk[3])||+tk[3]<1){caret(raw,3+off);return;} line=+tk[3]; i=4; }
+  if(!tk[i]){ if(neg){ info('INFO: To delete a whole list use: clear configure access-list '+name); inc(); return;} inc(); return; }
+  const k=kwm(tk[i],['extended','remark','standard','webtype','ethertype','permit','deny']); if(!k||k.amb){caret(raw,i+off);return;}
+  if(['standard','webtype','ethertype'].includes(k)){ caret(raw,i+off); info('INFO: Use extended access lists in this lab.'); return; }
+  const list=C.acls[name];
+  if(k==='remark'){ const txt=raw.trim().split(/\s+/).slice(i+1+off).join(' '); if(!txt){inc();return;}
+    if(neg){ if(!list){o('ERROR: access-list '+name+' does not exist','l-bad');return;} C.acls[name]=list.filter(e=>e.remark!==txt); cleanup(name); return; }
+    const L=C.acls[name]||(C.acls[name]=[]); L.splice(line?Math.min(line-1,L.length):L.length,0,{remark:txt}); return; }
+  const r=parseACE(tk,k==='extended'?i+1:i);
+  if(r.err){ const at=r.at+off;
+    if(r.err==='incomplete'){inc();if(r.hint)info('INFO: '+r.hint);return;}
+    if(r.err==='wild'){ o('ERROR: IP address,mask <'+r.ip+','+r.mask+'> doesn\'t pair','l-bad'); info('INFO: The ASA uses subnet masks in ACLs (e.g. 255.255.255.0), not wildcard masks like '+r.mask+'.'); return; }
+    if(r.err==='pair'){ o('ERROR: IP address,mask <'+r.ip+','+r.mask+'> doesn\'t pair','l-bad'); info('INFO: Use the network address (the first address in the range) with its mask, or "host" for one device.'); return; }
+    if(r.err==='object'){ caret(raw,at); info('INFO: Objects are not used in this lab — write any, host A.B.C.D or network mask.'); return; }
+    caret(raw,at); if(r.hint) info('INFO: '+r.hint); return; }
+  if(neg){ if(!list){o('ERROR: access-list '+name+' does not exist','l-bad');return;}
+    const ix=list.findIndex(e=>e.ace&&aceEq(e.ace,r.ace)); if(ix<0){o('ERROR: Specified access-list entry does not exist','l-bad');return;}
+    list.splice(ix,1); cleanup(name); return; }
+  const L=C.acls[name]||(C.acls[name]=[]);
+  if(L.some(e=>e.ace&&aceEq(e.ace,r.ace))){ o('WARNING: <'+name+'> found duplicate element','l-warn'); return; }
+  L.splice(line?Math.min(line-1,L.length):L.length,0,{ace:r.ace,hits:0});
+}
+function cleanup(name){ const L=C.acls[name]; if(L&&!L.some(e=>e.ace)){ delete C.acls[name]; for(const i in C.groups) if(C.groups[i]===name){ delete C.groups[i]; o('WARNING: access-list '+name+' is now empty and has been removed — access-group on '+i+' removed','l-warn'); } } }
+function agCmd(tk,raw,neg){
+  const off=neg?1:0; const nm=tk[1]; if(!nm){inc();return;}
+  const dir=kwm(tk[2]||'',['in','out']); if(!tk[2]){inc();return;} if(!dir||dir.amb){caret(raw,2+off);return;}
+  if(kwm(tk[3]||'',['interface'])!=='interface'){tk[3]?caret(raw,3+off):inc();return;}
+  const ifn=tk[4]; if(!ifn){inc();return;}
+  const exists=Object.values(C.vlans).some(v=>v.nameif===ifn); if(!exists){ caret(raw,4+off); info('INFO: "'+ifn+'" is not an interface name. Names come from nameif — see show nameif.'); return; }
+  if(dir==='out'){ info('INFO: This lab uses inbound access-groups only. Apply the ACL "in" on the interface where the traffic arrives.'); return; }
+  if(neg){ if(C.groups[ifn]===nm) delete C.groups[ifn]; else o('ERROR: access-group '+nm+' is not applied to '+ifn,'l-bad'); return; }
+  if(!C.acls[nm]){ o('ERROR: access-list '+nm+' does not exist','l-bad'); info('INFO: Create the access-list first (names are case-sensitive).'); return; }
+  C.groups[ifn]=nm;
+}
+function routeCmd(tk,raw,neg){
+  const off=neg?1:0; const [_,ifn,net,mk,gw]=tk;
+  if(!ifn){inc();return;}
+  const vv=Object.values(C.vlans).find(v=>v.nameif===ifn); if(!vv){caret(raw,1+off);info('INFO: "'+ifn+'" is not an interface name (see show nameif).');return;}
+  if(!net){inc();return;} if(ip2n(net)==null){caret(raw,2+off);return;}
+  if(!mk){inc();return;} const m=ip2n(mk); if(m==null||!maskOK(m)){caret(raw,3+off);return;}
+  if(!gw){inc();return;} if(ip2n(gw)==null){caret(raw,4+off);return;}
+  if(tk[5]&&!/^\d+$/.test(tk[5])){caret(raw,5+off);return;}
+  if(band(ip2n(net),(~m)>>>0)!==0){ o('ERROR: Invalid network '+net+' for mask '+mk,'l-bad'); return; }
+  if(neg){ const n0=C.routes.length; C.routes=C.routes.filter(r=>!(r.if===ifn&&r.net===net&&r.mask===mk&&r.gw===gw)); if(C.routes.length===n0)o('ERROR: Route does not exist','l-bad'); return; }
+  if(!vv.ip||!inNet(ip2n(gw),ip2n(vv.ip),ip2n(vv.mask))){ o('ERROR: The next hop '+gw+' is not on the '+ifn+' interface\'s network'+(vv.ip?' ('+vv.ip+' '+vv.mask+')':' (it has no IP address yet)'),'l-bad'); return; }
+  C.routes=C.routes.filter(r=>!(r.net===net&&r.mask===mk)); C.routes.push({if:ifn,net,mask:mk,gw});
+}
+function clearCmd(tk,raw){
+  const x=kwm(tk[1]||'',['configure','access-list']); if(!tk[1]){inc();return;} if(!x||x.amb){caret(raw,1);return;}
+  if(x==='access-list'){ const nm=tk[2]&&kwm(tk[2],['counters'])!=='counters'?tk[2]:null; for(const n in C.acls) if(!nm||n===nm) C.acls[n].forEach(e=>{if(e.ace)e.hits=0;}); return; }
+  if(T.mode==='user'||T.mode==='priv'){ caret(raw,1); info('INFO: clear configure is a configuration-mode command.'); return; }
+  if(kwm(tk[2]||'',['access-list'])!=='access-list'){tk[2]?caret(raw,2):inc();return;}
+  const nm=tk[3]; for(const n of Object.keys(C.acls)) if(!nm||n===nm){ delete C.acls[n]; for(const i in C.groups) if(C.groups[i]===n) delete C.groups[i]; }
+}
+/* show */
+function show(tk,raw){
+  if(!tk[1]){inc();return;}
+  const x=kwm(tk[1],['access-list','interface','nameif','route','running-config','switch','version','history','ip','vlan','startup-config']); if(!x){caret(raw,1);return;} if(amb(tk,x))return;
+  if(x==='running-config'){ const s=tk[2]?kwm(tk[2],['access-list','access-group','interface','route','policy-map','hostname']):null; if(tk[2]&&(!s||s.amb)){caret(raw,2);return;} o(runCfg(s).join('\n')); return; }
+  if(x==='startup-config'){ o(C.saved?runCfg().join('\n'):'! startup configuration is empty — use write memory'); return; }
+  if(x==='access-list'){ addEv('showacl'); const names=Object.keys(C.acls).filter(n=>!tk[2]||n===tk[2]);
+    if(tk[2]&&!names.length){o('ERROR: access-list <'+tk[2]+'> does not exist','l-bad');return;}
+    o('access-list cached ACL log flows: total 0, denied 0 (deny-flow-max 4096)\n            alert-interval 300');
+    names.forEach(n=>{const L=C.acls[n]; o('access-list '+n+'; '+L.filter(e=>e.ace).length+' elements; name hash: 0x'+hash(n));
+      L.forEach((e,i)=>o('access-list '+n+' line '+(i+1)+' '+(e.remark!=null?'remark '+e.remark:aceText(e.ace)+' (hitcnt='+(e.hits||0)+') 0x'+hash(n+i))));}); return; }
+  if(x==='interface'||x==='ip'){ o('Interface                  IP-Address      OK? Method Status                Protocol');
+    for(let i=0;i<8;i++){const pn='Ethernet0/'+i,p=C.ports[pn],conn=i<2;o(pn.padEnd(27)+'unassigned'.padEnd(16)+'YES unset  '+(p.shut?'administratively down down':(conn?'up                    up':'down                  down')));}
+    Object.keys(C.vlans).map(Number).sort((a,b)=>a-b).forEach(n=>{const v=C.vlans[n],up=!v.shut&&Object.entries(C.ports).some(([k,p])=>p.vlan===n&&!p.shut&&(k==='Ethernet0/0'||k==='Ethernet0/1'));
+      o(('Vlan'+n).padEnd(27)+(v.ip||'unassigned').padEnd(16)+'YES '+(v.ip?'manual':'unset ')+' '+(v.shut?'administratively down down':(up?'up                    up':'down                  down')));});
+    return; }
+  if(x==='nameif'){ o('Interface                Name                     Security'); Object.keys(C.vlans).map(Number).sort((a,b)=>a-b).forEach(n=>{const v=C.vlans[n];if(v.nameif)o(('Vlan'+n).padEnd(25)+v.nameif.padEnd(25)+String(v.sec==null?0:v.sec).padStart(3));}); return; }
+  if(x==='switch'||x==='vlan'){ if(x==='switch'&&kwm(tk[2]||'',['vlan'])!=='vlan'){tk[2]?caret(raw,2):inc();return;}
+    o('VLAN Name                             Status    Ports\n---- -------------------------------- --------- -----------------------------');
+    const vs=new Set([1,...Object.keys(C.vlans).map(Number),...Object.values(C.ports).map(p=>p.vlan)]);
+    [...vs].sort((a,b)=>a-b).forEach(n=>{const ps=Object.entries(C.ports).filter(([,p])=>p.vlan===n).map(([k])=>k.replace('Ethernet','Et'));const v=C.vlans[n];
+      const up=Object.entries(C.ports).some(([k,p])=>p.vlan===n&&!p.shut&&(k==='Ethernet0/0'||k==='Ethernet0/1'));
+      o(String(n).padEnd(5)+((v&&v.nameif)||'-').padEnd(33)+(up?'up':'down').padEnd(10)+ps.join(', '));}); return; }
+  if(x==='route'){ const dr=C.routes.find(r=>r.net==='0.0.0.0'&&r.mask==='0.0.0.0');
+    o('Codes: L - local, C - connected, S - static, R - RIP, O - OSPF\n       * - candidate default\n\nGateway of last resort is '+(dr?dr.gw+' to network 0.0.0.0':'not set')+'\n');
+    C.routes.forEach(r=>o((r.net==='0.0.0.0'?'S*':'S ').padEnd(5)+r.net+' '+r.mask+' [1/0] via '+r.gw+', '+r.if));
+    Object.values(C.vlans).forEach(v=>{if(v.ip&&v.nameif){o('C    '+n2ip(band(ip2n(v.ip),ip2n(v.mask)))+' '+v.mask+' is directly connected, '+v.nameif);o('L    '+v.ip+' 255.255.255.255 is directly connected, '+v.nameif);}}); return; }
+  if(x==='version'){ o('\nCisco Adaptive Security Appliance Software Version 9.2(4)\nDevice Manager Version 7.4(3)\n\nHardware:   ASA5505, 512 MB RAM, CPU Geode 500 MHz\n 0: Int: Internal-Data0/0    : address is 0019.e8a4.2c10, irq 11\n\nLicensed features for this platform:\nMaximum Physical Interfaces       : 8\nVLANs                             : 3, DMZ Restricted\n\nThis platform has a Base license.\n'); return; }
+  if(x==='history'){ T.hist.slice(-20).forEach(h=>o('  '+h)); return; }
+}
+function hash(s){let h=0x811c9dc5;for(const ch of s){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)>>>0;}return h.toString(16).padStart(8,'0');}
+function runCfg(sec){
+  const L=[], want=k=>!sec||sec===k;
+  if(!sec) L.push(': Saved',':',': Serial Number: JMX1234L0AB',': Hardware:   ASA5505, 512 MB RAM, CPU Geode 500 MHz',':','ASA Version 9.2(4) ','!','hostname '+C.hostname,'enable password 8Ry2YjIyt7RRXU24 encrypted','names','!');
+  if(sec==='hostname') L.push('hostname '+C.hostname);
+  if(want('interface')){ for(let i=0;i<8;i++){const p=C.ports['Ethernet0/'+i]; L.push('interface Ethernet0/'+i); if(p.desc)L.push(' description '+p.desc); if(p.vlan!==1)L.push(' switchport access vlan '+p.vlan); if(p.shut)L.push(' shutdown'); L.push('!');}
+    Object.keys(C.vlans).map(Number).sort((a,b)=>a-b).forEach(n=>{const v=C.vlans[n]; L.push('interface Vlan'+n); if(v.desc)L.push(' description '+v.desc); if(v.shut)L.push(' shutdown');
+      L.push(v.nameif?' nameif '+v.nameif:' no nameif'); L.push(v.sec!=null?' security-level '+v.sec:' no security-level'); L.push(v.ip?' ip address '+v.ip+' '+v.mask:' no ip address'); L.push('!');}); }
+  if(!sec) L.push('ftp mode passive');
+  if(want('access-list')) for(const n in C.acls) C.acls[n].forEach(e=>L.push('access-list '+n+' '+(e.remark!=null?'remark '+e.remark:aceText(e.ace))));
+  if(!sec){ L.push('pager lines 24'); Object.values(C.vlans).forEach(v=>{if(v.nameif)L.push('mtu '+v.nameif+' 1500');}); L.push('icmp unreachable rate-limit 1 burst-size 1','arp timeout 14400'); }
+  if(want('access-group')) for(const i in C.groups) L.push('access-group '+C.groups[i]+' in interface '+i);
+  if(want('route')) C.routes.forEach(r=>L.push('route '+r.if+' '+r.net+' '+r.mask+' '+r.gw+' 1'));
+  if(!sec) L.push('timeout xlate 3:00:00','timeout conn 1:00:00 half-closed 0:10:00 udp 0:02:00 icmp 0:00:02','!');
+  if(want('policy-map')){ L.push('policy-map global_policy',' class inspection_default'); DEF_INSPECT.forEach(x=>L.push('  inspect '+x)); if(C.inspect.icmp)L.push('  inspect icmp'); L.push('!'); if(!sec)L.push('service-policy global_policy global'); }
+  if(!sec) L.push('prompt hostname context',': end');
+  return L;
+}
+/* ping from the ASA itself (not subject to ACLs) */
+function ping(tk,raw){
+  if(!tk[1]){inc();return;} let i=1; if(Object.values(C.vlans).some(v=>v.nameif===tk[1])) i=2;
+  const ip=tk[i]; if(!ip){inc();return;} const n=ip2n(ip); if(n==null){caret(raw,i);return;}
+  o('Type escape sequence to abort.\nSending 5, 100-byte ICMP Echos to '+ip+', timeout is 2 seconds:');
+  const side=sideOfIp(n), I=sideIf(side); let ok=false;
+  if(I.ok){ const known=side==='in'?['192.168.10.10','192.168.10.11','192.168.10.50']:['203.0.113.1',...Object.values(HOSTS).filter(h=>h.side==='out').map(h=>h.ip)];
+    if(known.includes(ip)&&!gwWhy(side,I)) ok=side==='in'||ip==='203.0.113.1'||routeTo(n,I);
+    if(ip===I.v.ip) ok=true; }
+  o(ok?'!!!!!\nSuccess rate is 100 percent (5/5), round-trip min/avg/max = 1/1/2 ms':'?????\nSuccess rate is 0 percent (0/5)');
+}
+/* packet-tracer */
+function ptracer(tk,raw){
+  if(kwm(tk[1]||'',['input'])!=='input'){tk[1]?caret(raw,1):inc();return;}
+  const ifn=tk[2]; if(!ifn){inc();return;} if(!Object.values(C.vlans).some(v=>v.nameif===ifn)){caret(raw,2);info('INFO: Use an interface name such as inside or outside (see show nameif).');return;}
+  const pr=kwm(tk[3]||'',['tcp','udp','icmp']); if(!tk[3]){inc();return;} if(!pr||pr.amb){caret(raw,3);return;}
+  let src,dst,dport,icmp;
+  if(pr==='icmp'){ src=tk[4];const ty=tk[5],cd=tk[6];dst=tk[7]; if(!dst){inc();info('INFO: packet-tracer input '+ifn+' icmp SOURCE 8 0 DEST');return;}
+    if(ip2n(src)==null){caret(raw,4);return;} const t=/^\d+$/.test(ty)?+ty:ICMPT[ty]; if(t==null){caret(raw,5);return;} if(!/^\d+$/.test(cd)){caret(raw,6);return;} if(ip2n(dst)==null){caret(raw,7);return;} icmp=t; }
+  else { src=tk[4];const sp=tk[5];dst=tk[6];const dp=tk[7]; if(!dp){inc();info('INFO: packet-tracer input '+ifn+' '+pr+' SOURCE SPORT DEST DPORT');return;}
+    if(ip2n(src)==null){caret(raw,4);return;} if(portOf(sp)==null){caret(raw,5);return;} if(ip2n(dst)==null){caret(raw,6);return;} dport=portOf(dp); if(dport==null){caret(raw,7);return;} }
+  const f={proto:pr,src:ip2n(src),dst:ip2n(dst),dport,icmp}, R=decide(f);
+  const ph=[]; const add=(type,sub,res,cfg,addl)=>ph.push('Phase: '+(ph.length+1)+'\nType: '+type+'\nSubtype: '+sub+'\nResult: '+res+'\nConfig:'+(cfg?'\n'+cfg:'')+'\nAdditional Information:'+(addl?'\n'+addl:'')+'\n');
+  if(R.inIf&&R.inIf!==ifn) info('INFO: '+src+' actually arrives on the "'+R.inIf+'" interface — tracing it from there.');
+  if(R.at==='none'){ o('Both addresses are on the same side of the ASA — the packet would not pass through the firewall.'); return; }
+  if(R.at==='link'||(!R.routeOK&&!R.outIf)){ add('ROUTE-LOOKUP','Resolve Egress Interface','DROP','',R.why); }
+  else if(R.noRoute){ add('ROUTE-LOOKUP','Resolve Egress Interface','DROP','','no route to '+dst); }
+  else { add('ROUTE-LOOKUP','Resolve Egress Interface','ALLOW','',sideOfIp(f.dst)==='in'?'found next-hop '+dst+' using egress ifc  '+R.outIf:'found next-hop 203.0.113.1 using egress ifc  '+R.outIf);
+    if(R.rule) add('ACCESS-LIST','log',R.ok?'ALLOW':'DROP','access-group '+R.aclName+' in interface '+R.inIf+'\n'+R.rule.text,'');
+    else add('ACCESS-LIST','',R.ok?'ALLOW':'DROP','Implicit Rule',R.aclName?'(no matching line in '+R.aclName+')':'');
+    if(R.ok){ if(pr==='icmp'&&C.inspect.icmp) add('INSPECT','np-inspect','ALLOW','class-map inspection_default\n match default-inspection-traffic\npolicy-map global_policy\n class inspection_default\n  inspect icmp\nservice-policy global_policy global','');
+      add('FLOW-CREATION','','ALLOW','','New flow created with id '+(3000+Math.floor(Math.random()*900))+', packet dispatched to next module'); } }
+  o(ph.join('\n'));
+  o('Result:\ninput-interface: '+(R.inIf||ifn)+'\ninput-status: up\ninput-line-status: up'+(R.outIf?'\noutput-interface: '+R.outIf+'\noutput-status: up\noutput-line-status: up':'')+'\nAction: '+(R.ok?'allow':'drop')+(R.ok?'':'\nDrop-reason: '+(R.dropReason||'(acl-drop) Flow is denied by configured rule')));
+  addEv('ptrace');
+  // animate if both ends are hosts on the diagram
+  const s=hostByIp(src), d=hostByIp(dst);
+  if(s&&d&&HOSTS[s].side!==HOSTS[d].side&&!busy){ const sv=Object.values(SVCS).find(v=>v.proto===pr&&(pr==='icmp'?v.icmp===icmp:v.port===dport))||{label:pr.toUpperCase()+(dport?' '+dport:''),proto:pr,port:dport,icmp};
+    busy=true; send(s,d,sv,'packet-tracer').finally(()=>{busy=false;refresh();}); }
+}
+
+/* input handling */
+tin.addEventListener('keydown',e=>{
+  if(e.key==='Enter'){ const v=tin.value; tin.value='';
+    if(T.pw){ o('Password: '); doLine(v); }
+    else { o(P()+' '+v); if(v.trim()){T.hist.push(v);} T.hp=T.hist.length; doLine(v); }
+    afterCmd(); }
+  else if(e.key==='?'&&!T.pw){ e.preventDefault(); o(P()+' '+tin.value+'?'); help(tin.value); scrollEnd(); }
+  else if(e.key==='Tab'){ e.preventDefault(); complete(); }
+  else if(e.key==='ArrowUp'){ e.preventDefault(); if(T.hp>0){T.hp--;tin.value=T.hist[T.hp]||'';} }
+  else if(e.key==='ArrowDown'){ e.preventDefault(); if(T.hp<T.hist.length){T.hp++;tin.value=T.hist[T.hp]||'';} }
+  else if(e.key==='c'&&e.ctrlKey){ o(P()+' '+tin.value+'^C'); tin.value=''; scrollEnd(); }
+  else if(e.key==='z'&&e.ctrlKey){ e.preventDefault(); if(!['user','priv'].includes(T.mode)){T.mode='priv';T.sub=null;} o(P()); setPs(); scrollEnd(); }
+});
+term.addEventListener('mouseup',()=>{ if(!getSelection().toString()) tin.focus({preventScroll:true}); });
+function afterCmd(){ setPs(); refresh(); scrollEnd(); }
+let lastSig='';
+function refresh(){ const sig=JSON.stringify([C.vlans,C.ports,C.acls&&Object.keys(C.acls).map(k=>C.acls[k].map(e=>e.ace?aceText(e.ace):e.remark)),C.groups,C.routes,C.inspect,C.hostname]);
+  if(lastSig&&sig!==lastSig){ C.saved=false; } lastSig=sig;
+  draw(); renderTask(); renderRes(); persist(); }
+$('#conClear').onclick=()=>{tout.innerHTML='';tin.focus();};
+$('#conShowRun').onclick=()=>{ o(P()+' show running-config'); doLine('show running-config'); afterCmd(); };
+function banner(){ tout.innerHTML='';
+  o('ASA 5505 (lab) — '+(D().auto?'interfaces auto-configured, firewall rules empty':'blank configuration')+'\nCisco Adaptive Security Appliance Software Version 9.2(4)\n\nType help or \'?\' for a list of available commands.'); setPs(); }
+/* auto-configure: replay the commands through the CLI so the config is identical to typing them */
+function autoConfigure(){
+  const keep={mode:T.mode,sub:T.sub,pm:T.pm,cls:T.cls}; T.mode='config'; T.sub=null; const n0=tout.childNodes.length;
+  AUTO_CMDS.forEach(l=>doLine(l)); while(tout.childNodes.length>n0) tout.removeChild(tout.lastChild);
+  Object.assign(T,keep); if(T.mode==='if'&&!(T.sub.startsWith('Vlan')?C.vlans[+T.sub.slice(4)]:1)){T.mode='config';T.sub=null;}
+  D().auto=true;
+  o('! ⚡ Auto-configure applied these commands:','l-dim'); AUTO_CMDS.forEach(l=>o('!   '+l,'l-dim')); o('! Interfaces, VLANs and the default route are ready — now write your firewall rules.','l-dim');
+  setPs(); refresh(); scrollEnd(); setCap('ok','⚡','Interfaces, VLANs and the default route configured. The link lights are green — now practise the firewall rules.');
+}
+$('#autoBtn').onclick=autoConfigure;
+let resetArm=0;
+$('#resetBtn').onclick=()=>{ if(Date.now()-resetArm>2500){ resetArm=Date.now(); $('#resetBtn').textContent='Click again to reset'; setTimeout(()=>$('#resetBtn').textContent='Reset this task',2500); return; }
+  ST.d[ST.mode]={cfg:blankCfg(),ev:[],res:{},auto:false}; resetArm=0; $('#resetBtn').textContent='Reset this task'; switchMode(ST.mode); };
+function switchMode(m){ ST.mode=m; $$('#cfgMode button').forEach(b=>b.classList.toggle('on',b.dataset.m===m)); C=D().cfg; lastSig='';
+  Object.assign(T,{mode:'user',sub:null,pm:null,cls:null,pw:false}); $('#plog').innerHTML=''; banner(); lastTask='';
+  setCap('','ℹ️','Choose a source, destination and service, then press <b>Send packet</b> to test your firewall rules.'); refresh(); }
+$$('#cfgMode button').forEach(b=>b.onclick=()=>{ if(!busy) switchMode(b.dataset.m); });
+window.CFG_SHOWN=()=>{ draw(); };
+fillSel(); switchMode(ST.mode);
+window.__asa={doLine:(l)=>{o(P()+' '+l);doLine(l);afterCmd();},get C(){return C;},T,decide,send:(s,d,k)=>sendUI(s,d,k),runAll,autoConfigure,switchMode,D,get busy(){return busy;}};
+})();
+
+</script>
+
+<script>window.__WB_KEY__="asa-firewall";</script>
+<script>/* ============================================================
+   Oldham Cisco Labs — shared Whiteboard overlay.
+   Self-contained: injects its own CSS + DOM, persists per lab,
+   independent of the lab's own device switching. Styled after a
+   classroom whiteboard (aluminium frame, magnets, marker tray).
+   Toggle with window.wbToggle(). Set window.__WB_KEY__ per page.
+   ============================================================ */
+(function(){
+  'use strict';
+  if(window.__wbInit) return; window.__wbInit=true;
+  var KEY='wb-notes-'+(window.__WB_KEY__||'lab');
+  var W=1100, H=680; // fixed drawing resolution (persisted at this size)
+  var COLOURS={black:'#1c1c1c', blue:'#1d55c4', red:'#d7352b', green:'#1e8f45'};
+
+  var css=''+
+  '.wb-overlay{position:fixed;inset:0;z-index:9000;background:#2daaa4;display:none;flex-direction:column;padding:env(safe-area-inset-top,0) 0 0}'+
+  '.wb-overlay.open{display:flex}'+
+  '.wb-top{display:flex;align-items:center;gap:12px;padding:10px 16px;color:#eafaf8}'+
+  '.wb-top b{font:700 16px "Chivo",system-ui,sans-serif}'+
+  '.wb-top .sp{flex:1}'+
+  '.wb-top button{font:600 13px "Chivo",system-ui,sans-serif;border:0;border-radius:8px;padding:9px 14px;cursor:pointer;background:rgba(255,255,255,.18);color:#fff}'+
+  '.wb-top button:hover{background:rgba(255,255,255,.3)}'+
+  '.wb-stage{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:6px 16px 18px}'+
+  '.wb-frame{position:relative;width:min(1100px,100%);max-height:100%;aspect-ratio:1100/680;'+
+    'background:linear-gradient(#e9ecee,#c3c8cc 45%,#aeb4b8);border-radius:10px;padding:14px;'+
+    'box-shadow:0 14px 40px rgba(0,0,0,.35);border:1px solid #9aa0a4}'+
+  '.wb-inner{position:relative;width:100%;height:100%;background:#fff;border-radius:3px;box-shadow:inset 0 0 0 1px #d7dadd, inset 0 2px 8px rgba(0,0,0,.06);overflow:hidden}'+
+  '.wb-canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:crosshair;display:block}'+
+  '.wb-corner{position:absolute;width:30px;height:30px;background:#2b2f33;z-index:3}'+
+  '.wb-corner.tl{top:-2px;left:-2px;border-radius:9px 0 14px 0}'+
+  '.wb-corner.tr{top:-2px;right:-2px;border-radius:0 9px 0 14px}'+
+  '.wb-corner.bl{bottom:-2px;left:-2px;border-radius:0 14px 0 9px}'+
+  '.wb-corner.br{bottom:-2px;right:-2px;border-radius:14px 0 9px 0}'+
+  '.wb-mag{position:absolute;top:16px;right:18px;display:flex;flex-direction:column;gap:9px;z-index:4}'+
+  '.wb-mag i{width:19px;height:19px;border-radius:50%;box-shadow:0 2px 3px rgba(0,0,0,.3);background:radial-gradient(circle at 32% 30%, rgba(255,255,255,.75), transparent 45%)}'+
+  '.wb-tray{position:absolute;left:0;right:0;bottom:-13px;height:20px;background:linear-gradient(#c7cccf,#a6acb0);border-radius:0 0 7px 7px;z-index:2;box-shadow:0 5px 8px rgba(0,0,0,.18)}'+
+  '.wb-tools{position:absolute;left:18px;bottom:-6px;display:flex;align-items:flex-end;gap:10px;z-index:5}'+
+  '.wb-sponge{width:54px;height:30px;border-radius:5px;background:linear-gradient(#f3d58b,#e0b64e);border:1px solid #c69a3a;box-shadow:0 2px 4px rgba(0,0,0,.25);cursor:pointer;position:relative}'+
+  '.wb-sponge::after{content:"";position:absolute;left:0;right:0;bottom:0;height:11px;background:#6f706f;border-radius:0 0 5px 5px}'+
+  '.wb-pen{width:66px;height:15px;border-radius:3px;cursor:pointer;position:relative;box-shadow:0 2px 4px rgba(0,0,0,.25);transition:transform .1s}'+
+  '.wb-pen::before{content:"";position:absolute;right:-9px;top:1px;border-left:12px solid rgba(0,0,0,.35);border-top:6px solid transparent;border-bottom:6px solid transparent}'+
+  '.wb-pen .cap{position:absolute;left:0;top:0;bottom:0;width:16px;border-radius:3px 0 0 3px;background:rgba(0,0,0,.25)}'+
+  '.wb-tool{outline:0}'+
+  '.wb-tool.on{transform:translateY(-10px)}'+
+  '.wb-sponge.on{transform:translateY(-8px)}'+
+  '.wb-panel{display:flex;align-items:center;gap:10px;padding:6px 16px 0;color:#eafaf8;font:500 12.5px "Chivo",system-ui,sans-serif;flex-wrap:wrap;justify-content:center}'+
+  '.wb-panel label{display:flex;align-items:center;gap:6px}'+
+  '.wb-panel input[type=range]{accent-color:#fff}'+
+  '.wb-hint{opacity:.85}'+
+  '@media (max-width:620px){.wb-tools{left:8px;gap:6px}.wb-pen{width:48px}.wb-sponge{width:42px}}';
+
+  var sel=document.createElement('style'); sel.textContent=css; document.head.appendChild(sel);
+
+  var ov=document.createElement('div'); ov.className='wb-overlay'; ov.setAttribute('role','dialog'); ov.setAttribute('aria-label','Whiteboard');
+  ov.innerHTML=''+
+    '<div class="wb-top"><b>Whiteboard</b><span class="wb-hint">Your notes stay here while you work — they persist across devices and tabs.</span><span class="sp"></span>'+
+      '<button type="button" class="wb-save">Save PNG</button><button type="button" class="wb-clear">Clear board</button><button type="button" class="wb-close">Close ✕</button></div>'+
+    '<div class="wb-panel"><label>Pen size <input type="range" class="wb-size" min="2" max="10" value="4"></label><span class="wb-hint">Pick a marker or the sponge below · click a marker to change colour</span></div>'+
+    '<div class="wb-stage"><div class="wb-frame"><span class="wb-corner tl"></span><span class="wb-corner tr"></span><span class="wb-corner bl"></span><span class="wb-corner br"></span>'+
+      '<div class="wb-mag"><i style="background-color:#e0463c"></i><i style="background-color:#2fa54e"></i><i style="background-color:#f0b429"></i><i style="background-color:#e67a22"></i><i style="background-color:#2d63d6"></i></div>'+
+      '<div class="wb-inner"><canvas class="wb-canvas" width="'+W+'" height="'+H+'"></canvas></div>'+
+      '<div class="wb-tray"></div>'+
+      '<div class="wb-tools">'+
+        '<button class="wb-sponge wb-tool" data-tool="eraser" title="Eraser (sponge)" aria-label="Eraser"></button>'+
+        '<button class="wb-pen wb-tool on" data-tool="green" title="Green marker" aria-label="Green marker" style="background:#1e8f45"><span class="cap"></span></button>'+
+        '<button class="wb-pen wb-tool" data-tool="blue" title="Blue marker" aria-label="Blue marker" style="background:#1d55c4"><span class="cap"></span></button>'+
+        '<button class="wb-pen wb-tool" data-tool="red" title="Red marker" aria-label="Red marker" style="background:#d7352b"><span class="cap"></span></button>'+
+        '<button class="wb-pen wb-tool" data-tool="black" title="Black marker" aria-label="Black marker" style="background:#1c1c1c"><span class="cap"></span></button>'+
+      '</div>'+
+    '</div></div>';
+  document.body.appendChild(ov);
+
+  var canvas=ov.querySelector('.wb-canvas'), ctx=canvas.getContext('2d');
+  var tool='green', size=4, drawing=false, last=null, saveT=null, dirty=false;
+  ctx.lineCap='round'; ctx.lineJoin='round';
+
+  function load(){ try{ var d=localStorage.getItem(KEY); if(d){ var img=new Image(); img.onload=function(){ ctx.clearRect(0,0,W,H); ctx.drawImage(img,0,0,W,H); }; img.src=d; } }catch(e){} }
+  function save(){ try{ localStorage.setItem(KEY, canvas.toDataURL('image/png')); }catch(e){} }
+  function scheduleSave(){ clearTimeout(saveT); saveT=setTimeout(save,500); }
+
+  function pos(e){ var r=canvas.getBoundingClientRect(); return {x:(e.clientX-r.left)*(W/r.width), y:(e.clientY-r.top)*(H/r.height)}; }
+  function start(e){ drawing=true; last=pos(e); e.preventDefault(); stroke(e); }
+  function stroke(e){ if(!drawing) return; var p=pos(e);
+    ctx.globalCompositeOperation = tool==='eraser' ? 'destination-out' : 'source-over';
+    ctx.strokeStyle = tool==='eraser' ? 'rgba(0,0,0,1)' : COLOURS[tool];
+    ctx.lineWidth = tool==='eraser' ? 34 : size;
+    ctx.beginPath(); ctx.moveTo(last.x,last.y); ctx.lineTo(p.x,p.y); ctx.stroke(); last=p; dirty=true; }
+  function end(){ if(drawing){ drawing=false; if(dirty){ scheduleSave(); dirty=false; } } }
+  canvas.addEventListener('pointerdown',function(e){ canvas.setPointerCapture&&canvas.setPointerCapture(e.pointerId); start(e); });
+  canvas.addEventListener('pointermove',stroke);
+  canvas.addEventListener('pointerup',end); canvas.addEventListener('pointercancel',end); canvas.addEventListener('pointerleave',function(){ if(drawing){ /* keep drawing only while down */ } });
+  window.addEventListener('pointerup',end);
+
+  ov.querySelectorAll('.wb-tool').forEach(function(b){ b.addEventListener('click',function(){
+    tool=b.dataset.tool;
+    ov.querySelectorAll('.wb-tool').forEach(function(x){ x.classList.toggle('on',x===b); });
+  }); });
+  ov.querySelector('.wb-size').addEventListener('input',function(e){ size=+e.target.value; });
+  ov.querySelector('.wb-clear').addEventListener('click',function(){ ctx.clearRect(0,0,W,H); save(); });
+  ov.querySelector('.wb-close').addEventListener('click',function(){ ov.classList.remove('open'); });
+  ov.querySelector('.wb-save').addEventListener('click',function(){
+    try{ var a=document.createElement('a'); a.download='whiteboard-'+(window.__WB_KEY__||'notes')+'.png'; a.href=canvas.toDataURL('image/png'); document.body.appendChild(a); a.click(); a.remove(); }catch(e){} });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&ov.classList.contains('open')) ov.classList.remove('open'); });
+
+  window.wbToggle=function(){ ov.classList.toggle('open'); };
+  load();
+})();
+</script>
+<script>
+(function(){
+  function updThemeBtn(){var b=document.getElementById('themeBtn');if(!b)return;var dark=document.documentElement.getAttribute('data-theme')==='dark'||(!document.documentElement.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme:dark)').matches);b.innerHTML=dark?'☀️ <span class="lbl">Light</span>':'🌙 <span class="lbl">Dark</span>';}
+  function updTermBtn(){var b=document.getElementById('termBtn');if(!b)return;var w=document.documentElement.classList.contains('tt-white');b.innerHTML='⌨️ <span class="lbl">'+(w?'White':'Green')+'</span>';}
+  window.toggleTheme=function(){var d=document.documentElement;var cur=d.getAttribute('data-theme');var sys=matchMedia('(prefers-color-scheme:dark)').matches;var nx=(cur==='dark'||(!cur&&sys))?'light':'dark';d.setAttribute('data-theme',nx);try{localStorage.setItem('labs-theme',nx);}catch(e){}updThemeBtn();};
+  window.toggleTerm=function(){var d=document.documentElement;d.classList.toggle('tt-white');try{localStorage.setItem('labs-term',d.classList.contains('tt-white')?'white':'green');}catch(e){}updTermBtn();};
+  function init(){updThemeBtn();updTermBtn();}
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+})();
+</script>
+</body></html>

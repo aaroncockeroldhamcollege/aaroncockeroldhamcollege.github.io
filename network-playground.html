@@ -1,0 +1,843 @@
+<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><link rel="icon" href="favicon.svg" type="image/svg+xml"><script>try{var t=localStorage.getItem("labs-theme");if(t)document.documentElement.setAttribute("data-theme",t);if(localStorage.getItem("labs-term")==="white")document.documentElement.classList.add("tt-white");}catch(e){}</script><script>/* ============================================================
+   Network topology symbols — shared across every activity.
+   Original SVG drawings in the conventional Cisco/Packet Tracer
+   topology style (functional diagram symbols). viewBox 0 0 64 64,
+   device centred. Two-tone: light body + Cisco-blue outline, so
+   they read on both light and dark stages.
+   Use:  <svg viewBox="0 0 64 64">  + NETSYM[type]  </svg>
+============================================================ */
+(function(){
+  // palette (fixed so icons look identical on every page/theme)
+  var B='#cfe7f5',   // body fill
+      L='#0a7cad',   // outline
+      A='#0a9ad4',   // accent fill
+      D='#07485f',   // deep accent
+      W='#ffffff';
+  function arrow(d){ return '<path d="'+d+'" fill="none" stroke="'+W+'" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>'; }
+
+  var S={};
+
+  // ---- Router: 3-D cylinder with the classic 4-way arrows on top ----
+  S.router =
+   '<path d="M8 34 v4 a24 8 0 0 0 48 0 v-4" fill="'+L+'"/>'+
+   '<ellipse cx="32" cy="34" rx="24" ry="8.5" fill="'+A+'" stroke="'+L+'" stroke-width="2"/>'+
+   // 4-way arrows (left,right,up,down) on the top face
+   arrow('M20 34 h9 m-3.5 -3 l3.5 3 -3.5 3')+        // right
+   arrow('M44 34 h-9 m3.5 -3 l-3.5 3 3.5 3')+        // left
+   arrow('M32 27.5 v-3 M29.5 26 l2.5 -2.5 2.5 2.5')+ // up (small)
+   arrow('M32 40.5 v3 M29.5 42 l2.5 2.5 2.5 -2.5');  // down (small)
+
+  // ---- Switch: flat 3-D slab with 4 parallel arrows (2 each way) ----
+  S['switch'] =
+   '<path d="M10 30 L22 22 H58 L46 30 Z" fill="'+A+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>'+   // top face
+   '<path d="M10 30 H46 V40 H10 Z" fill="'+B+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>'+          // front
+   '<path d="M46 30 L58 22 V32 L46 40 Z" fill="'+L+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>'+    // side
+   arrow('M16 33 h16 m-4 -2.5 l4 2.5 -4 2.5')+
+   arrow('M40 37 h-16 m4 -2.5 l-4 2.5 4 2.5');
+
+  // ---- Multilayer (L3) switch: slab + routing ring ----
+  S.l3switch =
+   '<path d="M10 32 L22 24 H58 L46 32 Z" fill="'+A+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>'+
+   '<path d="M10 32 H46 V42 H10 Z" fill="'+B+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>'+
+   '<path d="M46 32 L58 24 V34 L46 42 Z" fill="'+L+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>'+
+   arrow('M16 35 h12 m-3.5 -2.5 l3.5 2.5 -3.5 2.5')+
+   arrow('M40 39 h-12 m3.5 -2.5 l-3.5 2.5 3.5 2.5')+
+   '<circle cx="47" cy="20" r="9" fill="'+W+'" stroke="'+L+'" stroke-width="2"/>'+
+   arrow('M43 20 h8 m-2.5 -2.5 l2.5 2.5 -2.5 2.5').replace(/#ffffff/,L);
+
+  // ---- PC / desktop: monitor + tower ----
+  S.pc =
+   '<rect x="12" y="14" width="34" height="24" rx="2" fill="'+B+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<rect x="16" y="18" width="26" height="16" rx="1" fill="'+A+'"/>'+
+   '<rect x="25" y="38" width="8" height="5" fill="#9bbdd4"/>'+
+   '<rect x="18" y="43" width="22" height="4" rx="2" fill="'+L+'"/>'+
+   '<rect x="48" y="20" width="12" height="27" rx="2" fill="'+B+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<circle cx="54" cy="25" r="1.6" fill="'+L+'"/><path d="M51 42 h6" stroke="'+L+'" stroke-width="2"/>';
+
+  // ---- Laptop ----
+  S.laptop =
+   '<path d="M16 16 h32 v20 h-32 Z" fill="'+B+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<rect x="19" y="19" width="26" height="14" rx="1" fill="'+A+'"/>'+
+   '<path d="M10 44 L16 36 h32 l6 8 Z" fill="'+B+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>'+
+   '<path d="M27 40 h10" stroke="'+L+'" stroke-width="2" stroke-linecap="round"/>';
+
+  // ---- Server ----
+  S.server =
+   '<rect x="20" y="10" width="24" height="44" rx="3" fill="'+B+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<rect x="24" y="15" width="16" height="7" rx="1" fill="'+A+'"/><circle cx="41" cy="18.5" r="1.4" fill="'+W+'"/>'+
+   '<rect x="24" y="25" width="16" height="7" rx="1" fill="'+A+'"/><circle cx="41" cy="28.5" r="1.4" fill="'+W+'"/>'+
+   '<rect x="24" y="35" width="16" height="7" rx="1" fill="'+A+'"/><circle cx="41" cy="38.5" r="1.4" fill="'+W+'"/>'+
+   '<path d="M25 48 h14" stroke="'+L+'" stroke-width="2" stroke-linecap="round"/>';
+
+  // ---- Firewall: brick wall ----
+  S.firewall =
+   '<rect x="8" y="16" width="48" height="32" rx="2" fill="'+B+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<g stroke="'+L+'" stroke-width="2">'+
+   '<path d="M8 27 h48 M8 37 h48"/>'+
+   '<path d="M24 16 v11 M40 16 v11"/>'+        // top row bricks
+   '<path d="M16 27 v10 M32 27 v10 M48 27 v10"/>'+ // mid row offset
+   '<path d="M24 37 v11 M40 37 v11"/>'+        // bottom row
+   '</g>';
+
+  // ---- Access point: puck + radio waves ----
+  S.ap =
+   '<ellipse cx="32" cy="42" rx="22" ry="7" fill="'+B+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<rect x="30" y="20" width="4" height="18" rx="2" fill="'+L+'"/>'+
+   '<circle cx="32" cy="18" r="3.5" fill="'+A+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<g fill="none" stroke="'+A+'" stroke-width="2.4" stroke-linecap="round">'+
+   '<path d="M22 14 a14 14 0 0 1 20 0"/><path d="M26 18 a9 9 0 0 1 12 0"/></g>';
+
+  // ---- IP phone ----
+  S.phone =
+   '<path d="M18 12 h24 a4 4 0 0 1 4 4 v30 a4 4 0 0 1 -4 4 h-24 a4 4 0 0 1 -4 -4 v-30 a4 4 0 0 1 4 -4 Z" fill="'+B+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<rect x="19" y="17" width="22" height="13" rx="1" fill="'+A+'"/>'+
+   '<g fill="'+L+'"><circle cx="23" cy="36" r="2"/><circle cx="30" cy="36" r="2"/><circle cx="37" cy="36" r="2"/><circle cx="23" cy="43" r="2"/><circle cx="30" cy="43" r="2"/><circle cx="37" cy="43" r="2"/></g>';
+
+  // ---- Printer ----
+  S.printer =
+   '<rect x="18" y="12" width="28" height="12" rx="1" fill="'+B+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<rect x="10" y="24" width="44" height="18" rx="3" fill="'+A+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<rect x="20" y="36" width="24" height="14" rx="1" fill="'+W+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<circle cx="48" cy="30" r="2" fill="'+W+'"/>';
+
+  // ---- Cloud (internet / WAN) ----
+  S.cloud =
+   '<path d="M16 46 a12 12 0 0 1 1 -24 a15 14 0 0 1 28 -4 a12 12 0 0 1 4 28 Z" fill="'+B+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>';
+
+  // ---- Hub: plain 3-D box with vertical slats (no arrows — it just repeats) ----
+  S.hub =
+   '<path d="M14 24 L24 17 H54 L44 24 Z" fill="'+A+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>'+
+   '<path d="M14 24 H44 V46 H14 Z" fill="'+B+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>'+
+   '<path d="M44 24 L54 17 V39 L44 46 Z" fill="'+L+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>'+
+   '<path d="M20 29v12M26 29v12M32 29v12M38 29v12" stroke="'+L+'" stroke-width="2.4" stroke-linecap="round"/>';
+
+  // aliases
+  S.multiswitch=S.l3switch; S.asa=S.firewall; S.internet=S.cloud; S.desktop=S.pc;
+
+  window.NETSYM=S;
+})();
+</script>
+<style>[hidden]{display:none!important}body{margin:0}</style>
+<title>Network Playground</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#eef5f9; --panel:#fff; --ink:#132430; --muted:#5a6b78; --line:#cfe0ec; --accent:#0a9ad4; --accent-dark:#0a7cad; --accent-soft:#d6f1fb;
+  --ok:#1a9c5b; --bad:#d23d3d; --wire:#0a7cad;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace; --display:"Chivo",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#081219;--panel:#10212c;--ink:#dcebf3;--muted:#8fa6b4;--line:#223644;--accent:#2cb8e8;--accent-dark:#6fd2f2;--accent-soft:#06344a;--wire:#4fc3e8;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#081219;--panel:#10212c;--ink:#dcebf3;--muted:#8fa6b4;--line:#223644;--accent:#2cb8e8;--accent-dark:#6fd2f2;--accent-soft:#06344a;--wire:#4fc3e8;color-scheme:dark}
+*{box-sizing:border-box}html,body{background:var(--bg);color:var(--ink)}body{margin:0;font:14px/1.5 var(--display)}
+button{font:inherit;color:inherit}:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.app{max-width:1180px;margin:0 auto;padding:18px 16px 44px}
+.eyebrow{font:600 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--accent-dark)}
+h1{font:800 clamp(24px,4vw,32px)/1.05 var(--display);margin:6px 0 0}
+.lead{color:var(--muted);margin:8px 0 0;max-width:74ch}
+.wrap{display:grid;grid-template-columns:186px 1fr;gap:14px;margin-top:16px}
+@media (max-width:740px){.wrap{grid-template-columns:1fr}}
+.side{display:flex;flex-direction:column;gap:12px}
+.card{border:1px solid var(--line);background:var(--panel);border-radius:12px;padding:12px}
+.card h3{margin:0 0 9px;font:700 11px var(--display);letter-spacing:.07em;text-transform:uppercase;color:var(--accent-dark)}
+.palette{display:grid;gap:8px}
+.pal{display:flex;align-items:center;gap:10px;border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:8px 10px;cursor:grab;user-select:none;text-align:left}
+.pal:hover{border-color:var(--accent);background:var(--accent-soft)}
+.pal svg{width:30px;height:30px;flex:none}
+.pal b{display:block;font:700 13px var(--display)}
+.pal span{display:block;color:var(--muted);font-size:11px}
+.tools{display:flex;flex-wrap:wrap;gap:7px}
+.btn{font:600 12px var(--display);border:1px solid var(--line);background:var(--panel);color:var(--ink);padding:8px 11px;border-radius:8px;cursor:pointer}
+.btn:hover{border-color:var(--accent)}
+.btn.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.warn:hover{border-color:var(--bad);color:var(--bad)}
+.stage{border:1px solid var(--line);background:var(--panel);border-radius:12px;position:relative;overflow:hidden;min-height:460px}
+.stagebar{display:flex;align-items:center;gap:8px;padding:8px 10px;border-bottom:1px solid var(--line);flex-wrap:wrap;background:var(--accent-soft)}
+.stagebar .hint{color:var(--muted);font-size:12px;margin-left:auto}
+.zoomctl{position:absolute;right:10px;bottom:10px;display:flex;gap:6px;z-index:6}
+.zoomctl button{width:30px;height:30px;border:1px solid var(--line);background:var(--panel);border-radius:7px;cursor:pointer;font-size:16px;line-height:1;display:flex;align-items:center;justify-content:center}
+.zoomctl button:hover{border-color:var(--accent)}
+.canvas{position:relative;width:100%;height:520px;touch-action:none;cursor:grab;overflow:hidden}
+.canvas.panning{cursor:grabbing}
+.node{cursor:move}
+.canvas.wire{cursor:crosshair}
+.canvas.del{cursor:not-allowed}
+.world{position:absolute;left:0;top:0;width:1600px;height:1100px;transform-origin:0 0}
+#wires{position:absolute;left:0;top:0;width:1600px;height:1100px;pointer-events:none;overflow:visible}
+#wires line{stroke:var(--wire);stroke-width:3;stroke-linecap:round}
+#wires line.sel{stroke:var(--bad)}
+#wires line.wifi{stroke-dasharray:7 6;stroke-width:2.5}
+#wires .pkt-env{filter:drop-shadow(0 2px 3px rgba(0,0,0,.25))}
+.node{position:absolute;width:92px;transform:translate(-50%,-50%);text-align:center;cursor:grab;user-select:none}
+.node .ic{width:56px;height:56px;margin:0 auto;filter:drop-shadow(0 3px 5px rgba(0,0,0,.18))}
+.node.pick .ic{outline:3px solid var(--accent);outline-offset:3px;border-radius:8px}
+.node .nm{font:700 12px var(--display);margin-top:2px}
+.node .ip{font:500 10.5px var(--mono);color:var(--muted);display:block;line-height:1.25}
+.node .ip.none{color:var(--bad)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:10px}
+.legend b{color:var(--ink)}
+.console{margin-top:12px;border:1px solid var(--line);border-radius:12px;background:var(--panel);overflow:hidden}
+.console .ch{padding:10px 12px;border-bottom:1px solid var(--line);font:700 11px var(--display);letter-spacing:.07em;text-transform:uppercase;color:var(--accent-dark);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.console .ch select{font:600 12px var(--display);border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:7px;padding:6px 8px}
+.log{font:12.5px/1.5 var(--mono);padding:10px 12px;max-height:190px;overflow:auto;white-space:pre-wrap}
+.log .ok{color:var(--ok)}.log .bad{color:var(--bad)}.log .dim{color:var(--muted)}
+.modes{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-left:10px}
+.modes button{border:0;background:var(--panel);padding:5px 12px;font:600 12px var(--display);cursor:pointer;color:var(--ink)}
+.modes button+button{border-left:1px solid var(--line)}
+.modes button.on{background:var(--accent);color:#fff}
+.simclock{font:600 12px var(--mono);color:var(--muted)}
+.simbar{position:absolute;left:10px;bottom:10px;display:flex;gap:6px;align-items:center;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:6px 8px;z-index:6;box-shadow:0 3px 10px rgba(0,0,0,.15)}
+.simbar[hidden]{display:none}
+.simbar button{border:1px solid var(--line);background:var(--panel);border-radius:7px;height:32px;min-width:34px;padding:0 10px;font:700 13px var(--display);cursor:pointer;color:var(--ink)}
+.simbar button:hover{border-color:var(--accent)}
+.simbar button.play{background:var(--accent);border-color:var(--accent);color:#fff;min-width:88px}
+.simbar .seg{display:flex;border:1px solid var(--line);border-radius:7px;overflow:hidden}
+.simbar .seg button{border:0;border-radius:0;height:30px;font-weight:600;font-size:12px}
+.simbar .seg button+button{border-left:1px solid var(--line)}
+.simbar .seg button.on{background:var(--accent-soft);color:var(--accent-dark)}
+.simbar .lbl{font:700 11px var(--display);color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-left:4px}
+.evwrap{max-height:220px;overflow:auto;border-top:1px solid var(--line)}
+.evwrap[hidden]{display:none}
+table.ev{width:100%;border-collapse:collapse;font:12.5px var(--mono)}
+table.ev th{position:sticky;top:0;background:var(--panel);text-align:left;font:700 11px var(--display);text-transform:uppercase;letter-spacing:.04em;color:var(--accent-dark);padding:6px 10px;border-bottom:2px solid var(--line)}
+table.ev td{padding:4px 10px;border-bottom:1px solid var(--line)}
+table.ev td.res-ok{color:var(--ok);font-weight:700}table.ev td.res-bad{color:var(--bad);font-weight:700}
+.chip-arp,.chip-icmp{display:inline-block;width:14px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px;border:1.5px solid}
+.chip-arp{background:#d9e2ff;border-color:#3a5bd1}.chip-icmp{background:#fff4c2;border-color:#9a7b00}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:9px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .2s;z-index:40}
+.toast.show{opacity:1}
+</style>
+<style>
+/* ===== site header / controls ===== */
+.site-hdr{display:flex;align-items:center;gap:12px;background:#fff;border-bottom:3px solid #0a9ad4;padding:7px 16px;font-family:"Chivo","Segoe UI",system-ui,sans-serif;flex-wrap:wrap}
+.site-hdr .site-brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+.site-hdr .logo-ol{height:50px;background:#fff;border-radius:6px;padding:2px}
+.site-hdr .logo-ci{height:34px;border-radius:4px}
+.site-hdr .site-div{width:1px;height:30px;background:#d2dae2}
+.site-hdr .site-title{font:700 15px/1 "Chivo",system-ui,sans-serif;color:#0a7cad}
+.site-hdr .site-sp{flex:1}
+.site-ctl,.site-hdr .site-link{font:600 12.5px "Chivo",system-ui,sans-serif;color:#0a7cad;text-decoration:none;border:1px solid #bfe4f3;border-radius:7px;padding:7px 11px;white-space:nowrap;background:#fff;cursor:pointer}
+.site-ctl:hover,.site-hdr .site-link:hover{background:#e8f6fc}
+@media (prefers-color-scheme:dark){html:not([data-theme="light"]) .site-hdr{background:#0e1a23;border-bottom-color:#2cb8e8}
+ html:not([data-theme="light"]) .site-hdr .site-title{color:#6fd2f2}
+ html:not([data-theme="light"]) .site-ctl,html:not([data-theme="light"]) .site-hdr .site-link{background:#13232e;color:#6fd2f2;border-color:#28485c}
+ html:not([data-theme="light"]) .site-hdr .site-div{background:#28485c}}
+html[data-theme="dark"] .site-hdr{background:#0e1a23;border-bottom-color:#2cb8e8}
+html[data-theme="dark"] .site-hdr .site-title{color:#6fd2f2}
+html[data-theme="dark"] .site-ctl,html[data-theme="dark"] .site-hdr .site-link{background:#13232e;color:#6fd2f2;border-color:#28485c}
+html[data-theme="dark"] .site-hdr .site-div{background:#28485c}
+.wb-fab{position:fixed;right:16px;bottom:16px;z-index:70;border:0;border-radius:24px;cursor:pointer;background:#0a9ad4;color:#fff;font:600 13px "Chivo",system-ui,sans-serif;padding:11px 16px;box-shadow:0 6px 18px rgba(10,120,170,.4);display:inline-flex;align-items:center;gap:7px}
+.wb-fab:hover{background:#088ec5}
+@media (max-width:640px){.site-hdr .site-title{display:none}.site-ctl .lbl{display:none}.wb-fab .t{display:none}}
+/* ===== Tera Term terminal colours (green default, white toggle) ===== */
+.term{background:#071a0e!important;color:#45dd68!important}
+.term pre,.term .out{color:inherit!important}
+#prompt,.ps1,.term .ps1{color:#88ffb0!important}
+.l-cmd{color:#9dffc2!important}.l-dim{color:#7fae8c!important}.l-warn{color:#ecc06a!important}.l-bad{color:#ff8575!important}
+#cmd,.cin,.term input{color:#45dd68!important;caret-color:#45dd68!important;background:transparent!important}
+html.tt-white .term{color:#e7eef1!important}
+html.tt-white #prompt,html.tt-white .ps1,html.tt-white .term .ps1{color:#bfe3ff!important}
+html.tt-white .l-cmd{color:#d4e9ff!important}
+html.tt-white #cmd,html.tt-white .cin,html.tt-white .term input{color:#e7eef1!important;caret-color:#e7eef1!important}
+/* ===== Windows-7 (Aero) style GUI windows + resizeable ===== */
+.win{resize:both!important;overflow:hidden!important;min-width:300px;min-height:200px;border:1px solid #2f6aa8!important;border-radius:8px 8px 6px 6px!important;box-shadow:0 20px 44px rgba(0,0,0,.42), inset 0 0 0 1px rgba(255,255,255,.45)!important}
+.win-bar,.win-title{background:linear-gradient(#fdfefe,#dbe9f8 46%,#c2d8f0)!important;border-bottom:1px solid #8fb0d6!important;color:#13314e!important;border-radius:7px 7px 0 0}
+.win-bar b,.win-title b{text-shadow:0 1px 0 rgba(255,255,255,.75)}
+.win-bar .x,.win-title .x{background:linear-gradient(#f7a19a,#d9453b)!important;border:1px solid #b23026!important;color:#fff!important;border-radius:4px!important;text-shadow:0 1px 1px rgba(0,0,0,.3)}
+.win-bar .x:hover,.win-title .x:hover{background:linear-gradient(#ff8f86,#c9382e)!important}
+html[data-theme="dark"] .win-bar,html[data-theme="dark"] .win-title{background:linear-gradient(#2b3b4c,#1c2a38 46%,#152230)!important;border-bottom-color:#3a556c!important;color:#dceaf5!important}
+@media (prefers-color-scheme:dark){html:not([data-theme="light"]) .win-bar,html:not([data-theme="light"]) .win-title{background:linear-gradient(#2b3b4c,#1c2a38 46%,#152230)!important;border-bottom-color:#3a556c!important;color:#dceaf5!important}}
+</style>
+</head><body>
+<header class="site-hdr"><a class="site-brand" href="index.html"><img class="logo-ol" src="oldham-college.png" alt="Oldham College"><span class="site-div"></span><img class="logo-ci" src="cisco-netacad.png" alt="Cisco Networking Academy"></a><span class="site-title">Network Playground</span><span class="site-sp"></span><a class="site-link" href="playground.pdf" target="_blank" rel="noopener">📄 <span class="lbl">Instructions (PDF)</span></a><button id="themeBtn" class="site-ctl" type="button" onclick="toggleTheme()" title="Light / dark">🌙 <span class="lbl">Dark</span></button><a class="site-link" href="index.html">← <span class="lbl">All labs</span></a></header><button class="wb-fab" type="button" onclick="wbToggle()" aria-label="Open whiteboard" title="Whiteboard">✎ <span class="t">Whiteboard</span></button>
+
+
+<div class="app">
+  <div class="eyebrow">Cisco Networking Academy</div>
+  <h1>Network Playground</h1>
+  <p class="lead">Drag devices onto the canvas, switch to <b>Wire</b> mode and click two devices to cable them together. The playground auto-assigns IP addresses and gateways for you — no commands — so you can build a topology and test it with <b>Ping</b> straight away.</p>
+
+  <div class="wrap">
+    <div class="side">
+      <div class="card">
+        <h3>Devices</h3>
+        <div class="palette" id="palette">
+          <button class="pal" data-type="pc" draggable="true"><svg viewBox="0 0 64 64">__IC_PC__</svg><span><b>PC</b>End device</span></button>
+          <button class="pal" data-type="switch" draggable="true"><svg viewBox="0 0 64 64">__IC_SW__</svg><span><b>Switch</b>Layer 2</span></button>
+          <button class="pal" data-type="router" draggable="true"><svg viewBox="0 0 64 64"></svg><span><b>Router</b>Layer 3 / gateway</span></button>
+          <button class="pal" data-type="hub" draggable="true"><svg viewBox="0 0 64 64"></svg><span><b>Hub</b>Layer 1 · repeats to all ports</span></button>
+          <button class="pal" data-type="server" draggable="true"><svg viewBox="0 0 64 64"></svg><span><b>Server</b>End device</span></button>
+          <button class="pal" data-type="laptop" draggable="true"><svg viewBox="0 0 64 64"></svg><span><b>Laptop</b>Wireless client</span></button>
+          <button class="pal" data-type="ap" draggable="true"><svg viewBox="0 0 64 64"></svg><span><b>Access point</b>Wireless · Layer 2</span></button>
+        </div>
+        <p style="font-size:11px;color:var(--muted);margin:10px 0 0">Drag onto the canvas, or click to drop one in the middle.</p>
+      </div>
+      <div class="card">
+        <h3>Tools</h3>
+        <div class="tools">
+          <button class="btn" id="wireBtn" type="button">Wire</button>
+          <button class="btn" id="delBtn" type="button">Delete</button>
+          <button class="btn warn" id="clearBtn" type="button">Clear all</button>
+        </div>
+        <div class="legend">
+          <span><b>⌁</b> Wire: click A then B</span>
+          <span><b>✕</b> Delete: click a device or cable</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage">
+      <div class="stagebar">
+        <strong id="mode">Build mode</strong>
+        <div class="modes" role="tablist"><button id="rtBtn" class="on" type="button">Realtime</button><button id="simBtn" type="button">Simulation</button></div>
+        <span class="simclock" id="simclock" hidden>Sim time 0.000 s</span>
+        <span class="hint" id="count">0 devices · 0 cables</span>
+      </div>
+      <div class="canvas" id="canvas">
+        <div class="world" id="world">
+          <svg id="wires"></svg>
+        </div>
+        <div class="simbar" id="simbar" hidden>
+          <button class="play" id="simPlay" type="button" title="Play / pause">▶ Play</button>
+          <button id="simStep" type="button" title="Advance one hop">Step ›</button>
+          <button id="simReset" type="button" title="Clear packets and tables">↺ Reset</button>
+          <span class="lbl">Speed</span>
+          <div class="seg"><button id="spSlow" type="button">Slow</button><button id="spNorm" class="on" type="button">Normal</button><button id="spFast" type="button">Fast</button></div>
+        </div>
+        <div class="zoomctl">
+          <button id="zin" title="Zoom in" type="button">+</button>
+          <button id="zout" title="Zoom out" type="button">−</button>
+          <button id="zfit" title="Centre the network" type="button">⤢</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="console">
+    <div class="ch">
+      <span>Ping test</span>
+      <label>From <select id="src"></select></label>
+      <label>To <select id="dst"></select></label>
+      <button class="btn" id="pingBtn" type="button">Ping →</button>
+      <button class="btn" id="arrangeBtn" type="button" title="Tidy the layout">Auto-arrange</button>
+    </div>
+    <div class="evwrap" id="evwrap" hidden><table class="ev"><thead><tr><th>Time (s)</th><th>Last device</th><th>At device</th><th>Type</th><th>Result</th></tr></thead><tbody id="evbody"></tbody></table></div>
+    <div class="log" id="log"><span class="dim">Build a network, then run a ping. The log explains what happens at each hop.</span></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+'use strict';
+/* ====================== Network Playground ====================== *
+ * A Packet Tracer-style sandbox. Drop PCs, switches and routers;
+ * click to wire them; it auto-configures IP addressing per subnet
+ * and lets you ping. No manual CLI — the point is the topology.    */
+const SAVE_KEY='network-playground-v2';
+const $=s=>document.querySelector(s);
+const world=$('#world'), svg=$('#wires'), canvas=$('#canvas');
+
+/* ---- device icons (reused for palette + nodes) ---- */
+const IC=window.NETSYM||{};
+document.querySelectorAll('.pal').forEach(p=>{ const t=p.dataset.type; p.querySelector('svg').innerHTML=IC[t]||''; });
+
+/* ---- state ---- */
+let G={nodes:[],links:[],seq:{}};
+let MODE='build';           // build | wire | del
+let wireFrom=null;          // node id awaiting its wire partner
+let drag=null;              // {id,dx,dy} while dragging a node
+let view={z:1,x:40,y:20};   // pan/zoom of the world
+
+function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('show'); clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove('show'),1600); }
+const PFX={pc:'PC',switch:'SW',router:'R',server:'SRV',laptop:'LAP',ap:'AP',hub:'HUB'};
+const HOSTS=new Set(['pc','server','laptop']); const isHost=n=>!!n&&HOSTS.has(n.type); const isL2=n=>!!n&&(n.type==='switch'||n.type==='ap'||n.type==='hub');
+const isWifi=(A,B)=>(A.type==='ap'&&B.type==='laptop')||(B.type==='ap'&&A.type==='laptop');
+function uid(t){ G.seq[t]=(G.seq[t]||0)+1; return (PFX[t]||t.toUpperCase().slice(0,2))+G.seq[t]; }
+function node(id){ return G.nodes.find(n=>n.id===id); }
+
+/* ---- persistence ---- */
+function save(){ try{ localStorage.setItem(SAVE_KEY,JSON.stringify({G,view})); }catch(e){} }
+function load(){ try{ const r=JSON.parse(localStorage.getItem(SAVE_KEY)||'null'); if(r&&r.G){ G=r.G; G.seq=G.seq||{}; if(r.view) view=r.view; } }catch(e){} }
+
+/* ---- view transform ---- */
+function applyView(){ world.style.transform=`translate(${view.x}px,${view.y}px) scale(${view.z})`; }
+$('#zin').onclick=()=>{ view.z=Math.min(2.4,view.z*1.2); applyView(); save(); };
+$('#zout').onclick=()=>{ view.z=Math.max(.4,view.z/1.2); applyView(); save(); };
+function fitView(){ if(!G.nodes.length){ view={z:1,x:40,y:20}; applyView(); return; }
+  const r=canvas.getBoundingClientRect(); const W=r.width||900, H=r.height||520;
+  let x0=Infinity,y0=Infinity,x1=-Infinity,y1=-Infinity;
+  G.nodes.forEach(n=>{ x0=Math.min(x0,n.x-55); x1=Math.max(x1,n.x+55); y0=Math.min(y0,n.y-40); y1=Math.max(y1,n.y+62); });
+  const pad=30, z=Math.max(.4,Math.min(1.2,(W-pad*2)/(x1-x0),(H-pad*2)/(y1-y0)));
+  view={z, x:W/2-((x0+x1)/2)*z, y:H/2-((y0+y1)/2)*z}; applyView(); }
+$('#zfit').onclick=()=>{ fitView(); save(); };
+canvas.addEventListener('wheel',e=>{ if(!e.ctrlKey&&Math.abs(e.deltaY)<4) return; e.preventDefault();
+  const r=canvas.getBoundingClientRect(), mx=e.clientX-r.left, my=e.clientY-r.top;
+  const f=e.deltaY<0?1.12:1/1.12, nz=Math.max(.4,Math.min(2.4,view.z*f));
+  view.x=mx-(mx-view.x)*(nz/view.z); view.y=my-(my-view.y)*(nz/view.z); view.z=nz; applyView(); save();
+},{passive:false});
+
+/* ---- add / place devices ---- */
+function addNode(type,wx,wy){ const id=uid(type); G.nodes.push({id,type,x:wx,y:wy}); render(); autoConfig(); save(); return id; }
+function canvasToWorld(cx,cy){ return {x:(cx-view.x)/view.z, y:(cy-view.y)/view.z}; }
+
+document.querySelectorAll('.pal').forEach(p=>{
+  p.addEventListener('dragstart',e=>{ e.dataTransfer.setData('text/type',p.dataset.type); e.dataTransfer.effectAllowed='copy'; });
+  p.addEventListener('click',()=>{ const r=canvas.getBoundingClientRect(); const w=canvasToWorld(r.width/2+(Math.random()*60-30),r.height/2+(Math.random()*60-30)); addNode(p.dataset.type,w.x,w.y); });
+});
+canvas.addEventListener('dragover',e=>{ e.preventDefault(); e.dataTransfer.dropEffect='copy'; });
+canvas.addEventListener('drop',e=>{ e.preventDefault(); const t=e.dataTransfer.getData('text/type'); if(!t) return;
+  const r=canvas.getBoundingClientRect(); const w=canvasToWorld(e.clientX-r.left,e.clientY-r.top); addNode(t,w.x,w.y); });
+
+/* ---- modes ---- */
+function setMode(m){ MODE=(MODE===m&&m!=='build')?'build':m; wireFrom=null;
+  $('#wireBtn').classList.toggle('on',MODE==='wire'); $('#delBtn').classList.toggle('on',MODE==='del');
+  canvas.classList.toggle('wire',MODE==='wire'); canvas.classList.toggle('del',MODE==='del');
+  $('#mode').textContent=MODE==='wire'?'Wire mode — click two devices':MODE==='del'?'Delete mode — click to remove':'Build mode';
+  render(); }
+$('#wireBtn').onclick=()=>setMode('wire');
+$('#delBtn').onclick=()=>setMode('del');
+$('#clearBtn').onclick=()=>{ if(!G.nodes.length) return; if(!confirm('Remove every device and cable?')) return;
+  G={nodes:[],links:[],seq:{}}; wireFrom=null; render(); autoConfig(); save(); };
+
+/* ---- wiring ---- */
+function portName(n){ return n.type==='router'?'Gig0/'+n._pc:(n.type==='switch'?'Fa0/'+n._pc:'NIC'); }
+function linkExists(a,b){ return G.links.some(l=>(l.a===a&&l.b===b)||(l.a===b&&l.b===a)); }
+function tryWire(id){ if(!wireFrom){ wireFrom=id; render(); return; }
+  if(wireFrom===id){ wireFrom=null; render(); return; }
+  if(linkExists(wireFrom,id)){ toast('Those two are already cabled'); wireFrom=null; render(); return; }
+  const A=node(wireFrom), B=node(id);
+  if(isHost(A)&&G.links.some(l=>l.a===A.id||l.b===A.id)){ toast(A.id+' already has a connection (one NIC)'); wireFrom=null; render(); return; }
+  if(isHost(B)&&G.links.some(l=>l.a===B.id||l.b===B.id)){ toast(B.id+' already has a connection (one NIC)'); wireFrom=null; render(); return; }
+  G.links.push({a:wireFrom,b:id}); wireFrom=null; render(); autoConfig(); save(); }
+
+/* ---- node interaction (click = wire/delete; drag = move) ---- */
+function onNodePointerDown(e,id){ e.stopPropagation();
+  if(MODE==='del'){ delNode(id); return; }
+  if(MODE==='wire'){ tryWire(id); return; }
+  const n=node(id); const p=canvasToWorld(e.clientX-canvas.getBoundingClientRect().left,e.clientY-canvas.getBoundingClientRect().top);
+  drag={id,dx:n.x-p.x,dy:n.y-p.y,moved:false}; e.target.setPointerCapture&&e.target.setPointerCapture(e.pointerId); }
+let pan=null;
+canvas.addEventListener('pointerdown',e=>{ if(e.button!==0||e.target.closest('.node,.zoomctl,.simbar,line')) return;
+  if(wireFrom){ wireFrom=null; render(); }
+  pan={sx:e.clientX,sy:e.clientY,vx:view.x,vy:view.y}; canvas.classList.add('panning'); canvas.setPointerCapture&&canvas.setPointerCapture(e.pointerId); });
+canvas.addEventListener('pointermove',e=>{ if(!pan) return; view.x=pan.vx+(e.clientX-pan.sx); view.y=pan.vy+(e.clientY-pan.sy); applyView(); });
+canvas.addEventListener('pointerup',()=>{ if(pan){ pan=null; canvas.classList.remove('panning'); save(); } });
+canvas.addEventListener('pointercancel',()=>{ pan=null; drag=null; canvas.classList.remove('panning'); });
+canvas.addEventListener('pointermove',e=>{ if(!drag) return; const r=canvas.getBoundingClientRect(); const p=canvasToWorld(e.clientX-r.left,e.clientY-r.top);
+  const n=node(drag.id); n.x=Math.max(50,Math.min(1550,p.x+drag.dx)); n.y=Math.max(40,Math.min(1060,p.y+drag.dy)); drag.moved=true; positionNodes(); drawWires(); });
+canvas.addEventListener('pointerup',()=>{ if(drag){ if(drag.moved) save(); drag=null; } });
+
+function delNode(id){ G.links=G.links.filter(l=>l.a!==id&&l.b!==id); G.nodes=G.nodes.filter(n=>n.id!==id); render(); autoConfig(); save(); }
+function delLink(i){ G.links.splice(i,1); render(); autoConfig(); save(); }
+
+/* ================= auto-configuration ================= *
+ * L2 broadcast domains = connected components where routers do NOT
+ * pass traffic (each router interface sits in its own domain).
+ * Each domain gets a /24; PCs get .10+, the router interface .1.    */
+function computeDomains(){
+  // adjacency excluding traversal *through* routers
+  const adj={}; G.nodes.forEach(n=>adj[n.id]=[]);
+  G.links.forEach(l=>{ adj[l.a]&&adj[l.a].push(l.b); adj[l.b]&&adj[l.b].push(l.a); });
+  // seed points: every link endpoint that is a router, plus every non-router node
+  const seen=new Set(), domains=[];
+  function flood(start){ const dom=new Set([start]), stack=[start]; seen.add(start+'');
+    while(stack.length){ const cur=stack.pop(); if(node(cur).type==='router') continue; // stop at routers
+      for(const nb of adj[cur]){ if(node(nb).type==='router'){ dom.add(nb); continue; } if(!dom.has(nb)){ dom.add(nb); seen.add(nb); stack.push(nb); } } }
+    return dom; }
+  // start floods from non-router nodes not yet seen
+  G.nodes.filter(n=>n.type!=='router').forEach(n=>{ if(!seen.has(n.id)){ domains.push(flood(n.id)); } });
+  // isolated routers / router-router direct links: each such link is its own domain
+  G.links.forEach(l=>{ if(node(l.a).type==='router'&&node(l.b).type==='router'){ domains.push(new Set([l.a,l.b])); } });
+  return domains.map(d=>[...d]);
+}
+function autoConfig(){
+  G.nodes.forEach(n=>{ n.ip=null; n.gw=null; n._dom=null; n._pc=0; });
+  // port numbers (per device) for display
+  const pc={}; G.links.forEach(l=>{ [l.a,l.b].forEach(id=>{ pc[id]=(pc[id]||0)+1; }); });
+  G.nodes.forEach(n=>n._nports=pc[n.id]||0);
+  const domains=computeDomains(); G._domains=domains; G._rip={};
+  let sub=0;
+  G._routerSubnets={};  // routerId -> [subnet index...]
+  domains.forEach(ids=>{
+    const base='192.168.'+(sub+1); let host=10;
+    const routersHere=ids.filter(id=>node(id).type==='router');
+    const pcsHere=ids.filter(id=>isHost(node(id)));
+    if(!pcsHere.length&&routersHere.length<2) { // lone switch / stub — skip addressing
+      ids.forEach(id=>{ node(id)._dom=sub; }); sub++; return; }
+    const gw=routersHere.length?base+'.1':null;
+    routersHere.forEach((id,k)=>{ const r=node(id); r._dom=sub; (G._routerSubnets[id]=G._routerSubnets[id]||[]).push(sub); (G._rip[id]=G._rip[id]||{})[sub]=base+'.'+(1+k); });
+    pcsHere.forEach(id=>{ const p=node(id); p._dom=sub; p.ip=base+'.'+(host++); p.gw=gw; });
+    ids.filter(id=>isL2(node(id))).forEach(id=>{ node(id)._dom=sub; });
+    sub++;
+  });
+  // router interface IP label: show .1 of each connected subnet
+  G.nodes.filter(n=>n.type==='router').forEach(r=>{ const subs=(G._routerSubnets[r.id]||[]); r.ip=subs.length?subs.map(s=>G._rip[r.id][s]).join('  '):null; });
+  refreshSelects(); updateCount(); renderIPs();
+}
+
+/* ---- rendering ---- */
+function render(){ // rebuild node DOM
+  if(typeof simReset==='function') simReset(true);
+  [...world.querySelectorAll('.node')].forEach(e=>e.remove());
+  G.nodes.forEach(n=>{
+    const el=document.createElement('div'); el.className='node'; el.dataset.id=n.id;
+    el.innerHTML=`<svg class="ic" viewBox="0 0 64 64">${IC[n.type]}</svg><div class="nm">${n.id}</div><span class="ip"></span>`;
+    el.addEventListener('pointerdown',e=>onNodePointerDown(e,n.id));
+    world.appendChild(el);
+  });
+  positionNodes(); renderIPs(); drawWires(); updateCount();
+}
+function positionNodes(){ world.querySelectorAll('.node').forEach(el=>{ const n=node(el.dataset.id); if(!n) return; el.style.left=n.x+'px'; el.style.top=n.y+'px'; el.classList.toggle('pick',wireFrom===n.id); }); }
+function renderIPs(){ world.querySelectorAll('.node').forEach(el=>{ const n=node(el.dataset.id); if(!n) return; const s=el.querySelector('.ip');
+  if(isL2(n)){ s.textContent=n.type==='ap'?'wireless':n.type==='hub'?'hub':''; s.classList.remove('none'); return; }
+  if(n.ip){ s.textContent=n.ip; s.classList.remove('none'); }
+  else { s.textContent=isHost(n)?'no IP':''; s.classList.toggle('none',isHost(n)); } }); }
+function drawWires(){ [...svg.querySelectorAll('line,.pkt')].forEach(e=>e.remove());
+  G.links.forEach((l,i)=>{ const A=node(l.a),B=node(l.b); if(!A||!B) return;
+    const ln=document.createElementNS('http://www.w3.org/2000/svg','line');
+    ln.setAttribute('x1',A.x);ln.setAttribute('y1',A.y);ln.setAttribute('x2',B.x);ln.setAttribute('y2',B.y); if(isWifi(A,B)) ln.classList.add('wifi');
+    if(MODE==='del'){ ln.style.pointerEvents='stroke'; ln.style.cursor='not-allowed'; ln.classList.add('sel'); ln.addEventListener('click',ev=>{ev.stopPropagation();delLink(i);}); }
+    svg.insertBefore(ln, simLayer()); }); }
+function updateCount(){ $('#count').textContent=G.nodes.length+' device'+(G.nodes.length===1?'':'s')+' · '+G.links.length+' cable'+(G.links.length===1?'':'s'); }
+
+/* ---- ping ---- */
+function refreshSelects(){ const pcs=G.nodes.filter(isHost); const src=$('#src'),dst=$('#dst'); const sv=src.value,dv=dst.value;
+  const opt=n=>`<option value="${n.id}">${n.id}${n.ip?' ('+n.ip+')':''}</option>`;
+  src.innerHTML=pcs.map(opt).join(''); dst.innerHTML=pcs.map(opt).join('');
+  if([...src.options].some(o=>o.value===sv)) src.value=sv; if([...dst.options].some(o=>o.value===dv)) dst.value=dv;
+  if(dst.value===src.value&&pcs.length>1){ dst.selectedIndex=1; } }
+function logLine(txt,cls){ const l=$('#log'); const s=document.createElement('div'); if(cls)s.className=cls; s.textContent=txt; l.appendChild(s); l.scrollTop=l.scrollHeight; }
+function clearLog(){ $('#log').innerHTML=''; }
+
+/* subnet reachability: routers link the subnets they connect */
+function subnetGraph(){ const g={}; Object.values(G._routerSubnets||{}).forEach(subs=>{ subs.forEach(a=>{ g[a]=g[a]||new Set(); subs.forEach(b=>{ if(a!==b) g[a].add(b); }); }); }); return g; }
+function subnetsConnected(a,b){ if(a===b) return true; const g=subnetGraph(); const seen=new Set([a]),st=[a]; while(st.length){ const c=st.pop(); for(const nb of (g[c]||[])){ if(nb===b) return true; if(!seen.has(nb)){ seen.add(nb); st.push(nb); } } } return false; }
+
+function makeEnvelope(ok,reply){ const NS='http://www.w3.org/2000/svg';
+  const g=document.createElementNS(NS,'g'); g.setAttribute('class','pkt-env');
+  const fill=!ok?'#f6c5c5':reply?'#c9eedb':'#fff4c2', edge=!ok?'#d23d3d':reply?'#1a9c5b':'#9a7b00';
+  g.innerHTML=`<rect x="-13" y="-9" width="26" height="18" rx="2.5" fill="${fill}" stroke="${edge}" stroke-width="1.8"/><path d="M-13 -8 L0 2 L13 -8" fill="none" stroke="${edge}" stroke-width="1.8" stroke-linejoin="round"/>`;
+  svg.appendChild(g); return g; }
+function animatePacket(path,ok,reply,done){ if(!path||path.length<2){ done&&done(); return; }
+  const env=makeEnvelope(ok,reply); const per=420; let t0=null;
+  const last=ok?path.length-1:Math.max(1,Math.ceil((path.length-1)/2)); // failed packets stop part-way
+  function step(t){ if(t0==null)t0=t; const f=(t-t0)/per; const seg=Math.min(Math.floor(f),last-1), k=Math.min(1,f-seg);
+    const A=node(path[seg]),B=node(path[seg+1]); if(!A||!B){ env.remove(); return; }
+    const x=A.x+(B.x-A.x)*k, y=A.y+(B.y-A.y)*k; env.setAttribute('transform',`translate(${x},${y-4})`);
+    if(f>=last){ if(!ok){ env.innerHTML+='<path d="M-9 -9 L9 9 M9 -9 L-9 9" stroke="#d23d3d" stroke-width="3" stroke-linecap="round"/>'; }
+      setTimeout(()=>{ env.remove(); done&&done(); }, ok?120:700); return; }
+    requestAnimationFrame(step); }
+  requestAnimationFrame(step); }
+function pingAnim(path,ok){ if(!path) return; animatePacket(path,ok,false,()=>{ if(ok) animatePacket(path.slice().reverse(),true,true); }); }
+/* find an L2 path within a domain (BFS over links, not crossing routers unless endpoint) */
+function l2path(from,to){ const adj={}; G.nodes.forEach(n=>adj[n.id]=[]); G.links.forEach(l=>{ adj[l.a].push(l.b); adj[l.b].push(l.a); });
+  const prev={},q=[from],seen=new Set([from]); while(q.length){ const c=q.shift(); if(c===to) break; for(const nb of adj[c]){ if(!seen.has(nb)){ seen.add(nb); prev[nb]=c; q.push(nb); } } }
+  if(!(to in prev)&&from!==to) return null; const path=[to]; let c=to; while(c!==from){ c=prev[c]; path.unshift(c); } return path; }
+
+$('#pingBtn').onclick=()=>{ if(SIM.on){ simStart(); return; } const sid=$('#src').value, did=$('#dst').value; clearLog();
+  if(!sid||!did){ logLine('Add at least two end devices (PC, laptop or server) and connect them first.','bad'); return; }
+  if(sid===did){ logLine('Pick two different devices.','dim'); return; }
+  const A=node(sid),B=node(did);
+  logLine(`C:\\> ping ${B.ip||did}`,'');
+  if(!A.ip){ logLine(`${A.id} has no IP — it isn't connected to a switch, access point or router.`,'bad'); return; }
+  if(!B.ip){ logLine(`${B.id} has no IP — it isn't connected to a switch, access point or router.`,'bad'); return; }
+  const path=l2path(sid,did);
+  if(A._dom===B._dom){
+    if(!path){ logLine('Same subnet, but there is no cable path between them.','bad'); return; }
+    logLine(`Both on ${A.ip.replace(/\.\d+$/,'.0')}/24 — same subnet, switched directly${path.some(id=>node(id).type==='ap')?' (via the wireless access point)':''}.`,'dim');
+    logLine(`Reply from ${B.ip}: bytes=32 time<1ms TTL=128`,'ok'); logLine('Reply from '+B.ip+': bytes=32 time<1ms TTL=128','ok');
+    logLine('Success — 2/2 replies.','ok'); pingAnim(path,true); return;
+  }
+  // different subnets — need a router path
+  if(!A.gw){ logLine(`${A.id} has no gateway (no router on its subnet) — can't leave the LAN.`,'bad'); pingAnim(path,false); return; }
+  if(!B.gw){ logLine(`${B.id} has no gateway (no router on its subnet) — replies can't get back.`,'bad'); return; }
+  if(subnetsConnected(A._dom,B._dom)){
+    logLine(`Different subnets — routing via gateway ${A.gw}.`,'dim');
+    if(path) logLine('Path: '+path.join(' → '),'dim');
+    logLine(`Reply from ${B.ip}: bytes=32 time=1ms TTL=127`,'ok'); logLine(`Reply from ${B.ip}: bytes=32 time=1ms TTL=127`,'ok');
+    logLine('Success — 2/2 replies.','ok'); if(path) pingAnim(path,true); return;
+  }
+  logLine(`No route: ${A.id}'s subnet and ${B.id}'s subnet aren't joined by a router.`,'bad');
+  logLine('Request timed out.','bad'); if(path) pingAnim(path,false);
+};
+
+/* ---- auto-arrange (tidy into tiers: routers top, switches mid, PCs bottom) ---- */
+$('#arrangeBtn').onclick=()=>{ const tiers={router:[],l2:[],host:[]}; G.nodes.forEach(n=>tiers[n.type==='router'?'router':isL2(n)?'l2':'host'].push(n));
+  const rows=[['router',140],['l2',320],['host',520]]; rows.forEach(([t,y])=>{ const arr=tiers[t]; const gap=Math.min(190,1200/(arr.length+1)); arr.forEach((n,i)=>{ n.x=120+gap*(i+1); n.y=y; }); });
+  positionNodes(); drawWires(); fitView(); save(); };
+
+
+/* =====================================================================
+   SIMULATION MODE  (Packet Tracer style)
+   Frames travel hop by hop as envelopes. ARP resolves MACs first;
+   hubs repeat to every port; switches/APs learn MACs and forward only
+   where needed; hosts accept (✓) or drop (✕); routers route between
+   subnets. Each arrival is written to the Event List.
+===================================================================== */
+const BC='FFFF.FFFF.FFFF';
+const SPEEDS={slow:2.2,normal:1.1,fast:0.45};      // seconds of real time per hop
+const SIM={on:false,playing:false,speed:'normal',pdus:[],marks:[],clock:0,mt:{},arp:{},pend:{},seq:0,active:false,src:null,dst:null,done:false,last:0};
+function simLayer(){ let g=svg.querySelector('#simlayer'); if(!g){ g=document.createElementNS('http://www.w3.org/2000/svg','g'); g.id='simlayer'; svg.appendChild(g); } return g; }
+function hex4(n){ return (n&0xffff).toString(16).toUpperCase().padStart(4,'0'); }
+function hashId(id){ let h=7; for(const c of id) h=(h*31+c.charCodeAt(0))>>>0; return h; }
+function macOf(id){ const h=hashId(id); return '00D0.'+hex4(h)+'.'+hex4(h>>>16); }
+function rmac(r,d){ const h=hashId(r+'/'+d); return '0060.'+hex4(h)+'.'+hex4(d*257+3); }
+function nbrs(id){ return G.links.filter(l=>l.a===id||l.b===id).map(l=>l.a===id?l.b:l.a); }
+function linkBetween(a,b){ return G.links.find(l=>(l.a===a&&l.b===b)||(l.a===b&&l.b===a)); }
+function linkDom(l){ const doms=G._domains||[]; const A=node(l.a),B=node(l.b);
+  if(A.type==='router'&&B.type==='router'){ const i=doms.findIndex(d=>d.length===2&&d.includes(l.a)&&d.includes(l.b)); if(i>=0) return i; }
+  return doms.findIndex(d=>d.includes(l.a)&&d.includes(l.b)); }
+function domOfIp(ip){ const m=/^192\.168\.(\d+)\./.exec(ip||''); return m?(+m[1]-1):-1; }
+function rip(r,d){ return ((G._rip||{})[r]||{})[d]; }
+function routerNext(R,D){ // -> {dom, nhIp, nbr} or null
+  if(rip(R,D)) return {dom:D, nhIp:null};
+  const doms=Object.keys(G._rip||{}).reduce((m,r)=>{ Object.keys(G._rip[r]).forEach(d=>{ (m[d]=m[d]||[]).push(r); }); return m; },{});
+  const prev={}, q=[R], seen=new Set([R]);
+  while(q.length){ const c=q.shift(); if(c!==R&&rip(c,D)){ let n=c; while(prev[n].r!==R) n=prev[n].r; return {dom:prev[n].d, nhIp:rip(n,prev[n].d)}; }
+    Object.keys(G._rip[c]||{}).forEach(d=>{ (doms[d]||[]).forEach(o=>{ if(!seen.has(o)){ seen.add(o); prev[o]={r:c,d:+d}; q.push(o); } }); }); }
+  return null; }
+function egressNbr(R,dom){ const l=G.links.find(l=>(l.a===R||l.b===R)&&linkDom(l)===dom); return l?(l.a===R?l.b:l.a):null; }
+
+function emit(from,to,f){ SIM.pdus.push({id:++SIM.seq,from,to,t:0,f:Object.assign({},f)}); }
+function mark(at,f,ok){ SIM.marks.push({id:++SIM.seq,at,kind:f.kind,ok,life:1}); }
+function evRow(from,at,f,res,ok){ const tb=$('#evbody'); const tr=document.createElement('tr');
+  tr.innerHTML=`<td>${SIM.clock.toFixed(3)}</td><td>${from}</td><td>${at}</td><td><span class="chip-${f.kind.toLowerCase()}"></span>${f.kind}${f.kind==='ARP'?(f.op==='req'?' request':' reply'):(f.op==='echo'?' echo':' reply')}</td><td class="${ok===true?'res-ok':ok===false?'res-bad':''}">${res}</td>`;
+  tb.appendChild(tr); const w=$('#evwrap'); w.scrollTop=w.scrollHeight; }
+
+function sameSubnet(a,b){ return domOfIp(a)===domOfIp(b)&&domOfIp(a)>=0; }
+// send an IP packet {op,sIp,dIp} from a host or router
+function sendIp(dev,p){ const D=node(dev); let nh,nbr,sMac,sIp;
+  if(D.type==='router'){ const tgt=domOfIp(p.dIp); const rt=routerNext(dev,tgt);
+    if(!rt){ return 'no route to '+p.dIp; }
+    nbr=egressNbr(dev,rt.dom); nh=rt.nhIp||p.dIp; sMac=rmac(dev,rt.dom); sIp=rip(dev,rt.dom);
+    if(!nbr) return 'no route to '+p.dIp; }
+  else { nbr=nbrs(dev)[0]; if(!nbr) return 'not connected';
+    nh=sameSubnet(D.ip,p.dIp)?p.dIp:D.gw; if(!nh) return 'no default gateway'; sMac=macOf(dev); sIp=D.ip; }
+  const cache=SIM.arp[dev]=SIM.arp[dev]||{};
+  const frame={kind:'ICMP',op:p.op,sIp:p.sIp,dIp:p.dIp,sMac};
+  if(cache[nh]){ emit(dev,nbr,Object.assign(frame,{dMac:cache[nh]})); return null; }
+  const pend=SIM.pend[dev]=SIM.pend[dev]||{}; const first=!pend[nh]; (pend[nh]=pend[nh]||[]).push({frame,nbr});
+  if(first) emit(dev,nbr,{kind:'ARP',op:'req',sMac,sIp,tIp:nh,dMac:BC});
+  return null; }
+function flushPend(dev,ip,mac){ const p=(SIM.pend[dev]||{})[ip]; if(!p) return; delete SIM.pend[dev][ip]; p.forEach(x=>emit(dev,x.nbr,Object.assign(x.frame,{dMac:mac}))); }
+
+function arrive(pdu){ const at=pdu.to, from=pdu.from, f=pdu.f, N=node(at); if(!N) return;
+  const T=N.type;
+  if(T==='hub'){ const out=nbrs(at).filter(n=>n!==from); out.forEach(n=>emit(at,n,f)); evRow(from,at,f,'repeated to '+out.length+' port'+(out.length===1?'':'s')); return; }
+  if(T==='switch'||T==='ap'){ const mt=SIM.mt[at]=SIM.mt[at]||{}; mt[f.sMac]=from;
+    if(f.dMac===BC||!mt[f.dMac]){ const out=nbrs(at).filter(n=>n!==from); out.forEach(n=>emit(at,n,f)); evRow(from,at,f,(f.dMac===BC?'broadcast':'unknown MAC')+' → flooded'); }
+    else { const out=mt[f.dMac]; if(out!==from){ emit(at,out,f); evRow(from,at,f,'forwarded to '+out+' (MAC table)'); } else { mark(at,f,false); evRow(from,at,f,'destination is back on the same port — filtered',false); } }
+    return; }
+  if(T==='router'){ const l=linkBetween(at,from); const d=linkDom(l); const myIp=rip(at,d), myMac=rmac(at,d);
+    if(f.kind==='ARP'){
+      if(f.op==='req'){ if(f.tIp===myIp){ (SIM.arp[at]=SIM.arp[at]||{})[f.sIp]=f.sMac; mark(at,f,true); emit(at,from,{kind:'ARP',op:'rep',sMac:myMac,sIp:myIp,dIp:f.sIp,dMac:f.sMac}); evRow(from,at,f,'is my IP → ARP reply',true); }
+        else { mark(at,f,false); evRow(from,at,f,'not for me — dropped',false); } return; }
+      if(f.dMac===myMac){ (SIM.arp[at]=SIM.arp[at]||{})[f.sIp]=f.sMac; mark(at,f,true); evRow(from,at,f,'learned '+f.sIp,true); flushPend(at,f.sIp,f.sMac); } return; }
+    if(f.dMac!==myMac){ mark(at,f,false); evRow(from,at,f,'not my MAC — dropped',false); return; }
+    const err=sendIp(at,{op:f.op,sIp:f.sIp,dIp:f.dIp});
+    if(err){ mark(at,f,false); evRow(from,at,f,err,false); simOutcome(false,at+': '+err); }
+    else evRow(from,at,f,'routed toward '+f.dIp);
+    return; }
+  // end device (pc / server / laptop)
+  if(f.dMac!==BC&&f.dMac!==macOf(at)){ mark(at,f,false); evRow(from,at,f,'not my MAC — dropped',false); return; }
+  if(f.kind==='ARP'){
+    if(f.op==='req'){ if(f.tIp===N.ip){ (SIM.arp[at]=SIM.arp[at]||{})[f.sIp]=f.sMac; mark(at,f,true); emit(at,from,{kind:'ARP',op:'rep',sMac:macOf(at),sIp:N.ip,dIp:f.sIp,dMac:f.sMac}); evRow(from,at,f,'is my IP → ARP reply',true); }
+      else { mark(at,f,false); evRow(from,at,f,'not my IP — dropped',false); } return; }
+    (SIM.arp[at]=SIM.arp[at]||{})[f.sIp]=f.sMac; mark(at,f,true); evRow(from,at,f,'learned '+f.sIp+' = '+f.sMac,true); flushPend(at,f.sIp,f.sMac); return; }
+  if(f.dIp!==N.ip){ mark(at,f,false); evRow(from,at,f,'not my IP — dropped',false); return; }
+  mark(at,f,true);
+  if(f.op==='echo'){ evRow(from,at,f,'echo received → sending reply',true); const err=sendIp(at,{op:'reply',sIp:N.ip,dIp:f.sIp}); if(err) simOutcome(false,at+': '+err); }
+  else { evRow(from,at,f,'reply received',true); simOutcome(true); }
+}
+function simOutcome(ok,msg){ if(SIM.done) return; SIM.done=true; const A=node(SIM.src),B=node(SIM.dst);
+  if(ok){ logLine(`Reply from ${B.ip}: bytes=32 TTL=${sameSubnet(A.ip,B.ip)?128:127}`,'ok'); logLine('Simulation: ping succeeded.','ok'); }
+  else { logLine('Request failed — '+msg,'bad'); } }
+
+/* ---- drawing ---- */
+function envMarkup(kind,ok){ const c=kind==='ARP'?['#d9e2ff','#3a5bd1']:['#fff4c2','#9a7b00'];
+  let m=`<rect x="-13" y="-9" width="26" height="18" rx="2.5" fill="${c[0]}" stroke="${c[1]}" stroke-width="1.8"/><path d="M-13 -8 L0 2 L13 -8" fill="none" stroke="${c[1]}" stroke-width="1.8" stroke-linejoin="round"/>`;
+  if(ok===true) m+='<path d="M-8 1 L-2 7 L10 -6" fill="none" stroke="#1a9c5b" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>';
+  if(ok===false) m+='<path d="M-8 -6 L8 7 M8 -6 L-8 7" stroke="#d23d3d" stroke-width="3.6" stroke-linecap="round"/>';
+  return m; }
+function simDraw(){ const L=simLayer(); const want=new Set();
+  SIM.pdus.forEach(p=>{ const A=node(p.from),B=node(p.to); if(!A||!B) return; const k=Math.max(0.14,Math.min(1,p.t));
+    let g=L.querySelector('[data-p="'+p.id+'"]'); if(!g){ g=document.createElementNS('http://www.w3.org/2000/svg','g'); g.dataset.p=p.id; g.setAttribute('class','pkt-env'); g.innerHTML=envMarkup(p.f.kind); L.appendChild(g); }
+    g.setAttribute('transform',`translate(${A.x+(B.x-A.x)*k},${A.y+(B.y-A.y)*k-6}) scale(1.6)`); want.add(String(p.id)); });
+  SIM.marks.forEach(m=>{ const N=node(m.at); if(!N) return; let g=L.querySelector('[data-p="'+m.id+'"]');
+    if(!g){ g=document.createElementNS('http://www.w3.org/2000/svg','g'); g.dataset.p=m.id; g.setAttribute('class','pkt-env'); g.innerHTML=envMarkup(m.kind,m.ok); L.appendChild(g); }
+    g.setAttribute('transform',`translate(${N.x+30},${N.y-30}) scale(1.6)`); g.setAttribute('opacity',Math.max(0,Math.min(1,m.life*1.6))); want.add(String(m.id)); });
+  [...L.children].forEach(g=>{ if(!want.has(g.dataset.p)) g.remove(); });
+  $('#simclock').textContent='Sim time '+SIM.clock.toFixed(3)+' s'; }
+
+/* ---- advancing time ---- */
+function advance(hops){ // hops = fraction of a hop
+  SIM.pdus.forEach(p=>p.t+=hops);
+  SIM.marks.forEach(m=>m.life-=hops); SIM.marks=SIM.marks.filter(m=>m.life>0);
+  const arrived=SIM.pdus.filter(p=>p.t>=1); SIM.pdus=SIM.pdus.filter(p=>p.t<1);
+  if(arrived.length){ SIM.clock+=0.001; arrived.forEach(arrive); }
+  if(SIM.active&&!SIM.pdus.length&&!SIM.marks.length){ SIM.active=false; simPause(); if(!SIM.done){ SIM.done=true; logLine('Simulation finished — no reply came back.','bad'); } logLine('Press Play to run it again, or pick new devices.','dim'); }
+  simDraw(); }
+function tick(t){ const dt=SIM.last?Math.min(0.1,(t-SIM.last)/1000):0; SIM.last=t;
+  if(SIM.on&&SIM.playing) advance(dt/SPEEDS[SIM.speed]);
+  requestAnimationFrame(tick); }
+requestAnimationFrame(tick);
+
+/* ---- controls ---- */
+function simReset(quiet){ SIM.pdus=[]; SIM.marks=[]; SIM.clock=0; SIM.mt={}; SIM.arp={}; SIM.pend={}; SIM.active=false; SIM.done=false; simPause();
+  const tb=document.getElementById('evbody'); if(tb) tb.innerHTML=''; if(svg.querySelector('#simlayer')) simLayer().innerHTML=''; if(document.getElementById('simclock')) $('#simclock').textContent='Sim time 0.000 s'; }
+function simStart(){ const sid=$('#src').value, did=$('#dst').value; clearLog();
+  if(!sid||!did||sid===did){ logLine('Pick two different end devices in the From / To boxes first.','bad'); return false; }
+  const A=node(sid),B=node(did);
+  if(!A.ip||!B.ip){ logLine((A.ip?B:A).id+' has no IP — connect it to the network first.','bad'); return false; }
+  SIM.pdus=[]; SIM.marks=[]; SIM.pend={}; SIM.done=false; SIM.src=sid; SIM.dst=did; SIM.active=true; $('#evbody').innerHTML=''; SIM.clock=0;
+  logLine(`Simulation: ${A.id} pings ${B.ip}. Watch the envelopes — ARP is blue, ICMP is yellow.`,'dim');
+  const err=sendIp(sid,{op:'echo',sIp:A.ip,dIp:B.ip}); if(err){ logLine('Cannot send — '+err,'bad'); SIM.active=false; return false; }
+  simPlay(); simDraw(); return true; }
+function simPlay(){ SIM.playing=true; const b=$('#simPlay'); if(b){ b.textContent='⏸ Pause'; } }
+function simPause(){ SIM.playing=false; const b=document.getElementById('simPlay'); if(b){ b.textContent='▶ Play'; } }
+$('#simPlay').onclick=()=>{ if(SIM.playing){ simPause(); return; } if(!SIM.active){ simStart(); return; } simPlay(); };
+$('#simStep').onclick=()=>{ simPause(); if(!SIM.active){ if(!simStart()) return; simPause(); return; }
+  const need=SIM.pdus.length?1-Math.max(...SIM.pdus.map(p=>p.t)):1; advance(Math.max(need,0.0001)); };
+$('#simReset').onclick=()=>{ simReset(); clearLog(); logLine('Simulation reset — MAC tables and ARP caches cleared.','dim'); };
+[['spSlow','slow'],['spNorm','normal'],['spFast','fast']].forEach(([id,sp])=>{ $('#'+id).onclick=()=>{ SIM.speed=sp; ['spSlow','spNorm','spFast'].forEach(x=>$('#'+x).classList.toggle('on',x===id)); }; });
+function setSimMode(sim){ SIM.on=sim; $('#rtBtn').classList.toggle('on',!sim); $('#simBtn').classList.toggle('on',sim);
+  $('#simbar').hidden=!sim; $('#evwrap').hidden=!sim; $('#simclock').hidden=!sim;
+  $('#pingBtn').textContent=sim?'Send ping ▶':'Ping →';
+  if(!sim){ simReset(true); } else { clearLog(); logLine('Simulation mode: pick From / To and press Play (or Step) to watch each frame move hop by hop.','dim'); }
+  $('#mode').textContent=sim?'Simulation mode':(MODE==='wire'?'Wire mode — click two devices':MODE==='del'?'Delete mode — click to remove':'Build mode'); }
+$('#rtBtn').onclick=()=>setSimMode(false); $('#simBtn').onclick=()=>setSimMode(true);
+
+/* ---- boot ---- */
+load(); applyView(); render(); autoConfig();
+if(!G.nodes.length){ // friendly starter sample — hub + switch LAN, routed to a second LAN
+  const r=addNode('router',700,90), hub=addNode('hub',220,260), s1=addNode('switch',480,260), s2=addNode('switch',920,260);
+  const p1=addNode('pc',100,430), p2=addNode('pc',250,430), p3=addNode('pc',420,430), sv=addNode('server',570,430);
+  const p4=addNode('pc',820,430), ap=addNode('ap',1020,430), lp=addNode('laptop',1130,580);
+  G.links.push({a:r,b:s1},{a:r,b:s2},{a:hub,b:s1},{a:hub,b:p1},{a:hub,b:p2},{a:s1,b:p3},{a:s1,b:sv},{a:s2,b:p4},{a:s2,b:ap},{a:ap,b:lp});
+  render(); autoConfig(); save();
+}
+fitView(); requestAnimationFrame(fitView);
+</script>
+
+<script>window.__WB_KEY__="network-playground";</script>
+<script>/* ============================================================
+   Oldham Cisco Labs — shared Whiteboard overlay.
+   Self-contained: injects its own CSS + DOM, persists per lab,
+   independent of the lab's own device switching. Styled after a
+   classroom whiteboard (aluminium frame, magnets, marker tray).
+   Toggle with window.wbToggle(). Set window.__WB_KEY__ per page.
+   ============================================================ */
+(function(){
+  'use strict';
+  if(window.__wbInit) return; window.__wbInit=true;
+  var KEY='wb-notes-'+(window.__WB_KEY__||'lab');
+  var W=1100, H=680; // fixed drawing resolution (persisted at this size)
+  var COLOURS={black:'#1c1c1c', blue:'#1d55c4', red:'#d7352b', green:'#1e8f45'};
+
+  var css=''+
+  '.wb-overlay{position:fixed;inset:0;z-index:9000;background:#2daaa4;display:none;flex-direction:column;padding:env(safe-area-inset-top,0) 0 0}'+
+  '.wb-overlay.open{display:flex}'+
+  '.wb-top{display:flex;align-items:center;gap:12px;padding:10px 16px;color:#eafaf8}'+
+  '.wb-top b{font:700 16px "Chivo",system-ui,sans-serif}'+
+  '.wb-top .sp{flex:1}'+
+  '.wb-top button{font:600 13px "Chivo",system-ui,sans-serif;border:0;border-radius:8px;padding:9px 14px;cursor:pointer;background:rgba(255,255,255,.18);color:#fff}'+
+  '.wb-top button:hover{background:rgba(255,255,255,.3)}'+
+  '.wb-stage{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:6px 16px 18px}'+
+  '.wb-frame{position:relative;width:min(1100px,100%);max-height:100%;aspect-ratio:1100/680;'+
+    'background:linear-gradient(#e9ecee,#c3c8cc 45%,#aeb4b8);border-radius:10px;padding:14px;'+
+    'box-shadow:0 14px 40px rgba(0,0,0,.35);border:1px solid #9aa0a4}'+
+  '.wb-inner{position:relative;width:100%;height:100%;background:#fff;border-radius:3px;box-shadow:inset 0 0 0 1px #d7dadd, inset 0 2px 8px rgba(0,0,0,.06);overflow:hidden}'+
+  '.wb-canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:crosshair;display:block}'+
+  '.wb-corner{position:absolute;width:30px;height:30px;background:#2b2f33;z-index:3}'+
+  '.wb-corner.tl{top:-2px;left:-2px;border-radius:9px 0 14px 0}'+
+  '.wb-corner.tr{top:-2px;right:-2px;border-radius:0 9px 0 14px}'+
+  '.wb-corner.bl{bottom:-2px;left:-2px;border-radius:0 14px 0 9px}'+
+  '.wb-corner.br{bottom:-2px;right:-2px;border-radius:14px 0 9px 0}'+
+  '.wb-mag{position:absolute;top:16px;right:18px;display:flex;flex-direction:column;gap:9px;z-index:4}'+
+  '.wb-mag i{width:19px;height:19px;border-radius:50%;box-shadow:0 2px 3px rgba(0,0,0,.3);background:radial-gradient(circle at 32% 30%, rgba(255,255,255,.75), transparent 45%)}'+
+  '.wb-tray{position:absolute;left:0;right:0;bottom:-13px;height:20px;background:linear-gradient(#c7cccf,#a6acb0);border-radius:0 0 7px 7px;z-index:2;box-shadow:0 5px 8px rgba(0,0,0,.18)}'+
+  '.wb-tools{position:absolute;left:18px;bottom:-6px;display:flex;align-items:flex-end;gap:10px;z-index:5}'+
+  '.wb-sponge{width:54px;height:30px;border-radius:5px;background:linear-gradient(#f3d58b,#e0b64e);border:1px solid #c69a3a;box-shadow:0 2px 4px rgba(0,0,0,.25);cursor:pointer;position:relative}'+
+  '.wb-sponge::after{content:"";position:absolute;left:0;right:0;bottom:0;height:11px;background:#6f706f;border-radius:0 0 5px 5px}'+
+  '.wb-pen{width:66px;height:15px;border-radius:3px;cursor:pointer;position:relative;box-shadow:0 2px 4px rgba(0,0,0,.25);transition:transform .1s}'+
+  '.wb-pen::before{content:"";position:absolute;right:-9px;top:1px;border-left:12px solid rgba(0,0,0,.35);border-top:6px solid transparent;border-bottom:6px solid transparent}'+
+  '.wb-pen .cap{position:absolute;left:0;top:0;bottom:0;width:16px;border-radius:3px 0 0 3px;background:rgba(0,0,0,.25)}'+
+  '.wb-tool{outline:0}'+
+  '.wb-tool.on{transform:translateY(-10px)}'+
+  '.wb-sponge.on{transform:translateY(-8px)}'+
+  '.wb-panel{display:flex;align-items:center;gap:10px;padding:6px 16px 0;color:#eafaf8;font:500 12.5px "Chivo",system-ui,sans-serif;flex-wrap:wrap;justify-content:center}'+
+  '.wb-panel label{display:flex;align-items:center;gap:6px}'+
+  '.wb-panel input[type=range]{accent-color:#fff}'+
+  '.wb-hint{opacity:.85}'+
+  '@media (max-width:620px){.wb-tools{left:8px;gap:6px}.wb-pen{width:48px}.wb-sponge{width:42px}}';
+
+  var sel=document.createElement('style'); sel.textContent=css; document.head.appendChild(sel);
+
+  var ov=document.createElement('div'); ov.className='wb-overlay'; ov.setAttribute('role','dialog'); ov.setAttribute('aria-label','Whiteboard');
+  ov.innerHTML=''+
+    '<div class="wb-top"><b>Whiteboard</b><span class="wb-hint">Your notes stay here while you work — they persist across devices and tabs.</span><span class="sp"></span>'+
+      '<button type="button" class="wb-save">Save PNG</button><button type="button" class="wb-clear">Clear board</button><button type="button" class="wb-close">Close ✕</button></div>'+
+    '<div class="wb-panel"><label>Pen size <input type="range" class="wb-size" min="2" max="10" value="4"></label><span class="wb-hint">Pick a marker or the sponge below · click a marker to change colour</span></div>'+
+    '<div class="wb-stage"><div class="wb-frame"><span class="wb-corner tl"></span><span class="wb-corner tr"></span><span class="wb-corner bl"></span><span class="wb-corner br"></span>'+
+      '<div class="wb-mag"><i style="background-color:#e0463c"></i><i style="background-color:#2fa54e"></i><i style="background-color:#f0b429"></i><i style="background-color:#e67a22"></i><i style="background-color:#2d63d6"></i></div>'+
+      '<div class="wb-inner"><canvas class="wb-canvas" width="'+W+'" height="'+H+'"></canvas></div>'+
+      '<div class="wb-tray"></div>'+
+      '<div class="wb-tools">'+
+        '<button class="wb-sponge wb-tool" data-tool="eraser" title="Eraser (sponge)" aria-label="Eraser"></button>'+
+        '<button class="wb-pen wb-tool on" data-tool="green" title="Green marker" aria-label="Green marker" style="background:#1e8f45"><span class="cap"></span></button>'+
+        '<button class="wb-pen wb-tool" data-tool="blue" title="Blue marker" aria-label="Blue marker" style="background:#1d55c4"><span class="cap"></span></button>'+
+        '<button class="wb-pen wb-tool" data-tool="red" title="Red marker" aria-label="Red marker" style="background:#d7352b"><span class="cap"></span></button>'+
+        '<button class="wb-pen wb-tool" data-tool="black" title="Black marker" aria-label="Black marker" style="background:#1c1c1c"><span class="cap"></span></button>'+
+      '</div>'+
+    '</div></div>';
+  document.body.appendChild(ov);
+
+  var canvas=ov.querySelector('.wb-canvas'), ctx=canvas.getContext('2d');
+  var tool='green', size=4, drawing=false, last=null, saveT=null, dirty=false;
+  ctx.lineCap='round'; ctx.lineJoin='round';
+
+  function load(){ try{ var d=localStorage.getItem(KEY); if(d){ var img=new Image(); img.onload=function(){ ctx.clearRect(0,0,W,H); ctx.drawImage(img,0,0,W,H); }; img.src=d; } }catch(e){} }
+  function save(){ try{ localStorage.setItem(KEY, canvas.toDataURL('image/png')); }catch(e){} }
+  function scheduleSave(){ clearTimeout(saveT); saveT=setTimeout(save,500); }
+
+  function pos(e){ var r=canvas.getBoundingClientRect(); return {x:(e.clientX-r.left)*(W/r.width), y:(e.clientY-r.top)*(H/r.height)}; }
+  function start(e){ drawing=true; last=pos(e); e.preventDefault(); stroke(e); }
+  function stroke(e){ if(!drawing) return; var p=pos(e);
+    ctx.globalCompositeOperation = tool==='eraser' ? 'destination-out' : 'source-over';
+    ctx.strokeStyle = tool==='eraser' ? 'rgba(0,0,0,1)' : COLOURS[tool];
+    ctx.lineWidth = tool==='eraser' ? 34 : size;
+    ctx.beginPath(); ctx.moveTo(last.x,last.y); ctx.lineTo(p.x,p.y); ctx.stroke(); last=p; dirty=true; }
+  function end(){ if(drawing){ drawing=false; if(dirty){ scheduleSave(); dirty=false; } } }
+  canvas.addEventListener('pointerdown',function(e){ canvas.setPointerCapture&&canvas.setPointerCapture(e.pointerId); start(e); });
+  canvas.addEventListener('pointermove',stroke);
+  canvas.addEventListener('pointerup',end); canvas.addEventListener('pointercancel',end); canvas.addEventListener('pointerleave',function(){ if(drawing){ /* keep drawing only while down */ } });
+  window.addEventListener('pointerup',end);
+
+  ov.querySelectorAll('.wb-tool').forEach(function(b){ b.addEventListener('click',function(){
+    tool=b.dataset.tool;
+    ov.querySelectorAll('.wb-tool').forEach(function(x){ x.classList.toggle('on',x===b); });
+  }); });
+  ov.querySelector('.wb-size').addEventListener('input',function(e){ size=+e.target.value; });
+  ov.querySelector('.wb-clear').addEventListener('click',function(){ ctx.clearRect(0,0,W,H); save(); });
+  ov.querySelector('.wb-close').addEventListener('click',function(){ ov.classList.remove('open'); });
+  ov.querySelector('.wb-save').addEventListener('click',function(){
+    try{ var a=document.createElement('a'); a.download='whiteboard-'+(window.__WB_KEY__||'notes')+'.png'; a.href=canvas.toDataURL('image/png'); document.body.appendChild(a); a.click(); a.remove(); }catch(e){} });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&ov.classList.contains('open')) ov.classList.remove('open'); });
+
+  window.wbToggle=function(){ ov.classList.toggle('open'); };
+  load();
+})();
+</script>
+<script>
+(function(){
+  function updThemeBtn(){var b=document.getElementById('themeBtn');if(!b)return;var dark=document.documentElement.getAttribute('data-theme')==='dark'||(!document.documentElement.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme:dark)').matches);b.innerHTML=dark?'☀️ <span class="lbl">Light</span>':'🌙 <span class="lbl">Dark</span>';}
+  function updTermBtn(){var b=document.getElementById('termBtn');if(!b)return;var w=document.documentElement.classList.contains('tt-white');b.innerHTML='⌨️ <span class="lbl">'+(w?'White':'Green')+'</span>';}
+  window.toggleTheme=function(){var d=document.documentElement;var cur=d.getAttribute('data-theme');var sys=matchMedia('(prefers-color-scheme:dark)').matches;var nx=(cur==='dark'||(!cur&&sys))?'light':'dark';d.setAttribute('data-theme',nx);try{localStorage.setItem('labs-theme',nx);}catch(e){}updThemeBtn();};
+  window.toggleTerm=function(){var d=document.documentElement;d.classList.toggle('tt-white');try{localStorage.setItem('labs-term',d.classList.contains('tt-white')?'white':'green');}catch(e){}updTermBtn();};
+  function init(){updThemeBtn();updTermBtn();}
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+})();
+</script>
+</body></html>
