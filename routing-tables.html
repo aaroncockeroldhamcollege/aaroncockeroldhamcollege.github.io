@@ -1,0 +1,651 @@
+<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><link rel="icon" href="favicon.svg" type="image/svg+xml"><script>try{var t=localStorage.getItem("labs-theme");if(t)document.documentElement.setAttribute("data-theme",t);if(localStorage.getItem("labs-term")==="white")document.documentElement.classList.add("tt-white");}catch(e){}</script><script>/* ============================================================
+   Network topology symbols — shared across every activity.
+   Original SVG drawings in the conventional Cisco/Packet Tracer
+   topology style (functional diagram symbols). viewBox 0 0 64 64,
+   device centred. Two-tone: light body + Cisco-blue outline, so
+   they read on both light and dark stages.
+   Use:  <svg viewBox="0 0 64 64">  + NETSYM[type]  </svg>
+============================================================ */
+(function(){
+  // palette (fixed so icons look identical on every page/theme)
+  var B='#cfe7f5',   // body fill
+      L='#0a7cad',   // outline
+      A='#0a9ad4',   // accent fill
+      D='#07485f',   // deep accent
+      W='#ffffff';
+  function arrow(d){ return '<path d="'+d+'" fill="none" stroke="'+W+'" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>'; }
+
+  var S={};
+
+  // ---- Router: 3-D cylinder with the classic 4-way arrows on top ----
+  S.router =
+   '<path d="M8 34 v4 a24 8 0 0 0 48 0 v-4" fill="'+L+'"/>'+
+   '<ellipse cx="32" cy="34" rx="24" ry="8.5" fill="'+A+'" stroke="'+L+'" stroke-width="2"/>'+
+   // 4-way arrows (left,right,up,down) on the top face
+   arrow('M20 34 h9 m-3.5 -3 l3.5 3 -3.5 3')+        // right
+   arrow('M44 34 h-9 m3.5 -3 l-3.5 3 3.5 3')+        // left
+   arrow('M32 27.5 v-3 M29.5 26 l2.5 -2.5 2.5 2.5')+ // up (small)
+   arrow('M32 40.5 v3 M29.5 42 l2.5 2.5 2.5 -2.5');  // down (small)
+
+  // ---- Switch: flat 3-D slab with 4 parallel arrows (2 each way) ----
+  S['switch'] =
+   '<path d="M10 30 L22 22 H58 L46 30 Z" fill="'+A+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>'+   // top face
+   '<path d="M10 30 H46 V40 H10 Z" fill="'+B+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>'+          // front
+   '<path d="M46 30 L58 22 V32 L46 40 Z" fill="'+L+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>'+    // side
+   arrow('M16 33 h16 m-4 -2.5 l4 2.5 -4 2.5')+
+   arrow('M40 37 h-16 m4 -2.5 l-4 2.5 4 2.5');
+
+  // ---- Multilayer (L3) switch: slab + routing ring ----
+  S.l3switch =
+   '<path d="M10 32 L22 24 H58 L46 32 Z" fill="'+A+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>'+
+   '<path d="M10 32 H46 V42 H10 Z" fill="'+B+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>'+
+   '<path d="M46 32 L58 24 V34 L46 42 Z" fill="'+L+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>'+
+   arrow('M16 35 h12 m-3.5 -2.5 l3.5 2.5 -3.5 2.5')+
+   arrow('M40 39 h-12 m3.5 -2.5 l-3.5 2.5 3.5 2.5')+
+   '<circle cx="47" cy="20" r="9" fill="'+W+'" stroke="'+L+'" stroke-width="2"/>'+
+   arrow('M43 20 h8 m-2.5 -2.5 l2.5 2.5 -2.5 2.5').replace(/#ffffff/,L);
+
+  // ---- PC / desktop: monitor + tower ----
+  S.pc =
+   '<rect x="12" y="14" width="34" height="24" rx="2" fill="'+B+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<rect x="16" y="18" width="26" height="16" rx="1" fill="'+A+'"/>'+
+   '<rect x="25" y="38" width="8" height="5" fill="#9bbdd4"/>'+
+   '<rect x="18" y="43" width="22" height="4" rx="2" fill="'+L+'"/>'+
+   '<rect x="48" y="20" width="12" height="27" rx="2" fill="'+B+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<circle cx="54" cy="25" r="1.6" fill="'+L+'"/><path d="M51 42 h6" stroke="'+L+'" stroke-width="2"/>';
+
+  // ---- Laptop ----
+  S.laptop =
+   '<path d="M16 16 h32 v20 h-32 Z" fill="'+B+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<rect x="19" y="19" width="26" height="14" rx="1" fill="'+A+'"/>'+
+   '<path d="M10 44 L16 36 h32 l6 8 Z" fill="'+B+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>'+
+   '<path d="M27 40 h10" stroke="'+L+'" stroke-width="2" stroke-linecap="round"/>';
+
+  // ---- Server ----
+  S.server =
+   '<rect x="20" y="10" width="24" height="44" rx="3" fill="'+B+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<rect x="24" y="15" width="16" height="7" rx="1" fill="'+A+'"/><circle cx="41" cy="18.5" r="1.4" fill="'+W+'"/>'+
+   '<rect x="24" y="25" width="16" height="7" rx="1" fill="'+A+'"/><circle cx="41" cy="28.5" r="1.4" fill="'+W+'"/>'+
+   '<rect x="24" y="35" width="16" height="7" rx="1" fill="'+A+'"/><circle cx="41" cy="38.5" r="1.4" fill="'+W+'"/>'+
+   '<path d="M25 48 h14" stroke="'+L+'" stroke-width="2" stroke-linecap="round"/>';
+
+  // ---- Firewall: brick wall ----
+  S.firewall =
+   '<rect x="8" y="16" width="48" height="32" rx="2" fill="'+B+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<g stroke="'+L+'" stroke-width="2">'+
+   '<path d="M8 27 h48 M8 37 h48"/>'+
+   '<path d="M24 16 v11 M40 16 v11"/>'+        // top row bricks
+   '<path d="M16 27 v10 M32 27 v10 M48 27 v10"/>'+ // mid row offset
+   '<path d="M24 37 v11 M40 37 v11"/>'+        // bottom row
+   '</g>';
+
+  // ---- Access point: puck + radio waves ----
+  S.ap =
+   '<ellipse cx="32" cy="42" rx="22" ry="7" fill="'+B+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<rect x="30" y="20" width="4" height="18" rx="2" fill="'+L+'"/>'+
+   '<circle cx="32" cy="18" r="3.5" fill="'+A+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<g fill="none" stroke="'+A+'" stroke-width="2.4" stroke-linecap="round">'+
+   '<path d="M22 14 a14 14 0 0 1 20 0"/><path d="M26 18 a9 9 0 0 1 12 0"/></g>';
+
+  // ---- IP phone ----
+  S.phone =
+   '<path d="M18 12 h24 a4 4 0 0 1 4 4 v30 a4 4 0 0 1 -4 4 h-24 a4 4 0 0 1 -4 -4 v-30 a4 4 0 0 1 4 -4 Z" fill="'+B+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<rect x="19" y="17" width="22" height="13" rx="1" fill="'+A+'"/>'+
+   '<g fill="'+L+'"><circle cx="23" cy="36" r="2"/><circle cx="30" cy="36" r="2"/><circle cx="37" cy="36" r="2"/><circle cx="23" cy="43" r="2"/><circle cx="30" cy="43" r="2"/><circle cx="37" cy="43" r="2"/></g>';
+
+  // ---- Printer ----
+  S.printer =
+   '<rect x="18" y="12" width="28" height="12" rx="1" fill="'+B+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<rect x="10" y="24" width="44" height="18" rx="3" fill="'+A+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<rect x="20" y="36" width="24" height="14" rx="1" fill="'+W+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<circle cx="48" cy="30" r="2" fill="'+W+'"/>';
+
+  // ---- Cloud (internet / WAN) ----
+  S.cloud =
+   '<path d="M18 44 a13 13 0 0 1 2 -25 a16 15 0 0 1 30 -3 a11 11 0 0 1 6 28 Z" fill="'+B+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>';
+
+  // aliases
+  S.multiswitch=S.l3switch; S.asa=S.firewall; S.internet=S.cloud; S.desktop=S.pc;
+
+  window.NETSYM=S;
+})();
+</script>
+<style>[hidden]{display:none!important}body{margin:0}</style>
+<title>Routing Table Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#eef5f9; --panel:#fff; --ink:#132430; --muted:#5a6b78; --line:#cfe0ec; --accent:#0a9ad4; --accent-dark:#0a7cad; --accent-soft:#d6f1fb;
+  --ok:#1a9c5b; --oks:#e7f6ec; --bad:#d23d3d; --bads:#fbe9e9; --hl:#fff6d6; --hlb:#e9c84a;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace; --display:"Chivo",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#081219;--panel:#10212c;--ink:#dcebf3;--muted:#8fa6b4;--line:#223644;--accent:#2cb8e8;--accent-dark:#6fd2f2;--accent-soft:#06344a;--oks:#13331f;--bads:#3a1c1c;--hl:#3a3410;--hlb:#8a7a1e;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#081219;--panel:#10212c;--ink:#dcebf3;--muted:#8fa6b4;--line:#223644;--accent:#2cb8e8;--accent-dark:#6fd2f2;--accent-soft:#06344a;--oks:#13331f;--bads:#3a1c1c;--hl:#3a3410;--hlb:#8a7a1e;color-scheme:dark}
+*{box-sizing:border-box}html,body{background:var(--bg);color:var(--ink)}body{margin:0;font:14px/1.5 var(--display)}
+button{font:inherit;color:inherit}:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.app{max-width:980px;margin:0 auto;padding:18px 16px 44px}
+.eyebrow{font:600 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--accent-dark)}
+h1{font:800 clamp(24px,4vw,32px)/1.05 var(--display);margin:6px 0 0}
+.lead{color:var(--muted);margin:8px 0 0;max-width:76ch}
+.tabs{display:flex;gap:8px;margin:18px 0 14px;flex-wrap:wrap}
+.tab{border:1px solid var(--line);background:var(--panel);border-radius:9px;padding:9px 15px;cursor:pointer;font-weight:600}
+.tab[aria-selected="true"]{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-dark)}
+.panel{display:none}.panel.on{display:block}
+.card{border:1px solid var(--line);background:var(--panel);border-radius:12px;padding:16px;margin-bottom:14px}
+.card h2{font:800 18px var(--display);margin:0 0 4px}
+.card h3{font:700 13px var(--display);margin:16px 0 6px;color:var(--accent-dark);letter-spacing:.03em}
+.card p.sub{color:var(--muted);margin:0 0 12px}
+.btn{font:600 13px var(--display);border:1px solid var(--line);background:var(--panel);color:var(--ink);padding:9px 14px;border-radius:8px;cursor:pointer}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary:hover{background:var(--accent-dark)}
+.btn:disabled{opacity:.5;cursor:default}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+/* routing table */
+.rt{width:100%;border-collapse:collapse;font:600 13.5px/1.4 var(--mono);margin:6px 0}
+.rt th{font:700 11px var(--display);text-transform:uppercase;letter-spacing:.05em;color:var(--accent-dark);text-align:left;padding:6px 10px;border-bottom:2px solid var(--line)}
+.rt td{padding:7px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+.rt td.code{font-weight:700;color:var(--accent-dark)}
+.rt tr.match{background:var(--hl)}
+.rt tr.win{background:var(--oks)}
+.rt tr.win td.code{color:var(--ok)}
+.rt tr.dim{opacity:.45}
+.rt tr.clk{cursor:pointer}
+.rt tr.clk:hover{background:var(--accent-soft)}
+.rt tr.picked{outline:2px solid var(--accent);outline-offset:-2px}
+.rt .meta{color:var(--muted);font-weight:500;white-space:normal}
+.pills{display:flex;gap:7px;flex-wrap:wrap;margin:4px 0 2px}
+.pill{font:600 12px var(--mono);border:1px solid var(--line);border-radius:999px;padding:3px 10px;background:var(--accent-soft);color:var(--accent-dark)}
+
+/* anatomy callout */
+.anat{font:700 20px/1 var(--mono);background:#071a0e;color:#45dd68;border-radius:8px;padding:16px 14px;overflow-x:auto;white-space:nowrap}
+.anat .seg{position:relative;padding:2px 2px}
+.legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:12px}
+.legc{border:1px solid var(--line);border-radius:9px;padding:9px 11px;background:var(--panel)}
+.legc b{display:block;font:700 12px var(--display);color:var(--accent-dark)}
+.legc span{font-size:12px;color:var(--muted)}
+.codes{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px}
+.codes div{border:1px solid var(--line);border-radius:8px;padding:8px 11px;font-size:13px}
+.codes code{font:700 13px var(--mono);background:var(--accent-soft);border:1px solid var(--line);border-radius:4px;padding:1px 7px;color:var(--accent-dark);margin-right:7px}
+.rule{border-left:3px solid var(--accent);background:var(--accent-soft);border-radius:0 8px 8px 0;padding:10px 13px;margin:9px 0;font-size:13.5px}
+.rule b{color:var(--accent-dark)}
+
+/* worked example */
+.dest{font:700 15px var(--mono);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 12px;display:inline-flex;align-items:center;gap:8px}
+.dest b{color:var(--accent-dark)}
+.step{min-height:54px;display:flex;gap:11px;align-items:flex-start;margin-top:12px}
+.step .n{flex:none;width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;font:800 13px var(--display);display:flex;align-items:center;justify-content:center;margin-top:1px}
+.step .t{font:600 15px/1.4 var(--display)}
+.step .t small{display:block;font:500 12.5px var(--mono);color:var(--muted);margin-top:3px}
+.bits{font:600 12.5px var(--mono);color:var(--muted)}
+.bits .m{color:var(--ok);font-weight:700}
+.bits .h{color:var(--muted)}
+
+/* practice */
+.q .stem{font-weight:700;margin:2px 0 4px;font-size:15px}
+.q .stem .ip{font:700 15px var(--mono);color:var(--accent-dark)}
+.opts{display:grid;gap:7px;margin-top:9px}
+.opt{border:1px solid var(--line);background:var(--panel);border-radius:9px;padding:10px 12px;cursor:pointer;text-align:left;font:600 13.5px var(--display)}
+.opt .mono{font-family:var(--mono);font-weight:600}
+.opt:hover{border-color:var(--accent)}
+.opt.sel{border-color:var(--accent);background:var(--accent-soft)}
+.opt.right{border-color:var(--ok);background:var(--oks)}
+.opt.wrong{border-color:var(--bad);background:var(--bads)}
+.fb{margin-top:10px;border-radius:9px;padding:10px 13px;font-size:13.5px;display:none}
+.fb.show{display:block}
+.fb.ok{background:var(--oks);border:1px solid var(--ok)}
+.fb.no{background:var(--bads);border:1px solid var(--bad)}
+.fb b{font-weight:700}
+.scorebar{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.score{font:800 16px var(--display)}
+.badge{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:3px 11px;font:600 12px var(--mono);color:var(--muted)}
+.prog{height:6px;background:var(--line);border-radius:3px;overflow:hidden;flex:1;min-width:120px}
+.prog i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+</style>
+<style>
+/* ===== site header / controls ===== */
+.site-hdr{display:flex;align-items:center;gap:12px;background:#fff;border-bottom:3px solid #0a9ad4;padding:7px 16px;font-family:"Chivo","Segoe UI",system-ui,sans-serif;flex-wrap:wrap}
+.site-hdr .site-brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+.site-hdr .logo-ol{height:40px}
+.site-hdr .logo-ci{height:34px;border-radius:4px}
+.site-hdr .site-div{width:1px;height:30px;background:#d2dae2}
+.site-hdr .site-title{font:700 15px/1 "Chivo",system-ui,sans-serif;color:#0a7cad}
+.site-hdr .site-sp{flex:1}
+.site-ctl,.site-hdr .site-link{font:600 12.5px "Chivo",system-ui,sans-serif;color:#0a7cad;text-decoration:none;border:1px solid #bfe4f3;border-radius:7px;padding:7px 11px;white-space:nowrap;background:#fff;cursor:pointer}
+.site-ctl:hover,.site-hdr .site-link:hover{background:#e8f6fc}
+@media (prefers-color-scheme:dark){html:not([data-theme="light"]) .site-hdr{background:#0e1a23;border-bottom-color:#2cb8e8}
+ html:not([data-theme="light"]) .site-hdr .site-title{color:#6fd2f2}
+ html:not([data-theme="light"]) .site-ctl,html:not([data-theme="light"]) .site-hdr .site-link{background:#13232e;color:#6fd2f2;border-color:#28485c}
+ html:not([data-theme="light"]) .site-hdr .site-div{background:#28485c}}
+html[data-theme="dark"] .site-hdr{background:#0e1a23;border-bottom-color:#2cb8e8}
+html[data-theme="dark"] .site-hdr .site-title{color:#6fd2f2}
+html[data-theme="dark"] .site-ctl,html[data-theme="dark"] .site-hdr .site-link{background:#13232e;color:#6fd2f2;border-color:#28485c}
+html[data-theme="dark"] .site-hdr .site-div{background:#28485c}
+.wb-fab{position:fixed;right:16px;bottom:16px;z-index:70;border:0;border-radius:24px;cursor:pointer;background:#0a9ad4;color:#fff;font:600 13px "Chivo",system-ui,sans-serif;padding:11px 16px;box-shadow:0 6px 18px rgba(10,120,170,.4);display:inline-flex;align-items:center;gap:7px}
+.wb-fab:hover{background:#088ec5}
+@media (max-width:640px){.site-hdr .site-title{display:none}.site-ctl .lbl{display:none}.wb-fab .t{display:none}}
+/* ===== Tera Term terminal colours (green default, white toggle) ===== */
+.term{background:#071a0e!important;color:#45dd68!important}
+.term pre,.term .out{color:inherit!important}
+#prompt,.ps1,.term .ps1{color:#88ffb0!important}
+.l-cmd{color:#9dffc2!important}.l-dim{color:#7fae8c!important}.l-warn{color:#ecc06a!important}.l-bad{color:#ff8575!important}
+#cmd,.cin,.term input{color:#45dd68!important;caret-color:#45dd68!important;background:transparent!important}
+html.tt-white .term{color:#e7eef1!important}
+html.tt-white #prompt,html.tt-white .ps1,html.tt-white .term .ps1{color:#bfe3ff!important}
+html.tt-white .l-cmd{color:#d4e9ff!important}
+html.tt-white #cmd,html.tt-white .cin,html.tt-white .term input{color:#e7eef1!important;caret-color:#e7eef1!important}
+/* ===== Windows-7 (Aero) style GUI windows + resizeable ===== */
+.win{resize:both!important;overflow:hidden!important;min-width:300px;min-height:200px;border:1px solid #2f6aa8!important;border-radius:8px 8px 6px 6px!important;box-shadow:0 20px 44px rgba(0,0,0,.42), inset 0 0 0 1px rgba(255,255,255,.45)!important}
+.win-bar,.win-title{background:linear-gradient(#fdfefe,#dbe9f8 46%,#c2d8f0)!important;border-bottom:1px solid #8fb0d6!important;color:#13314e!important;border-radius:7px 7px 0 0}
+.win-bar b,.win-title b{text-shadow:0 1px 0 rgba(255,255,255,.75)}
+.win-bar .x,.win-title .x{background:linear-gradient(#f7a19a,#d9453b)!important;border:1px solid #b23026!important;color:#fff!important;border-radius:4px!important;text-shadow:0 1px 1px rgba(0,0,0,.3)}
+.win-bar .x:hover,.win-title .x:hover{background:linear-gradient(#ff8f86,#c9382e)!important}
+html[data-theme="dark"] .win-bar,html[data-theme="dark"] .win-title{background:linear-gradient(#2b3b4c,#1c2a38 46%,#152230)!important;border-bottom-color:#3a556c!important;color:#dceaf5!important}
+@media (prefers-color-scheme:dark){html:not([data-theme="light"]) .win-bar,html:not([data-theme="light"]) .win-title{background:linear-gradient(#2b3b4c,#1c2a38 46%,#152230)!important;border-bottom-color:#3a556c!important;color:#dceaf5!important}}
+</style>
+</head><body>
+<header class="site-hdr"><a class="site-brand" href="index.html"><img class="logo-ol" src="oldham-college.png" alt="Oldham College"><span class="site-div"></span><img class="logo-ci" src="cisco-netacad.png" alt="Cisco Networking Academy"></a><span class="site-title">Routing Table Lab</span><span class="site-sp"></span><a class="site-link" href="routing-tables.pdf" target="_blank" rel="noopener">📄 <span class="lbl">Instructions (PDF)</span></a><button id="themeBtn" class="site-ctl" type="button" onclick="toggleTheme()" title="Light / dark">🌙 <span class="lbl">Dark</span></button><a class="site-link" href="index.html">← <span class="lbl">All labs</span></a></header><button class="wb-fab" type="button" onclick="wbToggle()" aria-label="Open whiteboard" title="Whiteboard">✎ <span class="t">Whiteboard</span></button>
+
+
+<div class="app">
+  <div class="eyebrow">Cisco Networking Academy</div>
+  <h1>Routing Table Lab</h1>
+  <p class="lead">Read a routing table the way the exam expects. Learn what every field means, walk through a worked example step by step, then test yourself on exam-style questions — each with the reasoning explained. Built around the skill of <b>interpreting a routing table to work out how a router forwards traffic</b>.</p>
+
+  <div class="tabs" id="tabs">
+    <button class="tab" data-t="learn" aria-selected="true" type="button">Read the fields</button>
+    <button class="tab" data-t="worked" aria-selected="false" type="button">Worked example</button>
+    <button class="tab" data-t="practice" aria-selected="false" type="button">Practice</button>
+  </div>
+
+  <!-- LEARN -->
+  <section class="panel on" data-p="learn">
+    <div class="card">
+      <h2>Anatomy of a route</h2>
+      <p class="sub">A routing table doesn't store single addresses — it stores whole <b>networks</b>. Read each entry left to right:</p>
+      <div class="anat">S&nbsp;&nbsp;&nbsp;192.168.1.128/26&nbsp;&nbsp;[1/0]&nbsp;&nbsp;via 10.0.0.6,&nbsp;&nbsp;Gi0/1</div>
+      <div class="legend">
+        <div class="legc"><b>S — code letter</b><span>How the route was added (not how good it is).</span></div>
+        <div class="legc"><b>192.168.1.128 — network ID</b><span>The network this entry represents.</span></div>
+        <div class="legc"><b>/26 — subnet mask</b><span>How many bits are the network part (255.255.255.192).</span></div>
+        <div class="legc"><b>[1/0] — admin distance / metric</b><span>Trust in the source / cost of the route.</span></div>
+        <div class="legc"><b>via 10.0.0.6 — next hop</b><span>The IP of the next router to send the packet to.</span></div>
+        <div class="legc"><b>Gi0/1 — interface</b><span>The router's own port the packet leaves by.</span></div>
+      </div>
+      <h3>Code letters you'll see</h3>
+      <div class="codes">
+        <div><code>C</code>Directly connected — the router reaches it through its own interface, so <b>no next hop</b>.</div>
+        <div><code>L</code>Local — the interface's own exact address (/32).</div>
+        <div><code>S</code>Static — typed in by an administrator with <code>ip route</code>.</div>
+        <div><code>O</code>OSPF — learned dynamically from an OSPF neighbour.</div>
+        <div><code>R</code>RIP — learned dynamically via RIP.</div>
+        <div><code>D</code>EIGRP — learned dynamically via EIGRP.</div>
+        <div><code>S*</code>Candidate default — a static default route.</div>
+        <div><code>*</code>The route currently chosen as the default.</div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>How the router chooses</h2>
+      <p class="sub">To forward a packet, the router compares its destination IP against the network ID + mask of every entry, then applies these rules in order:</p>
+      <div class="rule"><b>1. Longest prefix match.</b> If more than one entry matches, the router uses the one with the <b>longest (most specific) mask</b> — e.g. a /26 beats a /24 for the same address.</div>
+      <div class="rule"><b>2. Administrative distance.</b> If it learned the <i>same</i> network from two sources, it trusts the lower AD — e.g. a static route (AD&nbsp;1) is preferred over OSPF (AD&nbsp;110).</div>
+      <div class="rule"><b>3. The default route (0.0.0.0/0).</b> Matches <i>everything</i>, but only wins when nothing more specific matches — normally the way out to the internet.</div>
+      <div class="rule"><b>No match at all?</b> With no default route, the router simply <b>drops</b> the packet.</div>
+      <h3>Static vs dynamic — the difference the exam asks for</h3>
+      <p style="font-size:13.5px;margin:4px 0 0"><b>Static</b> routes are added by hand (<code>ip route …</code>) and never change unless edited — simple, secure, predictable, good for small networks. <b>Dynamic</b> routes are built automatically by a protocol (RIP/OSPF/EIGRP) and update themselves when links change — better for large, growing networks, but need more processing and care. The code letter tells you <i>how</i> a route was added, not how good it is.</p>
+    </div>
+  </section>
+
+  <!-- WORKED EXAMPLE -->
+  <section class="panel" data-p="worked">
+    <div class="card">
+      <h2>Worked example — follow the match</h2>
+      <p class="sub">A packet arrives at the router. Step through exactly how it decides where to send it. Change the destination to try the different cases.</p>
+      <div class="row" style="margin-bottom:6px">
+        <span class="dest">Destination&nbsp; <b id="wdest"></b></span>
+        <select class="btn" id="wpick"></select>
+      </div>
+      <table class="rt" id="wtable"></table>
+      <div class="step"><div class="n" id="wnum">1</div><div class="t" id="wcap"></div></div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn" id="wprev" type="button">‹ Back</button>
+        <button class="btn primary" id="wnext" type="button">Next ›</button>
+        <span class="badge" id="wstep"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRACTICE -->
+  <section class="panel" data-p="practice">
+    <div class="card">
+      <h2>Practice <span class="badge" id="best"></span></h2>
+      <p class="sub">Ten exam-style questions. Read the table, pick your answer, and you'll get the reasoning either way. Your best score is saved on this device.</p>
+      <div class="scorebar" style="margin-bottom:12px">
+        <span class="badge" id="qcount">Question 1 of 10</span>
+        <div class="prog"><i id="progbar"></i></div>
+        <span class="score" id="runscore"></span>
+      </div>
+      <div id="qhost"></div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn primary" id="qnext" type="button" disabled>Next question ›</button>
+        <button class="btn" id="qrestart" type="button">Restart</button>
+        <span class="result" id="qdone" style="font-weight:700"></span>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+'use strict';
+const SAVE_KEY='routing-tables-v1';
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+
+/* ---------- IP helpers ---------- */
+function ipInt(ip){ return ip.split('.').reduce((a,o)=>a*256+(+o),0); }
+function maskInt(p){ return p===0?0:(0xFFFFFFFF<<(32-p))>>>0; }
+function maskDotted(p){ const m=maskInt(p); return [24,16,8,0].map(s=>(m>>>s)&255).join('.'); }
+function inNet(dest,net,p){ return ((ipInt(dest)&maskInt(p))>>>0) === ((ipInt(net)&maskInt(p))>>>0); }
+function bestRoute(dest,routes){ let best=null; for(const r of routes){ if(inNet(dest,r.net,r.plen)){ if(!best||r.plen>best.plen||(r.plen===best.plen&&r.ad<best.ad)) best=r; } } return best; }
+function matches(dest,routes){ return routes.filter(r=>inNet(dest,r.net,r.plen)).sort((a,b)=>b.plen-a.plen||a.ad-b.ad); }
+
+/* ---------- route tables (exam-style) ---------- */
+// r: {code,net,plen,nh (null=connected),intf,ad}
+const AD={C:0,L:0,S:1,D:90,O:110,R:120,'S*':1};
+function R(code,net,plen,nh,intf){ return {code,net,plen,nh,intf,ad:AD[code]!=null?AD[code]:1}; }
+const TABLES=[
+ { id:'T1', routes:[
+   R('C','10.0.0.0',30,null,'Gi0/0'),
+   R('S','192.168.1.0',24,'10.0.0.2','Gi0/0'),
+   R('S','192.168.1.128',26,'10.0.0.6','Gi0/1'),
+   R('O','172.16.0.0',16,'10.0.0.2','Gi0/0'),
+   R('S*','0.0.0.0',0,'203.0.113.1','Gi0/2'),
+ ]},
+ { id:'T2', routes:[
+   R('C','192.168.0.0',24,null,'Gi0/0'),
+   R('S','10.10.10.0',24,'192.168.0.254','Gi0/0'),
+   R('O','10.20.0.0',16,'192.168.0.253','Gi0/1'),
+ ]},  // no default route
+ { id:'T4', routes:[
+   R('C','172.31.0.0',24,null,'Gi0/0'),
+   R('R','10.1.0.0',16,'172.31.0.2','Gi0/0'),
+   R('D','10.2.0.0',16,'172.31.0.3','Gi0/1'),
+   R('S*','0.0.0.0',0,'172.31.0.1','Gi0/0'),
+ ]},
+ { id:'T5', routes:[
+   R('C','203.0.113.0',29,null,'Gi0/1'),
+   R('S','198.51.100.0',24,'203.0.113.2','Gi0/1'),
+   R('S','198.51.100.0',26,'203.0.113.3','Gi0/0'),
+   R('O','172.20.0.0',16,'203.0.113.2','Gi0/1'),
+   R('S*','0.0.0.0',0,'203.0.113.1','Gi0/1'),
+ ]},
+];
+function fmtDest(r){ return r.net+'/'+r.plen; }
+function routeText(r){ return r.code+'  '+r.net+'/'+r.plen+'  '+(r.nh?('via '+r.nh+', '):'directly connected, ')+r.intf; }
+function routeAnswerLabel(r){ return r.nh?('out '+r.intf+' (via '+r.nh+')'):('out '+r.intf+' (directly connected)'); }
+
+/* ---------- render a routing table ---------- */
+function drawTable(el,routes,opt){ opt=opt||{};
+  el.innerHTML='<tr><th>Code</th><th>Network / mask</th><th>Next hop</th><th>Interface</th></tr>'+
+   routes.map((r,i)=>`<tr data-i="${i}"><td class="code">${r.code}</td><td>${r.net}/${r.plen}</td><td class="meta">${r.nh?('via '+r.nh):'— (directly connected)'}</td><td>${r.intf}</td></tr>`).join('');
+}
+
+/* ---------- tabs ---------- */
+$$('.tab').forEach(b=>b.addEventListener('click',()=>{ $$('.tab').forEach(x=>x.setAttribute('aria-selected',x===b));
+  $$('.panel').forEach(p=>p.classList.toggle('on',p.dataset.p===b.dataset.t)); }));
+
+/* ================= WORKED EXAMPLE ================= */
+const WT=TABLES[0];
+const WDESTS=['192.168.1.130','192.168.1.50','172.16.9.9','8.8.8.8','10.0.0.1'];
+let wd=0, ws=0, WSTEPS=[];
+function buildWSteps(dest){
+  const ms=matches(dest,WT.routes), best=ms[0];
+  const steps=[];
+  steps.push({cap:`A packet arrives for <b class="mono">${dest}</b>. The router checks this destination against every entry's network ID and subnet mask.`, sub:'Line the address up against each network using its mask.', hi:[], win:null});
+  if(!ms.length){
+    steps.push({cap:`No entry matches <b class="mono">${dest}</b>, and there is <b>no default route</b> in this table.`, sub:'Nothing to match against.', hi:[], win:null});
+    steps.push({cap:`The router <b>drops the packet</b> — it has nowhere to send it.`, sub:'No match + no default = dropped.', hi:[], win:null, drop:true});
+    return steps;
+  }
+  // show each match building up
+  const matchIdx=ms.filter(r=>r.plen>0).map(r=>WT.routes.indexOf(r));
+  const defIdx=ms.filter(r=>r.plen===0).map(r=>WT.routes.indexOf(r));
+  if(matchIdx.length){
+    matchIdx.forEach((idx,k)=>{ const r=WT.routes[idx]; steps.push({
+      cap:`<b class="mono">${r.net}/${r.plen}</b> matches — the first ${r.plen} bits of ${dest} agree with this network.`,
+      sub:`mask ${maskDotted(r.plen)} · ${r.plen===32?'host route':'network part fixed'}`,
+      hi:matchIdx.slice(0,k+1), win:null }); });
+    if(matchIdx.length>1){
+      steps.push({cap:`${matchIdx.length} entries match. The router uses <b>longest prefix match</b> — the most specific mask wins.`, sub:`/${WT.routes[WT.routes.indexOf(best)].plen} is more specific than the others.`, hi:matchIdx, win:null});
+    }
+    steps.push({cap:`Best route: <b class="mono">${best.net}/${best.plen}</b>. The packet is forwarded ${best.nh?('to next hop <b class="mono">'+best.nh+'</b>'):'<b>directly</b>'} ${'out <b class="mono">'+best.intf+'</b>'}.`, sub:best.nh?'Send to the next router on the path.':'Directly connected — delivered straight out this interface.', hi:[WT.routes.indexOf(best)], win:WT.routes.indexOf(best)});
+  } else {
+    // only default matches
+    steps.push({cap:`No specific network matches <b class="mono">${dest}</b>, so the router falls back to the <b>default route</b> 0.0.0.0/0.`, sub:'The default matches everything a more specific entry did not.', hi:defIdx, win:null});
+    steps.push({cap:`Forwarded via the default — next hop <b class="mono">${best.nh}</b> out <b class="mono">${best.intf}</b> (usually towards the internet).`, sub:'Default route wins only when nothing more specific does.', hi:defIdx, win:WT.routes.indexOf(best)});
+  }
+  return steps;
+}
+function renderW(){ const dest=WDESTS[wd]; $('#wdest').textContent=dest; drawTable($('#wtable'),WT.routes);
+  const st=WSTEPS[ws]; const rows=$$('#wtable tr'); // row0 is header
+  WT.routes.forEach((r,i)=>{ const tr=rows[i+1]; tr.className=''; if(st.win===i) tr.classList.add('win'); else if(st.hi.includes(i)) tr.classList.add('match'); else if(st.win!=null||st.drop) tr.classList.add('dim'); });
+  $('#wnum').textContent=ws+1; $('#wnum').style.background=st.drop?'var(--bad)':(st.win!=null?'var(--ok)':'var(--accent)');
+  $('#wcap').innerHTML=st.cap+(st.sub?('<small>'+st.sub+'</small>'):'');
+  $('#wstep').textContent='Step '+(ws+1)+' of '+WSTEPS.length;
+  $('#wprev').disabled=ws===0; $('#wnext').disabled=ws===WSTEPS.length-1;
+}
+function loadW(){ WSTEPS=buildWSteps(WDESTS[wd]); ws=0; renderW(); }
+$('#wpick').innerHTML=WDESTS.map((d,i)=>`<option value="${i}">${d}</option>`).join('');
+$('#wpick').onchange=e=>{ wd=+e.target.value; loadW(); };
+$('#wnext').onclick=()=>{ if(ws<WSTEPS.length-1){ws++;renderW();} };
+$('#wprev').onclick=()=>{ if(ws>0){ws--;renderW();} };
+loadW();
+
+/* ================= PRACTICE ================= */
+function st(){ try{ return JSON.parse(localStorage.getItem(SAVE_KEY)||'{}'); }catch(e){ return {}; } }
+function setSt(o){ try{ localStorage.setItem(SAVE_KEY,JSON.stringify(o)); }catch(e){} }
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function pick(a){ return a[Math.floor(Math.random()*a.length)]; }
+const CODEMEAN={C:'Directly connected',L:'Local interface address',S:'Static (added by an administrator)',O:'Learned by OSPF',R:'Learned by RIP',D:'Learned by EIGRP','S*':'Static default route'};
+
+/* build one question object: {table, stem, options:[{t,ok}], explain} */
+function destInNet(net,plen,host){ const base=ipInt(net); return [24,16,8,0].map(s=>((base+host)>>>s)&255).join('.'); }
+function trimOpts(opts,max){ // keep every correct option, fill with distractors, shuffle
+  const uniq=opts.filter((o,i,a)=>a.findIndex(x=>x.t===o.t)===i);
+  const ok=uniq.filter(o=>o.ok), no=uniq.filter(o=>!o.ok);
+  return shuffle(ok.concat(shuffle(no)).slice(0,Math.max(max,ok.length))); }
+function qForward(T){ // choose a dest that matches a specific (non-default) route
+  const specific=T.routes.filter(r=>r.plen>0&&r.plen<32);
+  const r=pick(specific); const host=(r.plen>=30?1:5); const dest=destInNet(r.net,r.plen,host);
+  const best=bestRoute(dest,T.routes), bestLab=routeAnswerLabel(best);
+  const opts=T.routes.map(rt=>({t:routeAnswerLabel(rt),ok:routeAnswerLabel(rt)===bestLab}));
+  if(T.routes.every(x=>x.plen>0)) opts.push({t:'The packet is dropped',ok:false});
+  return { table:T, stem:`A packet is destined for <span class="ip">${dest}</span>. How does the router forward it?`,
+    options:trimOpts(opts,5), explain:`${dest} is matched by <b>${best.net}/${best.plen}</b> (${best.code}). ${matches(dest,T.routes).length>1?'Two entries matched, so <b>longest prefix match</b> chose the /'+best.plen+'. ':''}So it goes ${bestLab}.` };
+}
+function qLPM(T){ // force an overlapping case: tables with overlapping prefixes
+  const over=T.routes.filter(r=>T.routes.some(o=>o!==r&&o.plen!==r.plen&&inNet(r.net,o.net,Math.min(o.plen,r.plen))&&o.plen>0&&r.plen>0));
+  const longest=over.sort((a,b)=>b.plen-a.plen)[0]; if(!longest) return qForward(T);
+  const dest=destInNet(longest.net,longest.plen,1); const best=bestRoute(dest,T.routes);
+  const ms=matches(dest,T.routes).filter(r=>r.plen>0);
+  const opts=ms.map(r=>({t:r.net+'/'+r.plen+' — '+routeAnswerLabel(r),ok:r===best}));
+  return { table:T, stem:`Two entries both match <span class="ip">${dest}</span>. Which one does the router actually use?`,
+    options:shuffle(opts), explain:`Both <b>${ms.map(r=>r.net+'/'+r.plen).join('</b> and <b>')}</b> match, but the router applies <b>longest prefix match</b> — the most specific mask wins — so it uses <b>${best.net}/${best.plen}</b>, ${routeAnswerLabel(best)}.` };
+}
+function qDefault(T){ // dest that matches ONLY default (or nothing)
+  const hasDef=T.routes.some(r=>r.plen===0); const dest='8.8.8.8';
+  if(matches(dest,T.routes).some(r=>r.plen>0)) return qForward(T); // safety
+  const best=bestRoute(dest,T.routes), bestLab=best?routeAnswerLabel(best):null;
+  const opts=T.routes.map(rt=>({t:routeAnswerLabel(rt),ok:!!bestLab&&routeAnswerLabel(rt)===bestLab}));
+  opts.push({t:'The packet is dropped',ok:!best});
+  return { table:T, stem:`A packet is destined for <span class="ip">${dest}</span> (a public internet address). What happens?`,
+    options:trimOpts(opts,5),
+    explain: best? `No specific entry matches ${dest}, so the router uses the <b>default route 0.0.0.0/0</b> — ${bestLab}.` : `No entry matches ${dest} and there is <b>no default route</b> in this table, so the router <b>drops the packet</b>.` };
+}
+function qCode(T){ const r=pick(T.routes); const correct=CODEMEAN[r.code];
+  const all=[...new Set(Object.values(CODEMEAN))]; const opts=[{t:correct,ok:true}];
+  shuffle(all.filter(x=>x!==correct)).slice(0,3).forEach(x=>opts.push({t:x,ok:false}));
+  return { table:T, stem:`In this table, what does the code <span class="ip">${r.code}</span> on the <b>${r.net}/${r.plen}</b> entry tell you?`,
+    options:shuffle(opts), explain:`<b>${r.code}</b> means “${correct}”. ${r.code==='C'?'A directly connected route has <b>no next hop</b> — the router reaches it straight out its own interface.':'The code shows <i>how</i> the route was added, not how good it is.'}` };
+}
+function qNextHop(T){ const conn=T.routes.find(r=>r.nh===null); if(!conn) return qForward(T);
+  const dest=destInNet(conn.net,conn.plen,1); const best=bestRoute(dest,T.routes);
+  if(!best||best.nh!==null) return qForward(T);
+  const opts=[{t:'No next hop — it is directly connected',ok:true}];
+  [...new Set(T.routes.filter(r=>r.nh).map(r=>r.nh))].slice(0,3).forEach(nh=>opts.push({t:'via '+nh,ok:false}));
+  return { table:T, stem:`What is the <b>next hop</b> for a packet to <span class="ip">${dest}</span>?`,
+    options:shuffle(opts), explain:`${dest} is on <b>${best.net}/${best.plen}</b>, a <b>directly connected (${best.code})</b> network — so there is <b>no next hop</b>. The router delivers it straight out <b>${best.intf}</b>.` };
+}
+const QGENS=[qForward,qForward,qLPM,qDefault,qCode,qNextHop];
+
+let QUIZ=[], qi=0, runScore=0, answered=false;
+function newQuiz(){ QUIZ=[]; for(let i=0;i<10;i++){ const T=pick(TABLES); const gen=pick(QGENS); let q; try{ q=gen(T); }catch(e){ q=qForward(T); } if(!q.options.some(o=>o.ok)) q=qForward(T); QUIZ.push(q); }
+  qi=0; runScore=0; answered=false; showBest(); renderQ(); }
+function showBest(){ const b=st().best; $('#best').textContent=b!=null?('best '+b+'/10'):''; }
+function renderQ(){ const q=QUIZ[qi]; answered=false;
+  $('#qcount').textContent='Question '+(qi+1)+' of 10'; $('#progbar').style.width=((qi)/10*100)+'%';
+  $('#runscore').textContent=runScore?('Score '+runScore+'/'+qi):''; $('#qdone').textContent='';
+  const tbl='<table class="rt" id="qtable"></table>';
+  $('#qhost').innerHTML=`<div class="q"><div class="stem">${q.stem}</div>${tbl}<div class="opts" id="qopts"></div><div class="fb" id="qfb"></div></div>`;
+  drawTable($('#qtable'),q.table.routes);
+  $('#qopts').innerHTML=q.options.map((o,i)=>`<button class="opt" data-i="${i}" type="button">${o.t.replace(/(Gi0\/\d|via [\d.]+|\/\d+|[\d]+\.[\d.]+)/g,'<span class="mono">$1</span>')}</button>`).join('');
+  $$('#qopts .opt').forEach(b=>b.onclick=()=>answer(+b.dataset.i));
+  $('#qnext').disabled=true;
+}
+function answer(i){ if(answered) return; answered=true; const q=QUIZ[qi];
+  $$('#qopts .opt').forEach((b,k)=>{ b.style.pointerEvents='none'; if(q.options[k].ok)b.classList.add('right'); if(k===i&&!q.options[k].ok)b.classList.add('wrong'); if(k===i)b.classList.add('sel'); });
+  const ok=q.options[i].ok; if(ok)runScore++;
+  const fb=$('#qfb'); fb.className='fb show '+(ok?'ok':'no'); fb.innerHTML=(ok?'<b>Correct. </b>':'<b>Not quite. </b>')+q.explain;
+  $('#runscore').textContent='Score '+runScore+'/'+(qi+1); $('#progbar').style.width=((qi+1)/10*100)+'%';
+  $('#qnext').disabled=false;
+  if(qi===QUIZ.length-1){ $('#qnext').disabled=true; const s=st(); if(s.best==null||runScore>s.best){ s.best=runScore; setSt(s); } showBest();
+    $('#qdone').textContent='Finished — '+runScore+'/10.'; }
+}
+$('#qnext').onclick=()=>{ if(qi<QUIZ.length-1){ qi++; renderQ(); } };
+$('#qrestart').onclick=newQuiz;
+newQuiz();
+</script>
+
+<script>window.__WB_KEY__="routing-tables";</script>
+<script>/* ============================================================
+   Oldham Cisco Labs — shared Whiteboard overlay.
+   Self-contained: injects its own CSS + DOM, persists per lab,
+   independent of the lab's own device switching. Styled after a
+   classroom whiteboard (aluminium frame, magnets, marker tray).
+   Toggle with window.wbToggle(). Set window.__WB_KEY__ per page.
+   ============================================================ */
+(function(){
+  'use strict';
+  if(window.__wbInit) return; window.__wbInit=true;
+  var KEY='wb-notes-'+(window.__WB_KEY__||'lab');
+  var W=1100, H=680; // fixed drawing resolution (persisted at this size)
+  var COLOURS={black:'#1c1c1c', blue:'#1d55c4', red:'#d7352b', green:'#1e8f45'};
+
+  var css=''+
+  '.wb-overlay{position:fixed;inset:0;z-index:9000;background:#2daaa4;display:none;flex-direction:column;padding:env(safe-area-inset-top,0) 0 0}'+
+  '.wb-overlay.open{display:flex}'+
+  '.wb-top{display:flex;align-items:center;gap:12px;padding:10px 16px;color:#eafaf8}'+
+  '.wb-top b{font:700 16px "Chivo",system-ui,sans-serif}'+
+  '.wb-top .sp{flex:1}'+
+  '.wb-top button{font:600 13px "Chivo",system-ui,sans-serif;border:0;border-radius:8px;padding:9px 14px;cursor:pointer;background:rgba(255,255,255,.18);color:#fff}'+
+  '.wb-top button:hover{background:rgba(255,255,255,.3)}'+
+  '.wb-stage{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:6px 16px 18px}'+
+  '.wb-frame{position:relative;width:min(1100px,100%);max-height:100%;aspect-ratio:1100/680;'+
+    'background:linear-gradient(#e9ecee,#c3c8cc 45%,#aeb4b8);border-radius:10px;padding:14px;'+
+    'box-shadow:0 14px 40px rgba(0,0,0,.35);border:1px solid #9aa0a4}'+
+  '.wb-inner{position:relative;width:100%;height:100%;background:#fff;border-radius:3px;box-shadow:inset 0 0 0 1px #d7dadd, inset 0 2px 8px rgba(0,0,0,.06);overflow:hidden}'+
+  '.wb-canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:crosshair;display:block}'+
+  '.wb-corner{position:absolute;width:30px;height:30px;background:#2b2f33;z-index:3}'+
+  '.wb-corner.tl{top:-2px;left:-2px;border-radius:9px 0 14px 0}'+
+  '.wb-corner.tr{top:-2px;right:-2px;border-radius:0 9px 0 14px}'+
+  '.wb-corner.bl{bottom:-2px;left:-2px;border-radius:0 14px 0 9px}'+
+  '.wb-corner.br{bottom:-2px;right:-2px;border-radius:14px 0 9px 0}'+
+  '.wb-mag{position:absolute;top:16px;right:18px;display:flex;flex-direction:column;gap:9px;z-index:4}'+
+  '.wb-mag i{width:19px;height:19px;border-radius:50%;box-shadow:0 2px 3px rgba(0,0,0,.3);background:radial-gradient(circle at 32% 30%, rgba(255,255,255,.75), transparent 45%)}'+
+  '.wb-tray{position:absolute;left:0;right:0;bottom:-13px;height:20px;background:linear-gradient(#c7cccf,#a6acb0);border-radius:0 0 7px 7px;z-index:2;box-shadow:0 5px 8px rgba(0,0,0,.18)}'+
+  '.wb-tools{position:absolute;left:18px;bottom:-6px;display:flex;align-items:flex-end;gap:10px;z-index:5}'+
+  '.wb-sponge{width:54px;height:30px;border-radius:5px;background:linear-gradient(#f3d58b,#e0b64e);border:1px solid #c69a3a;box-shadow:0 2px 4px rgba(0,0,0,.25);cursor:pointer;position:relative}'+
+  '.wb-sponge::after{content:"";position:absolute;left:0;right:0;bottom:0;height:11px;background:#6f706f;border-radius:0 0 5px 5px}'+
+  '.wb-pen{width:66px;height:15px;border-radius:3px;cursor:pointer;position:relative;box-shadow:0 2px 4px rgba(0,0,0,.25);transition:transform .1s}'+
+  '.wb-pen::before{content:"";position:absolute;right:-9px;top:1px;border-left:12px solid rgba(0,0,0,.35);border-top:6px solid transparent;border-bottom:6px solid transparent}'+
+  '.wb-pen .cap{position:absolute;left:0;top:0;bottom:0;width:16px;border-radius:3px 0 0 3px;background:rgba(0,0,0,.25)}'+
+  '.wb-tool{outline:0}'+
+  '.wb-tool.on{transform:translateY(-10px)}'+
+  '.wb-sponge.on{transform:translateY(-8px)}'+
+  '.wb-panel{display:flex;align-items:center;gap:10px;padding:6px 16px 0;color:#eafaf8;font:500 12.5px "Chivo",system-ui,sans-serif;flex-wrap:wrap;justify-content:center}'+
+  '.wb-panel label{display:flex;align-items:center;gap:6px}'+
+  '.wb-panel input[type=range]{accent-color:#fff}'+
+  '.wb-hint{opacity:.85}'+
+  '@media (max-width:620px){.wb-tools{left:8px;gap:6px}.wb-pen{width:48px}.wb-sponge{width:42px}}';
+
+  var sel=document.createElement('style'); sel.textContent=css; document.head.appendChild(sel);
+
+  var ov=document.createElement('div'); ov.className='wb-overlay'; ov.setAttribute('role','dialog'); ov.setAttribute('aria-label','Whiteboard');
+  ov.innerHTML=''+
+    '<div class="wb-top"><b>Whiteboard</b><span class="wb-hint">Your notes stay here while you work — they persist across devices and tabs.</span><span class="sp"></span>'+
+      '<button type="button" class="wb-save">Save PNG</button><button type="button" class="wb-clear">Clear board</button><button type="button" class="wb-close">Close ✕</button></div>'+
+    '<div class="wb-panel"><label>Pen size <input type="range" class="wb-size" min="2" max="10" value="4"></label><span class="wb-hint">Pick a marker or the sponge below · click a marker to change colour</span></div>'+
+    '<div class="wb-stage"><div class="wb-frame"><span class="wb-corner tl"></span><span class="wb-corner tr"></span><span class="wb-corner bl"></span><span class="wb-corner br"></span>'+
+      '<div class="wb-mag"><i style="background-color:#e0463c"></i><i style="background-color:#2fa54e"></i><i style="background-color:#f0b429"></i><i style="background-color:#e67a22"></i><i style="background-color:#2d63d6"></i></div>'+
+      '<div class="wb-inner"><canvas class="wb-canvas" width="'+W+'" height="'+H+'"></canvas></div>'+
+      '<div class="wb-tray"></div>'+
+      '<div class="wb-tools">'+
+        '<button class="wb-sponge wb-tool" data-tool="eraser" title="Eraser (sponge)" aria-label="Eraser"></button>'+
+        '<button class="wb-pen wb-tool on" data-tool="green" title="Green marker" aria-label="Green marker" style="background:#1e8f45"><span class="cap"></span></button>'+
+        '<button class="wb-pen wb-tool" data-tool="blue" title="Blue marker" aria-label="Blue marker" style="background:#1d55c4"><span class="cap"></span></button>'+
+        '<button class="wb-pen wb-tool" data-tool="red" title="Red marker" aria-label="Red marker" style="background:#d7352b"><span class="cap"></span></button>'+
+        '<button class="wb-pen wb-tool" data-tool="black" title="Black marker" aria-label="Black marker" style="background:#1c1c1c"><span class="cap"></span></button>'+
+      '</div>'+
+    '</div></div>';
+  document.body.appendChild(ov);
+
+  var canvas=ov.querySelector('.wb-canvas'), ctx=canvas.getContext('2d');
+  var tool='green', size=4, drawing=false, last=null, saveT=null, dirty=false;
+  ctx.lineCap='round'; ctx.lineJoin='round';
+
+  function load(){ try{ var d=localStorage.getItem(KEY); if(d){ var img=new Image(); img.onload=function(){ ctx.clearRect(0,0,W,H); ctx.drawImage(img,0,0,W,H); }; img.src=d; } }catch(e){} }
+  function save(){ try{ localStorage.setItem(KEY, canvas.toDataURL('image/png')); }catch(e){} }
+  function scheduleSave(){ clearTimeout(saveT); saveT=setTimeout(save,500); }
+
+  function pos(e){ var r=canvas.getBoundingClientRect(); return {x:(e.clientX-r.left)*(W/r.width), y:(e.clientY-r.top)*(H/r.height)}; }
+  function start(e){ drawing=true; last=pos(e); e.preventDefault(); stroke(e); }
+  function stroke(e){ if(!drawing) return; var p=pos(e);
+    ctx.globalCompositeOperation = tool==='eraser' ? 'destination-out' : 'source-over';
+    ctx.strokeStyle = tool==='eraser' ? 'rgba(0,0,0,1)' : COLOURS[tool];
+    ctx.lineWidth = tool==='eraser' ? 34 : size;
+    ctx.beginPath(); ctx.moveTo(last.x,last.y); ctx.lineTo(p.x,p.y); ctx.stroke(); last=p; dirty=true; }
+  function end(){ if(drawing){ drawing=false; if(dirty){ scheduleSave(); dirty=false; } } }
+  canvas.addEventListener('pointerdown',function(e){ canvas.setPointerCapture&&canvas.setPointerCapture(e.pointerId); start(e); });
+  canvas.addEventListener('pointermove',stroke);
+  canvas.addEventListener('pointerup',end); canvas.addEventListener('pointercancel',end); canvas.addEventListener('pointerleave',function(){ if(drawing){ /* keep drawing only while down */ } });
+  window.addEventListener('pointerup',end);
+
+  ov.querySelectorAll('.wb-tool').forEach(function(b){ b.addEventListener('click',function(){
+    tool=b.dataset.tool;
+    ov.querySelectorAll('.wb-tool').forEach(function(x){ x.classList.toggle('on',x===b); });
+  }); });
+  ov.querySelector('.wb-size').addEventListener('input',function(e){ size=+e.target.value; });
+  ov.querySelector('.wb-clear').addEventListener('click',function(){ ctx.clearRect(0,0,W,H); save(); });
+  ov.querySelector('.wb-close').addEventListener('click',function(){ ov.classList.remove('open'); });
+  ov.querySelector('.wb-save').addEventListener('click',function(){
+    try{ var a=document.createElement('a'); a.download='whiteboard-'+(window.__WB_KEY__||'notes')+'.png'; a.href=canvas.toDataURL('image/png'); document.body.appendChild(a); a.click(); a.remove(); }catch(e){} });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&ov.classList.contains('open')) ov.classList.remove('open'); });
+
+  window.wbToggle=function(){ ov.classList.toggle('open'); };
+  load();
+})();
+</script>
+<script>
+(function(){
+  function updThemeBtn(){var b=document.getElementById('themeBtn');if(!b)return;var dark=document.documentElement.getAttribute('data-theme')==='dark'||(!document.documentElement.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme:dark)').matches);b.innerHTML=dark?'☀️ <span class="lbl">Light</span>':'🌙 <span class="lbl">Dark</span>';}
+  function updTermBtn(){var b=document.getElementById('termBtn');if(!b)return;var w=document.documentElement.classList.contains('tt-white');b.innerHTML='⌨️ <span class="lbl">'+(w?'White':'Green')+'</span>';}
+  window.toggleTheme=function(){var d=document.documentElement;var cur=d.getAttribute('data-theme');var sys=matchMedia('(prefers-color-scheme:dark)').matches;var nx=(cur==='dark'||(!cur&&sys))?'light':'dark';d.setAttribute('data-theme',nx);try{localStorage.setItem('labs-theme',nx);}catch(e){}updThemeBtn();};
+  window.toggleTerm=function(){var d=document.documentElement;d.classList.toggle('tt-white');try{localStorage.setItem('labs-term',d.classList.contains('tt-white')?'white':'green');}catch(e){}updTermBtn();};
+  function init(){updThemeBtn();updTermBtn();}
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+})();
+</script>
+</body></html>
