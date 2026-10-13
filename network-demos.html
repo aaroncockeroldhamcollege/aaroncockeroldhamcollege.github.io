@@ -1,0 +1,654 @@
+<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><script>try{var t=localStorage.getItem("labs-theme");if(t)document.documentElement.setAttribute("data-theme",t);if(localStorage.getItem("labs-term")==="white")document.documentElement.classList.add("tt-white");}catch(e){}</script><script>/* ============================================================
+   Network topology symbols — shared across every activity.
+   Original SVG drawings in the conventional Cisco/Packet Tracer
+   topology style (functional diagram symbols). viewBox 0 0 64 64,
+   device centred. Two-tone: light body + Cisco-blue outline, so
+   they read on both light and dark stages.
+   Use:  <svg viewBox="0 0 64 64">  + NETSYM[type]  </svg>
+============================================================ */
+(function(){
+  // palette (fixed so icons look identical on every page/theme)
+  var B='#cfe7f5',   // body fill
+      L='#0a7cad',   // outline
+      A='#0a9ad4',   // accent fill
+      D='#07485f',   // deep accent
+      W='#ffffff';
+  function arrow(d){ return '<path d="'+d+'" fill="none" stroke="'+W+'" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>'; }
+
+  var S={};
+
+  // ---- Router: 3-D cylinder with the classic 4-way arrows on top ----
+  S.router =
+   '<path d="M8 34 v4 a24 8 0 0 0 48 0 v-4" fill="'+L+'"/>'+
+   '<ellipse cx="32" cy="34" rx="24" ry="8.5" fill="'+A+'" stroke="'+L+'" stroke-width="2"/>'+
+   // 4-way arrows (left,right,up,down) on the top face
+   arrow('M20 34 h9 m-3.5 -3 l3.5 3 -3.5 3')+        // right
+   arrow('M44 34 h-9 m3.5 -3 l-3.5 3 3.5 3')+        // left
+   arrow('M32 27.5 v-3 M29.5 26 l2.5 -2.5 2.5 2.5')+ // up (small)
+   arrow('M32 40.5 v3 M29.5 42 l2.5 2.5 2.5 -2.5');  // down (small)
+
+  // ---- Switch: flat 3-D slab with 4 parallel arrows (2 each way) ----
+  S['switch'] =
+   '<path d="M10 30 L22 22 H58 L46 30 Z" fill="'+A+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>'+   // top face
+   '<path d="M10 30 H46 V40 H10 Z" fill="'+B+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>'+          // front
+   '<path d="M46 30 L58 22 V32 L46 40 Z" fill="'+L+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>'+    // side
+   arrow('M16 33 h16 m-4 -2.5 l4 2.5 -4 2.5')+
+   arrow('M40 37 h-16 m4 -2.5 l-4 2.5 4 2.5');
+
+  // ---- Multilayer (L3) switch: slab + routing ring ----
+  S.l3switch =
+   '<path d="M10 32 L22 24 H58 L46 32 Z" fill="'+A+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>'+
+   '<path d="M10 32 H46 V42 H10 Z" fill="'+B+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>'+
+   '<path d="M46 32 L58 24 V34 L46 42 Z" fill="'+L+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>'+
+   arrow('M16 35 h12 m-3.5 -2.5 l3.5 2.5 -3.5 2.5')+
+   arrow('M40 39 h-12 m3.5 -2.5 l-3.5 2.5 3.5 2.5')+
+   '<circle cx="47" cy="20" r="9" fill="'+W+'" stroke="'+L+'" stroke-width="2"/>'+
+   arrow('M43 20 h8 m-2.5 -2.5 l2.5 2.5 -2.5 2.5').replace(/#ffffff/,L);
+
+  // ---- PC / desktop: monitor + tower ----
+  S.pc =
+   '<rect x="12" y="14" width="34" height="24" rx="2" fill="'+B+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<rect x="16" y="18" width="26" height="16" rx="1" fill="'+A+'"/>'+
+   '<rect x="25" y="38" width="8" height="5" fill="#9bbdd4"/>'+
+   '<rect x="18" y="43" width="22" height="4" rx="2" fill="'+L+'"/>'+
+   '<rect x="48" y="20" width="12" height="27" rx="2" fill="'+B+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<circle cx="54" cy="25" r="1.6" fill="'+L+'"/><path d="M51 42 h6" stroke="'+L+'" stroke-width="2"/>';
+
+  // ---- Laptop ----
+  S.laptop =
+   '<path d="M16 16 h32 v20 h-32 Z" fill="'+B+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<rect x="19" y="19" width="26" height="14" rx="1" fill="'+A+'"/>'+
+   '<path d="M10 44 L16 36 h32 l6 8 Z" fill="'+B+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>'+
+   '<path d="M27 40 h10" stroke="'+L+'" stroke-width="2" stroke-linecap="round"/>';
+
+  // ---- Server ----
+  S.server =
+   '<rect x="20" y="10" width="24" height="44" rx="3" fill="'+B+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<rect x="24" y="15" width="16" height="7" rx="1" fill="'+A+'"/><circle cx="41" cy="18.5" r="1.4" fill="'+W+'"/>'+
+   '<rect x="24" y="25" width="16" height="7" rx="1" fill="'+A+'"/><circle cx="41" cy="28.5" r="1.4" fill="'+W+'"/>'+
+   '<rect x="24" y="35" width="16" height="7" rx="1" fill="'+A+'"/><circle cx="41" cy="38.5" r="1.4" fill="'+W+'"/>'+
+   '<path d="M25 48 h14" stroke="'+L+'" stroke-width="2" stroke-linecap="round"/>';
+
+  // ---- Firewall: brick wall ----
+  S.firewall =
+   '<rect x="8" y="16" width="48" height="32" rx="2" fill="'+B+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<g stroke="'+L+'" stroke-width="2">'+
+   '<path d="M8 27 h48 M8 37 h48"/>'+
+   '<path d="M24 16 v11 M40 16 v11"/>'+        // top row bricks
+   '<path d="M16 27 v10 M32 27 v10 M48 27 v10"/>'+ // mid row offset
+   '<path d="M24 37 v11 M40 37 v11"/>'+        // bottom row
+   '</g>';
+
+  // ---- Access point: puck + radio waves ----
+  S.ap =
+   '<ellipse cx="32" cy="42" rx="22" ry="7" fill="'+B+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<rect x="30" y="20" width="4" height="18" rx="2" fill="'+L+'"/>'+
+   '<circle cx="32" cy="18" r="3.5" fill="'+A+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<g fill="none" stroke="'+A+'" stroke-width="2.4" stroke-linecap="round">'+
+   '<path d="M22 14 a14 14 0 0 1 20 0"/><path d="M26 18 a9 9 0 0 1 12 0"/></g>';
+
+  // ---- IP phone ----
+  S.phone =
+   '<path d="M18 12 h24 a4 4 0 0 1 4 4 v30 a4 4 0 0 1 -4 4 h-24 a4 4 0 0 1 -4 -4 v-30 a4 4 0 0 1 4 -4 Z" fill="'+B+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<rect x="19" y="17" width="22" height="13" rx="1" fill="'+A+'"/>'+
+   '<g fill="'+L+'"><circle cx="23" cy="36" r="2"/><circle cx="30" cy="36" r="2"/><circle cx="37" cy="36" r="2"/><circle cx="23" cy="43" r="2"/><circle cx="30" cy="43" r="2"/><circle cx="37" cy="43" r="2"/></g>';
+
+  // ---- Printer ----
+  S.printer =
+   '<rect x="18" y="12" width="28" height="12" rx="1" fill="'+B+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<rect x="10" y="24" width="44" height="18" rx="3" fill="'+A+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<rect x="20" y="36" width="24" height="14" rx="1" fill="'+W+'" stroke="'+L+'" stroke-width="2"/>'+
+   '<circle cx="48" cy="30" r="2" fill="'+W+'"/>';
+
+  // ---- Cloud (internet / WAN) ----
+  S.cloud =
+   '<path d="M18 44 a13 13 0 0 1 2 -25 a16 15 0 0 1 30 -3 a11 11 0 0 1 6 28 Z" fill="'+B+'" stroke="'+L+'" stroke-width="2" stroke-linejoin="round"/>';
+
+  // aliases
+  S.multiswitch=S.l3switch; S.asa=S.firewall; S.internet=S.cloud; S.desktop=S.pc;
+
+  window.NETSYM=S;
+})();
+</script>
+<style>[hidden]{display:none!important}body{margin:0}</style>
+<title>Network Demos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#eef5f9; --panel:#fff; --ink:#132430; --muted:#5a6b78; --line:#cfe0ec; --accent:#0a9ad4; --accent-dark:#0a7cad; --accent-soft:#d6f1fb;
+  --stage:#f7fbfe; --ok:#1a9c5b; --bad:#d23d3d; --warn:#e68a00;
+  --v10:#d23d3d; --v10s:#fbe4e4; --v20:#2f6fd6; --v20s:#e4edfb; --wire:#0a7cad; --gold:#f5c93a;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace; --display:"Chivo",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#081219;--panel:#10212c;--ink:#dcebf3;--muted:#8fa6b4;--line:#223644;--accent:#2cb8e8;--accent-dark:#6fd2f2;--accent-soft:#06344a;--stage:#0c1a24;--v10s:#3a1c1c;--v20s:#13284a;--wire:#4fc3e8;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#081219;--panel:#10212c;--ink:#dcebf3;--muted:#8fa6b4;--line:#223644;--accent:#2cb8e8;--accent-dark:#6fd2f2;--accent-soft:#06344a;--stage:#0c1a24;--v10s:#3a1c1c;--v20s:#13284a;--wire:#4fc3e8;color-scheme:dark}
+*{box-sizing:border-box}html,body{background:var(--bg);color:var(--ink)}body{margin:0;font:14px/1.5 var(--display)}
+button{font:inherit;color:inherit}:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.app{max-width:1120px;margin:0 auto;padding:18px 16px 44px}
+.eyebrow{font:600 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--accent-dark)}
+h1{font:800 clamp(24px,4vw,32px)/1.05 var(--display);margin:6px 0 0}
+.lead{color:var(--muted);margin:8px 0 0;max-width:76ch}
+.menu{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 12px}
+.mb{border:1px solid var(--line);background:var(--panel);border-radius:9px;padding:9px 13px;cursor:pointer;font-weight:600;font-size:13px}
+.mb:hover{border-color:var(--accent)}
+.mb[aria-selected="true"]{border-color:var(--accent);background:var(--accent);color:#fff}
+.stagewrap{border:1px solid var(--line);background:var(--panel);border-radius:14px;overflow:hidden}
+.sbar{display:flex;align-items:center;gap:10px;padding:11px 14px;border-bottom:1px solid var(--line);background:var(--accent-soft);flex-wrap:wrap}
+.sbar h2{font:800 17px var(--display);margin:0}
+.sbar .sp{flex:1}
+.ctrl{display:flex;gap:6px;align-items:center}
+.cbtn{border:1px solid var(--line);background:var(--panel);border-radius:8px;width:38px;height:34px;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center}
+.cbtn:hover{border-color:var(--accent)}
+.cbtn.play{width:auto;padding:0 14px;font-weight:700}
+.spd{border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:0 8px;height:34px;font:600 12px var(--display)}
+.stage{position:relative;background:var(--stage);display:flex;justify-content:center}
+.stage svg{display:block;width:100%;height:auto;max-height:min(600px,max(240px,calc(100vh - 445px)))}
+.anim{transition:transform .75s cubic-bezier(.4,.1,.2,1),opacity .5s ease,fill .45s ease,stroke .45s ease}
+.cap{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border-top:1px solid var(--line);min-height:70px}
+.cap .num{flex:none;width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;font:800 14px var(--display);display:flex;align-items:center;justify-content:center;margin-top:1px}
+.cap .txt{font:600 clamp(15px,2.2vw,19px)/1.4 var(--display)}
+.cap .txt small{display:block;font:500 13px var(--mono);color:var(--muted);margin-top:3px}
+.dots{display:flex;gap:7px;padding:0 16px 14px;flex-wrap:wrap}
+.dot{width:12px;height:12px;border-radius:50%;border:1px solid var(--accent);background:transparent;cursor:pointer;padding:0}
+.dot.on{background:var(--accent)}
+.note{color:var(--muted);font-size:12.5px;margin-top:12px}
+/* svg text defaults */
+text{font-family:var(--display);fill:var(--ink)}
+.mono{font-family:var(--mono)}
+.lbl{font-weight:700}
+.sub{fill:var(--muted);font-size:12px}
+</style>
+<style>
+/* ===== site header / controls ===== */
+.site-hdr{display:flex;align-items:center;gap:12px;background:#fff;border-bottom:3px solid #0a9ad4;padding:7px 16px;font-family:"Chivo","Segoe UI",system-ui,sans-serif;flex-wrap:wrap}
+.site-hdr .site-brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+.site-hdr .logo-ol{height:40px}
+.site-hdr .logo-ci{height:34px;border-radius:4px}
+.site-hdr .site-div{width:1px;height:30px;background:#d2dae2}
+.site-hdr .site-title{font:700 15px/1 "Chivo",system-ui,sans-serif;color:#0a7cad}
+.site-hdr .site-sp{flex:1}
+.site-ctl,.site-hdr .site-link{font:600 12.5px "Chivo",system-ui,sans-serif;color:#0a7cad;text-decoration:none;border:1px solid #bfe4f3;border-radius:7px;padding:7px 11px;white-space:nowrap;background:#fff;cursor:pointer}
+.site-ctl:hover,.site-hdr .site-link:hover{background:#e8f6fc}
+@media (prefers-color-scheme:dark){html:not([data-theme="light"]) .site-hdr{background:#0e1a23;border-bottom-color:#2cb8e8}
+ html:not([data-theme="light"]) .site-hdr .site-title{color:#6fd2f2}
+ html:not([data-theme="light"]) .site-ctl,html:not([data-theme="light"]) .site-hdr .site-link{background:#13232e;color:#6fd2f2;border-color:#28485c}
+ html:not([data-theme="light"]) .site-hdr .site-div{background:#28485c}}
+html[data-theme="dark"] .site-hdr{background:#0e1a23;border-bottom-color:#2cb8e8}
+html[data-theme="dark"] .site-hdr .site-title{color:#6fd2f2}
+html[data-theme="dark"] .site-ctl,html[data-theme="dark"] .site-hdr .site-link{background:#13232e;color:#6fd2f2;border-color:#28485c}
+html[data-theme="dark"] .site-hdr .site-div{background:#28485c}
+.wb-fab{position:fixed;right:16px;bottom:16px;z-index:70;border:0;border-radius:24px;cursor:pointer;background:#0a9ad4;color:#fff;font:600 13px "Chivo",system-ui,sans-serif;padding:11px 16px;box-shadow:0 6px 18px rgba(10,120,170,.4);display:inline-flex;align-items:center;gap:7px}
+.wb-fab:hover{background:#088ec5}
+@media (max-width:640px){.site-hdr .site-title{display:none}.site-ctl .lbl{display:none}.wb-fab .t{display:none}}
+/* ===== Tera Term terminal colours (green default, white toggle) ===== */
+.term{background:#071a0e!important;color:#45dd68!important}
+.term pre,.term .out{color:inherit!important}
+#prompt,.ps1,.term .ps1{color:#88ffb0!important}
+.l-cmd{color:#9dffc2!important}.l-dim{color:#7fae8c!important}.l-warn{color:#ecc06a!important}.l-bad{color:#ff8575!important}
+#cmd,.cin,.term input{color:#45dd68!important;caret-color:#45dd68!important;background:transparent!important}
+html.tt-white .term{color:#e7eef1!important}
+html.tt-white #prompt,html.tt-white .ps1,html.tt-white .term .ps1{color:#bfe3ff!important}
+html.tt-white .l-cmd{color:#d4e9ff!important}
+html.tt-white #cmd,html.tt-white .cin,html.tt-white .term input{color:#e7eef1!important;caret-color:#e7eef1!important}
+/* ===== Windows-7 (Aero) style GUI windows + resizeable ===== */
+.win{resize:both!important;overflow:hidden!important;min-width:300px;min-height:200px;border:1px solid #2f6aa8!important;border-radius:8px 8px 6px 6px!important;box-shadow:0 20px 44px rgba(0,0,0,.42), inset 0 0 0 1px rgba(255,255,255,.45)!important}
+.win-bar,.win-title{background:linear-gradient(#fdfefe,#dbe9f8 46%,#c2d8f0)!important;border-bottom:1px solid #8fb0d6!important;color:#13314e!important;border-radius:7px 7px 0 0}
+.win-bar b,.win-title b{text-shadow:0 1px 0 rgba(255,255,255,.75)}
+.win-bar .x,.win-title .x{background:linear-gradient(#f7a19a,#d9453b)!important;border:1px solid #b23026!important;color:#fff!important;border-radius:4px!important;text-shadow:0 1px 1px rgba(0,0,0,.3)}
+.win-bar .x:hover,.win-title .x:hover{background:linear-gradient(#ff8f86,#c9382e)!important}
+html[data-theme="dark"] .win-bar,html[data-theme="dark"] .win-title{background:linear-gradient(#2b3b4c,#1c2a38 46%,#152230)!important;border-bottom-color:#3a556c!important;color:#dceaf5!important}
+@media (prefers-color-scheme:dark){html:not([data-theme="light"]) .win-bar,html:not([data-theme="light"]) .win-title{background:linear-gradient(#2b3b4c,#1c2a38 46%,#152230)!important;border-bottom-color:#3a556c!important;color:#dceaf5!important}}
+</style>
+</head><body>
+<header class="site-hdr"><a class="site-brand" href="index.html"><img class="logo-ol" src="assets/oldham-college.png" alt="Oldham College"><span class="site-div"></span><img class="logo-ci" src="assets/cisco-netacad.png" alt="Cisco Networking Academy"></a><span class="site-title">Network Demos</span><span class="site-sp"></span><a class="site-link" href="pdfs/demos.pdf" target="_blank" rel="noopener">📄 <span class="lbl">Instructions (PDF)</span></a><button id="themeBtn" class="site-ctl" type="button" onclick="toggleTheme()" title="Light / dark">🌙 <span class="lbl">Dark</span></button><a class="site-link" href="index.html">← <span class="lbl">All labs</span></a></header><button class="wb-fab" type="button" onclick="wbToggle()" aria-label="Open whiteboard" title="Whiteboard">✎ <span class="t">Whiteboard</span></button>
+
+
+<div class="app">
+  <div class="eyebrow">Cisco Networking Academy</div>
+  <h1>Network Demos</h1>
+  <p class="lead">Big, looping animations for the projector. Pick a topic; each loops with a caption per step — <b>Pause</b> to discuss, <b>‹ ›</b> to step, and the speed control to slow it down.</p>
+
+  <div class="menu" id="menu"></div>
+
+  <div class="stagewrap">
+    <div class="sbar">
+      <h2 id="dTitle">—</h2>
+      <span class="sp"></span>
+      <div class="ctrl">
+        <button class="cbtn" id="prev" title="Previous step" type="button">‹</button>
+        <button class="cbtn play" id="play" type="button">⏸ Pause</button>
+        <button class="cbtn" id="next" title="Next step" type="button">›</button>
+        <button class="cbtn" id="restart" title="Restart" type="button">↻</button>
+        <select class="spd" id="spd" title="Speed">
+          <option value="1.6">0.6×</option><option value="1">1×</option><option value="0.65" selected>1.5×</option><option value="0.45">2×</option>
+        </select>
+      </div>
+    </div>
+    <div class="stage" id="stage"></div>
+    <div class="cap"><div class="num" id="capNum">1</div><div class="txt" id="capTxt">—</div></div>
+    <div class="dots" id="dots"></div>
+  </div>
+  <p class="note">Tip: everything scales to fill the screen — press your browser's full-screen (F11) for the clearest projector view. Demos loop automatically; pause whenever you want to unpack a step.</p>
+</div>
+
+<script>
+'use strict';
+const SAVE_KEY='network-demos-v1';
+const $=s=>document.querySelector(s);
+const SVGNS='http://www.w3.org/2000/svg';
+function S(tag,at,txt){ const e=document.createElementNS(SVGNS,tag); for(const k in (at||{})) e.setAttribute(k,at[k]); if(txt!=null) e.textContent=txt; return e; }
+function mk(parent,tag,at,txt){ const e=S(tag,at,txt); parent.appendChild(e); return e; }
+function svgRoot(){ const s=S('svg',{viewBox:'0 0 1000 560',role:'img'}); return s; }
+/* a device glyph (returns <g>) */
+var SYMMAP={pc:'pc',switch:'switch',router:'router',server:'server',cloud:'cloud',firewall:'firewall',ap:'ap',laptop:'laptop',phone:'phone',printer:'printer',l3switch:'l3switch'};
+function glyph(type,x,y,label,sub){ const g=S('g',{transform:`translate(${x},${y})`});
+  var inner=mk(g,'g',{transform:'translate(-30,-30) scale(0.94)'});
+  inner.innerHTML=(window.NETSYM||{})[SYMMAP[type]||type]||'';
+  if(label) mk(g,'text',{x:0,y:40,'text-anchor':'middle',class:'lbl','font-size':14},label);
+  if(sub) mk(g,'text',{x:0,y:55,'text-anchor':'middle',class:'sub mono','font-size':11.5},sub);
+  return g;
+}
+
+/* ===================================================================
+   Each demo = factory(stage) -> { title, phases:[{cap,sub?,fn}] }
+   fn(i) sets ABSOLUTE scene state for phase i, so stepping/looping work.
+   CSS .anim handles smooth tweening between states.
+=================================================================== */
+const DEMOS=[];
+function def(id,title,factory){ DEMOS.push({id,title,factory}); }
+
+/* ---------- 1. OSI encapsulation ---------- */
+def('osi','OSI encapsulation',stage=>{
+  const svg=svgRoot(); stage.appendChild(svg);
+  const names=['7 Application','6 Presentation','5 Session','4 Transport','3 Network','2 Data Link','1 Physical'];
+  // sender stack left, receiver stack right
+  function stack(x,title){ mk(svg,'text',{x,y:40,'text-anchor':'middle',class:'lbl','font-size':15},title);
+    names.forEach((n,i)=>{ const y=62+i*58; mk(svg,'rect',{x:x-85,y,width:170,height:48,rx:7,fill:'var(--accent-soft)',stroke:'var(--line)'}); mk(svg,'text',{x:x-74,y:y+29,'font-size':13,class:'lbl'},n); }); }
+  stack(150,'Sending host'); stack(850,'Receiving host');
+  mk(svg,'line',{x1:235,y1:470,x2:765,y2:470,stroke:'var(--wire)','stroke-width':4}); mk(svg,'text',{x:500,y:462,'text-anchor':'middle',class:'sub'},'physical medium');
+  // PDU builder: segments appended L→R
+  const pdu=mk(svg,'g',{class:'anim'});
+  const parts=[['Eth','#9b6fd6'],['IP','#2f6fd6'],['TCP','#e68a00'],['DATA','#1a9c5b']]; // order added: data first, then TCP,IP,Eth (prepended)
+  function drawPDU(headers){ // headers: array of indices from parts to show, DATA always last
+    pdu.innerHTML=''; let w=0; const unit=46; const show=headers;
+    show.forEach((p,i)=>{ const col=p[1],lab=p[0]; const ww=lab==='DATA'?70:46; mk(pdu,'rect',{x:w,y:-15,width:ww,height:30,rx:4,fill:col,stroke:'#0003'}); mk(pdu,'text',{x:w+ww/2,y:5,'text-anchor':'middle','font-size':11,class:'lbl',fill:'#fff'},lab); w+=ww+2; });
+    pdu._w=w;
+  }
+  const D=parts[3],T=parts[2],IP=parts[1],E=parts[0];
+  function at(x,y){ pdu.setAttribute('transform',`translate(${x-(pdu._w||0)/2},${y})`); }
+  return { title:'OSI encapsulation',
+    phases:[
+     {cap:'A message starts at Layer 7. The top three layers hand down application DATA.',sub:'Application · Presentation · Session',fn(){drawPDU([D]);at(150,110);}},
+     {cap:'Layer 4 (Transport) adds a TCP header — now it\'s a SEGMENT with port numbers.',sub:'PDU: Segment',fn(){drawPDU([T,D]);at(150,260);}},
+     {cap:'Layer 3 (Network) adds an IP header — now it\'s a PACKET with source & destination IPs.',sub:'PDU: Packet',fn(){drawPDU([IP,T,D]);at(150,318);}},
+     {cap:'Layer 2 (Data Link) adds an Ethernet header — now it\'s a FRAME with MAC addresses.',sub:'PDU: Frame',fn(){drawPDU([E,IP,T,D]);at(150,376);}},
+     {cap:'Layer 1 sends it as BITS across the physical medium to the other host.',sub:'PDU: Bits',fn(){drawPDU([E,IP,T,D]);at(500,470);}},
+     {cap:'The receiver works UP the stack, stripping the Ethernet header at Layer 2…',sub:'De-encapsulation',fn(){drawPDU([IP,T,D]);at(850,376);}},
+     {cap:'…the IP header at Layer 3, the TCP header at Layer 4…',sub:'De-encapsulation',fn(){drawPDU([D]);at(850,260);}},
+     {cap:'…until Layer 7 hands the original DATA to the application. Message delivered.',sub:'Same data, unwrapped',fn(){drawPDU([D]);at(850,110);}},
+    ]};
+});
+
+/* ---------- 2. Routing a packet between networks ---------- */
+def('routing','Routing between networks',stage=>{
+  const svg=svgRoot(); stage.appendChild(svg);
+  svg.appendChild(glyph('pc',110,250,'PC-A','192.168.1.10'));
+  svg.appendChild(glyph('router',380,250,'R1','gw .1'));
+  svg.appendChild(glyph('router',620,250,'R2','gw .1'));
+  svg.appendChild(glyph('pc',890,250,'PC-B','10.0.0.10'));
+  [[136,380],[404,596],[644,864]].forEach(([a,b])=>mk(svg,'line',{x1:a,y1:250,x2:b,y2:250,stroke:'var(--wire)','stroke-width':3}));
+  mk(svg,'text',{x:250,y:210,'text-anchor':'middle',class:'sub'},'Network 192.168.1.0/24');
+  mk(svg,'text',{x:500,y:210,'text-anchor':'middle',class:'sub'},'link 172.16.0.0/30');
+  mk(svg,'text',{x:760,y:210,'text-anchor':'middle',class:'sub'},'Network 10.0.0.0/24');
+  // info panel
+  mk(svg,'rect',{x:300,y:360,width:400,height:120,rx:10,fill:'var(--panel)',stroke:'var(--line)'});
+  mk(svg,'text',{x:320,y:388,class:'lbl','font-size':14},'Frame on the wire');
+  const sip=mk(svg,'text',{x:320,y:415,class:'mono','font-size':13},''); const dip=mk(svg,'text',{x:320,y:437,class:'mono','font-size':13},'');
+  const smac=mk(svg,'text',{x:320,y:459,class:'mono','font-size':13},''); const dmac=mk(svg,'text',{x:320,y:459,class:'mono','font-size':13},'');
+  const pkt=mk(svg,'g',{class:'anim'}); mk(pkt,'rect',{x:-22,y:-13,width:44,height:26,rx:5,fill:'var(--gold)',stroke:'#9a7b00'}); mk(pkt,'text',{x:0,y:5,'text-anchor':'middle','font-size':11,class:'lbl'},'pkt');
+  function setP(x,o){ pkt.setAttribute('transform',`translate(${x},190)`); pkt.setAttribute('opacity',o==null?1:o); }
+  function info(si,di,sm,dm){ sip.textContent='src IP : '+si; dip.textContent='dst IP : '+di; smac.textContent='src MAC: '+sm; dmac.textContent='dst MAC: '+dm; smac.setAttribute('y',436+ -0); smac.setAttribute('x',600); smac.setAttribute('y',415); dmac.setAttribute('x',600); dmac.setAttribute('y',437); }
+  // reposition src/dst mac texts to right column
+  smac.setAttribute('x',510); smac.setAttribute('y',415); dmac.setAttribute('x',510); dmac.setAttribute('y',437);
+  function info2(si,di,sm,dm){ sip.textContent='src IP : '+si; dip.textContent='dst IP : '+di; smac.textContent='src MAC: '+sm; dmac.textContent='dst MAC: '+dm; }
+  return { title:'Routing a packet between networks',
+    phases:[
+     {cap:'PC-A wants to reach PC-B on a different network, so it sends the frame to its gateway, R1.',sub:'dst MAC = R1 (the gateway), dst IP = PC-B',fn(){setP(248);info2('192.168.1.10','10.0.0.10','aa:aa (PC-A)','r1:L (R1)');}},
+     {cap:'R1 strips the frame, reads the destination IP, and forwards toward R2. It rewrites the MAC addresses.',sub:'IP stays end-to-end · MAC is hop-by-hop',fn(){setP(500);info2('192.168.1.10','10.0.0.10','r1:R (R1)','r2:L (R2)');}},
+     {cap:'R2 receives it, looks up 10.0.0.0/24 (directly connected), and forwards to PC-B — new MACs again.',sub:'Last hop: dst MAC = PC-B',fn(){setP(752);info2('192.168.1.10','10.0.0.10','r2:R (R2)','bb:bb (PC-B)');}},
+     {cap:'PC-B receives the packet. Notice the IP addresses never changed — only the MAC address at each hop.',sub:'That\'s the key idea: L3 end-to-end, L2 link-by-link',fn(){setP(864,0.25);info2('192.168.1.10','10.0.0.10','—','delivered ✓');}},
+    ]};
+});
+
+/* ---------- 3. VLANs & trunking ---------- */
+def('vlan','VLANs & trunking',stage=>{
+  const svg=svgRoot(); stage.appendChild(svg);
+  // two switches with a trunk
+  svg.appendChild(glyph('switch',310,250,'SW1',''));
+  svg.appendChild(glyph('switch',690,250,'SW2',''));
+  mk(svg,'line',{x1:350,y1:250,x2:650,y2:250,stroke:'var(--wire)','stroke-width':4}); mk(svg,'text',{x:500,y:240,'text-anchor':'middle',class:'sub'},'802.1Q trunk');
+  // PCs: SW1 has A(v10) B(v20); SW2 has C(v10) D(v20)
+  const A=glyph('pc',150,110,'PC-A','VLAN 10'),B=glyph('pc',150,400,'PC-B','VLAN 20');
+  const C=glyph('pc',850,110,'PC-C','VLAN 10'),Dn=glyph('pc',850,400,'PC-D','VLAN 20');
+  [A,B,C,Dn].forEach(g=>svg.appendChild(g));
+  mk(svg,'line',{x1:176,y1:120,x2:285,y2:235,stroke:'var(--v10)','stroke-width':3});
+  mk(svg,'line',{x1:176,y1:390,x2:285,y2:265,stroke:'var(--v20)','stroke-width':3});
+  mk(svg,'line',{x1:824,y1:120,x2:715,y2:235,stroke:'var(--v10)','stroke-width':3});
+  mk(svg,'line',{x1:824,y1:390,x2:715,y2:265,stroke:'var(--v20)','stroke-width':3});
+  mk(svg,'circle',{cx:180,cy:118,r:7,fill:'var(--v10)'}); mk(svg,'circle',{cx:180,cy:392,r:7,fill:'var(--v20)'});
+  mk(svg,'circle',{cx:820,cy:118,r:7,fill:'var(--v10)'}); mk(svg,'circle',{cx:820,cy:392,r:7,fill:'var(--v20)'});
+  const frame=mk(svg,'g',{class:'anim'}); const frect=mk(frame,'rect',{x:-30,y:-14,width:60,height:28,rx:5,fill:'var(--v10)',stroke:'#0004'}); const ftxt=mk(frame,'text',{x:0,y:5,'text-anchor':'middle','font-size':11,class:'lbl',fill:'#fff'},'frame');
+  function f(x,y,o,col,lab){ frame.setAttribute('transform',`translate(${x},${y})`); frame.setAttribute('opacity',o==null?1:o); if(col)frect.setAttribute('fill',col); if(lab!=null)ftxt.textContent=lab; }
+  return { title:'VLANs & trunking',
+    phases:[
+     {cap:'Two VLANs on the switches: VLAN 10 (red) and VLAN 20 (blue). Each VLAN is its own broadcast domain.',sub:'Same switch, logically separated',fn(){f(150,118,0);}},
+     {cap:'PC-A (VLAN 10) sends a frame. SW1 only forwards it out other VLAN 10 ports — PC-B never sees it.',sub:'Access port: untagged frame within one VLAN',fn(){f(260,230,1,'var(--v10)','VLAN10');}},
+     {cap:'To reach PC-C on the other switch, the frame crosses the trunk. SW1 adds an 802.1Q tag (VLAN 10).',sub:'Trunk carries many VLANs → tag identifies which',fn(){f(500,250,1,'var(--v10)','TAG 10');}},
+     {cap:'SW2 reads the tag, removes it, and delivers to PC-C — the only VLAN 10 member on SW2.',sub:'Tag stripped on the way out to an access port',fn(){f(760,230,1,'var(--v10)','VLAN10');}},
+     {cap:'Different VLANs still can\'t talk without a router. VLAN 10 ↔ VLAN 20 needs inter-VLAN routing.',sub:'VLANs = separate networks by design',fn(){f(500,250,0.25,'var(--v20)','blocked');}},
+    ]};
+});
+
+/* ---------- 4. OSPF ---------- */
+def('ospf','OSPF convergence',stage=>{
+  const svg=svgRoot(); stage.appendChild(svg);
+  const R={R1:[200,130],R2:[800,130],R3:[200,430],R4:[800,430]};
+  const E=[['R1','R2',1],['R1','R3',1],['R2','R4',1],['R3','R4',5],['R2','R3',3]];
+  const edgeEl={};
+  E.forEach(([a,b,c])=>{ const [x1,y1]=R[a],[x2,y2]=R[b]; const ln=mk(svg,'line',{x1,y1,x2,y2,stroke:'var(--line)','stroke-width':4,class:'anim'}); edgeEl[a+b]=ln; mk(svg,'text',{x:(x1+x2)/2,y:(y1+y2)/2-6,'text-anchor':'middle',class:'lbl mono','font-size':13,fill:'var(--accent-dark)'},'cost '+c); });
+  for(const k in R){ svg.appendChild(glyph('router',R[k][0],R[k][1],k,'')); }
+  const pulse=mk(svg,'g',{class:'anim'}); mk(pulse,'circle',{r:10,fill:'var(--gold)',stroke:'#9a7b00'});
+  function P(a,b,t,o){ const [x1,y1]=R[a],[x2,y2]=R[b]; pulse.setAttribute('transform',`translate(${x1+(x2-x1)*t},${y1+(y2-y1)*t})`); pulse.setAttribute('opacity',o==null?1:o); }
+  function hi(list,col){ for(const k in edgeEl){ edgeEl[k].setAttribute('stroke','var(--line)'); edgeEl[k].setAttribute('stroke-width',4); } list.forEach(k=>{ if(edgeEl[k]){edgeEl[k].setAttribute('stroke',col||'var(--accent)');edgeEl[k].setAttribute('stroke-width',7);} }); }
+  // panel
+  mk(svg,'rect',{x:360,y:230,width:280,height:100,rx:10,fill:'var(--panel)',stroke:'var(--line)'});
+  const pt=mk(svg,'text',{x:380,y:262,class:'lbl','font-size':14},''); const pl=mk(svg,'text',{x:380,y:290,class:'mono','font-size':13},''); const pl2=mk(svg,'text',{x:380,y:312,class:'mono','font-size':13},'');
+  function panel(t,a,b){ pt.textContent=t; pl.textContent=a||''; pl2.textContent=b||''; }
+  return { title:'OSPF — neighbours, LSAs & shortest path',
+    phases:[
+     {cap:'Four routers running OSPF. Each link has a cost. First, routers send Hello packets to find neighbours.',sub:'Hellos build adjacencies',fn(){hi([],'');P('R1','R2',0.5);panel('Hello packets','R1 ↔ R2, R1 ↔ R3…','neighbours forming');}},
+     {cap:'Each router floods its link states (LSAs) so everyone learns the whole map.',sub:'LSDB: every router sees the same topology',fn(){hi(['R1R2','R1R3','R2R4','R3R4','R2R3'],'var(--accent)');P('R2','R4',0.6);panel('LSA flooding','topology shared','building the map');}},
+     {cap:'Each router runs SPF (Dijkstra) to find the lowest-cost path. R1→R4 best path is via R2 (cost 2).',sub:'R1→R2→R4 = 1+1 = 2  (vs R1→R3→R4 = 1+5 = 6)',fn(){hi(['R1R2','R2R4'],'var(--ok)');P('R1','R2',1,0);panel('SPF result','best R1→R4: via R2','total cost 2');}},
+     {cap:'The best routes go into the routing table. Traffic now follows the green path.',sub:'Converged',fn(){hi(['R1R2','R2R4'],'var(--ok)');P('R1','R2',0.5);panel('Routing table','R1: 10.0/R4 via R2','cost 2');}},
+     {cap:'If the R1–R2 link fails, OSPF reconverges automatically onto the next-best path (via R3).',sub:'R1→R3→R4 = 1+5 = 6 — slower, but it heals itself',fn(){edgeEl['R1R2'].setAttribute('stroke','var(--bad)');edgeEl['R1R2'].setAttribute('stroke-width',4);edgeEl['R1R2'].setAttribute('stroke-dasharray','6 6');['R1R3','R3R4'].forEach(k=>{edgeEl[k].setAttribute('stroke','var(--ok)');edgeEl[k].setAttribute('stroke-width',7);});P('R1','R3',0.5);panel('Re-converged','new path via R3','cost 6');}},
+    ]};
+});
+
+/* ---------- 5. NAT / PAT ---------- */
+def('nat','NAT / PAT translation',stage=>{
+  const svg=svgRoot(); stage.appendChild(svg);
+  svg.appendChild(glyph('pc',110,150,'PC1','192.168.1.10'));
+  svg.appendChild(glyph('pc',110,410,'PC2','192.168.1.11'));
+  svg.appendChild(glyph('router',380,280,'NAT','203.0.113.5'));
+  svg.appendChild(glyph('cloud',620,280,'Internet',''));
+  svg.appendChild(glyph('server',870,280,'Server','8.8.8.8'));
+  mk(svg,'line',{x1:136,y1:160,x2:356,y2:272,stroke:'var(--wire)','stroke-width':3});
+  mk(svg,'line',{x1:136,y1:400,x2:356,y2:292,stroke:'var(--wire)','stroke-width':3});
+  mk(svg,'line',{x1:406,y1:280,x2:585,y2:280,stroke:'var(--wire)','stroke-width':3});
+  mk(svg,'line',{x1:660,y1:280,x2:844,y2:280,stroke:'var(--wire)','stroke-width':3});
+  mk(svg,'text',{x:240,y:120,'text-anchor':'middle',class:'sub'},'private (inside)'); mk(svg,'text',{x:740,y:235,'text-anchor':'middle',class:'sub'},'public (outside)');
+  // NAT table
+  mk(svg,'rect',{x:250,y:400,width:500,height:140,rx:10,fill:'var(--panel)',stroke:'var(--line)'});
+  mk(svg,'text',{x:270,y:426,class:'lbl','font-size':14},'NAT table  (inside  →  outside)');
+  const r1=mk(svg,'text',{x:270,y:456,class:'mono','font-size':13,opacity:0},''); const r2=mk(svg,'text',{x:270,y:480,class:'mono','font-size':13,opacity:0},'');
+  const pkt=mk(svg,'g',{class:'anim'}); mk(pkt,'rect',{x:-70,y:-13,width:140,height:26,rx:5,fill:'var(--gold)',stroke:'#9a7b00'}); const ptx=mk(pkt,'text',{x:0,y:5,'text-anchor':'middle','font-size':11,class:'mono lbl'},'');
+  function P(x,y,o,t){ pkt.setAttribute('transform',`translate(${x},${y})`); pkt.setAttribute('opacity',o==null?1:o); if(t!=null)ptx.textContent=t; }
+  return { title:'NAT / PAT — one public IP, many hosts',
+    phases:[
+     {cap:'PC1 (private 192.168.1.10) sends traffic to the server. Private IPs can\'t be used on the internet.',sub:'src 192.168.1.10:4001 → 8.8.8.8:80',fn(){r1.setAttribute('opacity',0);r2.setAttribute('opacity',0);P(240,215,1,'src 192.168.1.10:4001');}},
+     {cap:'The NAT router rewrites the source to its public IP and a unique port, and logs it in the NAT table.',sub:'203.0.113.5:5001 ↔ 192.168.1.10:4001',fn(){r1.textContent='192.168.1.10:4001  →  203.0.113.5:5001';r1.setAttribute('opacity',1);P(520,265,1,'src 203.0.113.5:5001');}},
+     {cap:'The server replies to the public address. It has no idea the private host exists.',sub:'dst 203.0.113.5:5001',fn(){P(520,295,1,'dst 203.0.113.5:5001');}},
+     {cap:'The router looks up the table, translates back to the private host, and delivers. PC1 gets its reply.',sub:'→ 192.168.1.10:4001',fn(){P(240,245,1,'dst 192.168.1.10:4001');}},
+     {cap:'PC2 does the same — same public IP, a different port keeps the two conversations apart. That\'s PAT.',sub:'One public IP shared by the whole network',fn(){r2.textContent='192.168.1.11:4002  →  203.0.113.5:5002';r2.setAttribute('opacity',1);P(520,265,1,'src 203.0.113.5:5002');}},
+    ]};
+});
+
+/* ---------- 6. TCP 3-way handshake ---------- */
+def('tcp','TCP 3-way handshake',stage=>{
+  const svg=svgRoot(); stage.appendChild(svg);
+  mk(svg,'text',{x:220,y:60,'text-anchor':'middle',class:'lbl','font-size':16},'Client'); mk(svg,'text',{x:780,y:60,'text-anchor':'middle',class:'lbl','font-size':16},'Server');
+  mk(svg,'line',{x1:220,y1:75,x2:220,y2:520,stroke:'var(--line)','stroke-width':2,'stroke-dasharray':'4 5'});
+  mk(svg,'line',{x1:780,y1:75,x2:780,y2:520,stroke:'var(--line)','stroke-width':2,'stroke-dasharray':'4 5'});
+  svg.appendChild(glyph('pc',220,100,'',''));svg.appendChild(glyph('server',780,110,'',''));
+  const arrow=mk(svg,'g',{class:'anim'}); const aln=mk(arrow,'line',{x1:0,y1:0,x2:0,y2:0,stroke:'var(--accent)','stroke-width':4,'marker-end':'url(#ah)'}); const atx=mk(arrow,'text',{x:500,y:0,'text-anchor':'middle',class:'lbl mono','font-size':14},'');
+  const defs=mk(svg,'defs'); const m=mk(defs,'marker',{id:'ah',markerWidth:10,markerHeight:10,refX:8,refY:3,orient:'auto'}); mk(m,'path',{d:'M0 0 L8 3 L0 6 z',fill:'var(--accent)'});
+  function seg(dir,y,label,col){ const x1=dir>0?236:764,x2=dir>0?760:240; aln.setAttribute('x1',x1);aln.setAttribute('y1',y);aln.setAttribute('x2',x2);aln.setAttribute('y2',y); aln.setAttribute('stroke',col||'var(--accent)'); atx.setAttribute('y',y-10); atx.textContent=label; arrow.setAttribute('opacity',1); }
+  const state=mk(svg,'text',{x:500,y:500,'text-anchor':'middle',class:'lbl','font-size':15,fill:'var(--ok)'},'');
+  return { title:'TCP 3-way handshake',
+    phases:[
+     {cap:'The client opens a connection by sending SYN with its starting sequence number.',sub:'SYN, seq = 100',fn(){state.textContent='';seg(1,170,'SYN  seq=100');}},
+     {cap:'The server replies SYN-ACK: it acknowledges the client and sends its own sequence number.',sub:'SYN-ACK, seq = 300, ack = 101',fn(){state.textContent='';seg(-1,260,'SYN-ACK  seq=300 ack=101');}},
+     {cap:'The client acknowledges the server. Three messages, and both sides are synchronised.',sub:'ACK, ack = 301',fn(){seg(1,350,'ACK  ack=301');state.textContent='';}},
+     {cap:'Connection established — data can now flow reliably in both directions.',sub:'ESTABLISHED',fn(){seg(1,420,'DATA →','var(--ok)');state.textContent='● Connection established';}},
+    ]};
+});
+
+/* ---------- 7. DHCP DORA ---------- */
+def('dhcp','DHCP (DORA)',stage=>{
+  const svg=svgRoot(); stage.appendChild(svg);
+  mk(svg,'text',{x:220,y:60,'text-anchor':'middle',class:'lbl','font-size':16},'Client (no IP)'); mk(svg,'text',{x:780,y:60,'text-anchor':'middle',class:'lbl','font-size':16},'DHCP Server');
+  mk(svg,'line',{x1:220,y1:75,x2:220,y2:520,stroke:'var(--line)','stroke-width':2,'stroke-dasharray':'4 5'});
+  mk(svg,'line',{x1:780,y1:75,x2:780,y2:520,stroke:'var(--line)','stroke-width':2,'stroke-dasharray':'4 5'});
+  svg.appendChild(glyph('pc',220,100,'',''));svg.appendChild(glyph('server',780,110,'',''));
+  const defs=mk(svg,'defs'); const m=mk(defs,'marker',{id:'ah2',markerWidth:10,markerHeight:10,refX:8,refY:3,orient:'auto'}); mk(m,'path',{d:'M0 0 L8 3 L0 6 z',fill:'var(--accent)'});
+  const arrow=mk(svg,'g',{class:'anim'}); const aln=mk(arrow,'line',{stroke:'var(--accent)','stroke-width':4,'marker-end':'url(#ah2)'}); const atx=mk(arrow,'text',{'text-anchor':'middle',class:'lbl mono','font-size':13},'');
+  function seg(dir,y,label,bc){ const x1=dir>0?236:764,x2=dir>0?760:240; aln.setAttribute('x1',x1);aln.setAttribute('y1',y);aln.setAttribute('x2',x2);aln.setAttribute('y2',y); aln.setAttribute('stroke',bc?'var(--warn)':'var(--accent)'); aln.setAttribute('marker-end','url(#ah2)'); atx.setAttribute('x',500);atx.setAttribute('y',y-10); atx.textContent=label; }
+  const got=mk(svg,'text',{x:220,y:470,'text-anchor':'middle',class:'lbl mono','font-size':14,fill:'var(--ok)',opacity:0},'');
+  return { title:'DHCP — Discover, Offer, Request, Acknowledge',
+    phases:[
+     {cap:'A new client has no IP. It broadcasts a DHCP DISCOVER — "is there a DHCP server out there?"',sub:'D — Discover (broadcast)',fn(){got.setAttribute('opacity',0);seg(1,165,'DISCOVER  (broadcast)',true);}},
+     {cap:'The server replies with an OFFER — here\'s an address you can have.',sub:'O — Offer: 192.168.1.50',fn(){seg(-1,255,'OFFER  192.168.1.50');}},
+     {cap:'The client broadcasts a REQUEST for that offered address (so other servers know it\'s taken).',sub:'R — Request (broadcast)',fn(){seg(1,345,'REQUEST  192.168.1.50',true);}},
+     {cap:'The server sends ACK — confirmed, with the lease time. The client is now configured.',sub:'A — Acknowledge',fn(){seg(-1,420,'ACK  lease 24h');got.setAttribute('opacity',1);got.textContent='IP 192.168.1.50 ✓';}},
+    ]};
+});
+
+/* ---------- 8. ARP ---------- */
+def('arp','ARP resolution',stage=>{
+  const svg=svgRoot(); stage.appendChild(svg);
+  svg.appendChild(glyph('pc',130,290,'PC-A','192.168.1.10'));
+  svg.appendChild(glyph('switch',500,290,'SW',''));
+  svg.appendChild(glyph('pc',870,150,'PC-B','192.168.1.20'));
+  svg.appendChild(glyph('pc',870,430,'PC-C','192.168.1.30'));
+  mk(svg,'line',{x1:156,y1:290,x2:460,y2:290,stroke:'var(--wire)','stroke-width':3});
+  mk(svg,'line',{x1:540,y1:285,x2:844,y2:160,stroke:'var(--wire)','stroke-width':3});
+  mk(svg,'line',{x1:540,y1:295,x2:844,y2:420,stroke:'var(--wire)','stroke-width':3});
+  // ARP table
+  mk(svg,'rect',{x:60,y:360,width:330,height:90,rx:10,fill:'var(--panel)',stroke:'var(--line)'});
+  mk(svg,'text',{x:80,y:386,class:'lbl','font-size':14},'PC-A ARP table');
+  const arp=mk(svg,'text',{x:80,y:414,class:'mono','font-size':13,opacity:0},'');
+  const b1=mk(svg,'g',{class:'anim'}); mk(b1,'rect',{x:-44,y:-13,width:88,height:26,rx:5,fill:'var(--warn)',stroke:'#0004'}); const b1t=mk(b1,'text',{x:0,y:5,'text-anchor':'middle','font-size':10.5,class:'lbl',fill:'#fff'},'');
+  function P(x,y,o,t,col){ b1.setAttribute('transform',`translate(${x},${y})`); b1.setAttribute('opacity',o==null?1:o); if(t!=null)b1t.textContent=t; if(col)b1.querySelector('rect').setAttribute('fill',col); }
+  return { title:'ARP — finding a MAC address',
+    phases:[
+     {cap:'PC-A knows PC-B\'s IP (192.168.1.20) but not its MAC. It can\'t build a frame without it.',sub:'Need: MAC for 192.168.1.20',fn(){arp.setAttribute('opacity',0);P(300,290,1,'Who has .20?','var(--warn)');}},
+     {cap:'PC-A broadcasts an ARP request to everyone: "Who has 192.168.1.20? Tell 192.168.1.10."',sub:'ARP request = broadcast to all ports',fn(){P(650,220,1,'Who has .20?','var(--warn)');}},
+     {cap:'Only PC-B answers, with a unicast reply: "192.168.1.20 is at MAC bb:bb:bb." PC-C ignores it.',sub:'ARP reply = unicast back to PC-A',fn(){P(650,220,1,'.20 is bb:bb','var(--ok)');}},
+     {cap:'PC-A caches the mapping in its ARP table and can now send frames straight to PC-B.',sub:'Cached — no ARP needed next time',fn(){arp.setAttribute('opacity',1);arp.textContent='192.168.1.20  →  bb:bb:bb';P(300,290,0.25,'data →','var(--accent)');}},
+    ]};
+});
+
+/* ---------- 9. Subnetting visualiser ---------- */
+def('subnet','Subnetting visualiser',stage=>{
+  const svg=svgRoot(); stage.appendChild(svg);
+  mk(svg,'text',{x:500,y:60,'text-anchor':'middle',class:'lbl','font-size':18},'192.168.1.0  split into equal subnets');
+  const barX=90,barW=820,barY=120,barH=70;
+  const bar=mk(svg,'g');
+  const cols=['#0a9ad4','#1a9c5b','#e68a00','#9b6fd6','#2f6fd6','#d23d3d','#17a2b8','#6b8e23'];
+  const info=mk(svg,'g');
+  function render(prefix){ bar.innerHTML=''; info.innerHTML='';
+    const n=Math.pow(2,prefix-24); const block=256/n; const segW=barW/n;
+    mk(info,'text',{x:500,y:95,'text-anchor':'middle',class:'sub mono','font-size':14},`/${prefix}  →  ${n} subnet${n>1?'s':''} of ${block} addresses  (${block-2} usable hosts each)`);
+    for(let i=0;i<n;i++){ const x=barX+i*segW; mk(bar,'rect',{x,y:barY,width:segW-3,height:barH,rx:5,fill:cols[i%cols.length],opacity:.85,class:'anim'}); mk(bar,'text',{x:x+segW/2,y:barY+42,'text-anchor':'middle','font-size':Math.min(14,segW/4),fill:'#fff',class:'lbl'},'.'+(i*block)); }
+    // detail table for first up-to-4 subnets
+    const rows=Math.min(n,4);
+    mk(info,'text',{x:barX,y:240,class:'lbl','font-size':14},`First ${rows} subnet${rows>1?'s':''}:`);
+    mk(info,'text',{x:barX,y:268,class:'sub mono','font-size':12.5},'network        first host      last host       broadcast');
+    for(let i=0;i<rows;i++){ const base=i*block; const net=`192.168.1.${base}`; const fh=`.${base+1}`; const lh=`.${base+block-2}`; const bc=`.${base+block-1}`;
+      mk(info,'rect',{x:barX-6,y:280+i*30,width:16,height:16,rx:3,fill:cols[i%cols.length]});
+      mk(info,'text',{x:barX+18,y:293+i*30,class:'mono','font-size':13},`${net}/${prefix}`.padEnd(18));
+      mk(info,'text',{x:barX+200,y:293+i*30,class:'mono','font-size':13},`${fh}`);
+      mk(info,'text',{x:barX+360,y:293+i*30,class:'mono','font-size':13},`${lh}`);
+      mk(info,'text',{x:barX+520,y:293+i*30,class:'mono','font-size':13},`${bc}`);
+    }
+  }
+  return { title:'Subnetting — splitting a /24',
+    phases:[
+     {cap:'Start with one network, 192.168.1.0/24 — a single block of 256 addresses (254 usable hosts).',sub:'/24  ·  1 subnet',fn(){render(24);}},
+     {cap:'Borrow one host bit → /25. The block splits into two subnets of 128 addresses each.',sub:'/25  ·  2 subnets of 128',fn(){render(25);}},
+     {cap:'Borrow another bit → /26. Four subnets of 64 addresses (62 usable hosts each).',sub:'/26  ·  4 subnets of 64',fn(){render(26);}},
+     {cap:'→ /27 gives eight subnets of 32. More subnets, fewer hosts in each — that\'s the trade-off.',sub:'/27  ·  8 subnets of 32',fn(){render(27);}},
+    ]};
+});
+
+/* ===================== player ===================== */
+const stageEl=$('#stage'), menuEl=$('#menu'), capNum=$('#capNum'), capTxt=$('#capTxt'), dotsEl=$('#dots');
+let cur=null, idx=0, timer=null, playing=true, factorDur=0.65;
+const BASE=3200;
+function buildMenu(){ menuEl.innerHTML=''; DEMOS.forEach((d,i)=>{ const b=document.createElement('button'); b.className='mb'; b.textContent=d.title; b.setAttribute('aria-selected',i===0); b.onclick=()=>select(d.id); b.dataset.id=d.id; menuEl.appendChild(b); }); }
+function select(id){ const d=DEMOS.find(x=>x.id===id); if(!d) return; stageEl.innerHTML=''; cur=d.factory(stageEl); idx=0;
+  $('#dTitle').textContent=cur.title; menuEl.querySelectorAll('.mb').forEach(b=>b.setAttribute('aria-selected',b.dataset.id===id));
+  dotsEl.innerHTML=''; cur.phases.forEach((p,i)=>{ const dt=document.createElement('button'); dt.className='dot'; dt.onclick=()=>{ goto(i); pause(); }; dotsEl.appendChild(dt); });
+  try{ localStorage.setItem(SAVE_KEY,id); }catch(e){}
+  goto(0); play(); }
+function goto(i){ if(!cur) return; idx=(i+cur.phases.length)%cur.phases.length; const ph=cur.phases[idx]; ph.fn(idx);
+  capNum.textContent=idx+1; capTxt.innerHTML=ph.cap+(ph.sub?('<small>'+ph.sub+'</small>'):'');
+  dotsEl.querySelectorAll('.dot').forEach((d,k)=>d.classList.toggle('on',k===idx)); }
+function tick(){ goto(idx+1); schedule(); }
+function schedule(){ clearTimeout(timer); if(playing) timer=setTimeout(tick,BASE*factorDur); }
+function play(){ playing=true; $('#play').textContent='⏸ Pause'; schedule(); }
+function pause(){ playing=false; $('#play').textContent='▶ Play'; clearTimeout(timer); }
+$('#play').onclick=()=>playing?pause():play();
+$('#next').onclick=()=>{ goto(idx+1); pause(); };
+$('#prev').onclick=()=>{ goto(idx-1); pause(); };
+$('#restart').onclick=()=>{ goto(0); play(); };
+$('#spd').onchange=e=>{ factorDur=parseFloat(e.target.value); if(playing)schedule(); };
+
+buildMenu();
+let start=DEMOS[0].id; try{ const s=localStorage.getItem(SAVE_KEY); if(s&&DEMOS.find(d=>d.id===s)) start=s; }catch(e){}
+select(start);
+</script>
+
+<script>window.__WB_KEY__="network-demos";</script>
+<script>/* ============================================================
+   Oldham Cisco Labs — shared Whiteboard overlay.
+   Self-contained: injects its own CSS + DOM, persists per lab,
+   independent of the lab's own device switching. Styled after a
+   classroom whiteboard (aluminium frame, magnets, marker tray).
+   Toggle with window.wbToggle(). Set window.__WB_KEY__ per page.
+   ============================================================ */
+(function(){
+  'use strict';
+  if(window.__wbInit) return; window.__wbInit=true;
+  var KEY='wb-notes-'+(window.__WB_KEY__||'lab');
+  var W=1100, H=680; // fixed drawing resolution (persisted at this size)
+  var COLOURS={black:'#1c1c1c', blue:'#1d55c4', red:'#d7352b', green:'#1e8f45'};
+
+  var css=''+
+  '.wb-overlay{position:fixed;inset:0;z-index:9000;background:#2daaa4;display:none;flex-direction:column;padding:env(safe-area-inset-top,0) 0 0}'+
+  '.wb-overlay.open{display:flex}'+
+  '.wb-top{display:flex;align-items:center;gap:12px;padding:10px 16px;color:#eafaf8}'+
+  '.wb-top b{font:700 16px "Chivo",system-ui,sans-serif}'+
+  '.wb-top .sp{flex:1}'+
+  '.wb-top button{font:600 13px "Chivo",system-ui,sans-serif;border:0;border-radius:8px;padding:9px 14px;cursor:pointer;background:rgba(255,255,255,.18);color:#fff}'+
+  '.wb-top button:hover{background:rgba(255,255,255,.3)}'+
+  '.wb-stage{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:6px 16px 18px}'+
+  '.wb-frame{position:relative;width:min(1100px,100%);max-height:100%;aspect-ratio:1100/680;'+
+    'background:linear-gradient(#e9ecee,#c3c8cc 45%,#aeb4b8);border-radius:10px;padding:14px;'+
+    'box-shadow:0 14px 40px rgba(0,0,0,.35);border:1px solid #9aa0a4}'+
+  '.wb-inner{position:relative;width:100%;height:100%;background:#fff;border-radius:3px;box-shadow:inset 0 0 0 1px #d7dadd, inset 0 2px 8px rgba(0,0,0,.06);overflow:hidden}'+
+  '.wb-canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:crosshair;display:block}'+
+  '.wb-corner{position:absolute;width:30px;height:30px;background:#2b2f33;z-index:3}'+
+  '.wb-corner.tl{top:-2px;left:-2px;border-radius:9px 0 14px 0}'+
+  '.wb-corner.tr{top:-2px;right:-2px;border-radius:0 9px 0 14px}'+
+  '.wb-corner.bl{bottom:-2px;left:-2px;border-radius:0 14px 0 9px}'+
+  '.wb-corner.br{bottom:-2px;right:-2px;border-radius:14px 0 9px 0}'+
+  '.wb-mag{position:absolute;top:16px;right:18px;display:flex;flex-direction:column;gap:9px;z-index:4}'+
+  '.wb-mag i{width:19px;height:19px;border-radius:50%;box-shadow:0 2px 3px rgba(0,0,0,.3);background:radial-gradient(circle at 32% 30%, rgba(255,255,255,.75), transparent 45%)}'+
+  '.wb-tray{position:absolute;left:0;right:0;bottom:-13px;height:20px;background:linear-gradient(#c7cccf,#a6acb0);border-radius:0 0 7px 7px;z-index:2;box-shadow:0 5px 8px rgba(0,0,0,.18)}'+
+  '.wb-tools{position:absolute;left:18px;bottom:-6px;display:flex;align-items:flex-end;gap:10px;z-index:5}'+
+  '.wb-sponge{width:54px;height:30px;border-radius:5px;background:linear-gradient(#f3d58b,#e0b64e);border:1px solid #c69a3a;box-shadow:0 2px 4px rgba(0,0,0,.25);cursor:pointer;position:relative}'+
+  '.wb-sponge::after{content:"";position:absolute;left:0;right:0;bottom:0;height:11px;background:#6f706f;border-radius:0 0 5px 5px}'+
+  '.wb-pen{width:66px;height:15px;border-radius:3px;cursor:pointer;position:relative;box-shadow:0 2px 4px rgba(0,0,0,.25);transition:transform .1s}'+
+  '.wb-pen::before{content:"";position:absolute;right:-9px;top:1px;border-left:12px solid rgba(0,0,0,.35);border-top:6px solid transparent;border-bottom:6px solid transparent}'+
+  '.wb-pen .cap{position:absolute;left:0;top:0;bottom:0;width:16px;border-radius:3px 0 0 3px;background:rgba(0,0,0,.25)}'+
+  '.wb-tool{outline:0}'+
+  '.wb-tool.on{transform:translateY(-10px)}'+
+  '.wb-sponge.on{transform:translateY(-8px)}'+
+  '.wb-panel{display:flex;align-items:center;gap:10px;padding:6px 16px 0;color:#eafaf8;font:500 12.5px "Chivo",system-ui,sans-serif;flex-wrap:wrap;justify-content:center}'+
+  '.wb-panel label{display:flex;align-items:center;gap:6px}'+
+  '.wb-panel input[type=range]{accent-color:#fff}'+
+  '.wb-hint{opacity:.85}'+
+  '@media (max-width:620px){.wb-tools{left:8px;gap:6px}.wb-pen{width:48px}.wb-sponge{width:42px}}';
+
+  var sel=document.createElement('style'); sel.textContent=css; document.head.appendChild(sel);
+
+  var ov=document.createElement('div'); ov.className='wb-overlay'; ov.setAttribute('role','dialog'); ov.setAttribute('aria-label','Whiteboard');
+  ov.innerHTML=''+
+    '<div class="wb-top"><b>Whiteboard</b><span class="wb-hint">Your notes stay here while you work — they persist across devices and tabs.</span><span class="sp"></span>'+
+      '<button type="button" class="wb-save">Save PNG</button><button type="button" class="wb-clear">Clear board</button><button type="button" class="wb-close">Close ✕</button></div>'+
+    '<div class="wb-panel"><label>Pen size <input type="range" class="wb-size" min="2" max="10" value="4"></label><span class="wb-hint">Pick a marker or the sponge below · click a marker to change colour</span></div>'+
+    '<div class="wb-stage"><div class="wb-frame"><span class="wb-corner tl"></span><span class="wb-corner tr"></span><span class="wb-corner bl"></span><span class="wb-corner br"></span>'+
+      '<div class="wb-mag"><i style="background-color:#e0463c"></i><i style="background-color:#2fa54e"></i><i style="background-color:#f0b429"></i><i style="background-color:#e67a22"></i><i style="background-color:#2d63d6"></i></div>'+
+      '<div class="wb-inner"><canvas class="wb-canvas" width="'+W+'" height="'+H+'"></canvas></div>'+
+      '<div class="wb-tray"></div>'+
+      '<div class="wb-tools">'+
+        '<button class="wb-sponge wb-tool" data-tool="eraser" title="Eraser (sponge)" aria-label="Eraser"></button>'+
+        '<button class="wb-pen wb-tool on" data-tool="green" title="Green marker" aria-label="Green marker" style="background:#1e8f45"><span class="cap"></span></button>'+
+        '<button class="wb-pen wb-tool" data-tool="blue" title="Blue marker" aria-label="Blue marker" style="background:#1d55c4"><span class="cap"></span></button>'+
+        '<button class="wb-pen wb-tool" data-tool="red" title="Red marker" aria-label="Red marker" style="background:#d7352b"><span class="cap"></span></button>'+
+        '<button class="wb-pen wb-tool" data-tool="black" title="Black marker" aria-label="Black marker" style="background:#1c1c1c"><span class="cap"></span></button>'+
+      '</div>'+
+    '</div></div>';
+  document.body.appendChild(ov);
+
+  var canvas=ov.querySelector('.wb-canvas'), ctx=canvas.getContext('2d');
+  var tool='green', size=4, drawing=false, last=null, saveT=null, dirty=false;
+  ctx.lineCap='round'; ctx.lineJoin='round';
+
+  function load(){ try{ var d=localStorage.getItem(KEY); if(d){ var img=new Image(); img.onload=function(){ ctx.clearRect(0,0,W,H); ctx.drawImage(img,0,0,W,H); }; img.src=d; } }catch(e){} }
+  function save(){ try{ localStorage.setItem(KEY, canvas.toDataURL('image/png')); }catch(e){} }
+  function scheduleSave(){ clearTimeout(saveT); saveT=setTimeout(save,500); }
+
+  function pos(e){ var r=canvas.getBoundingClientRect(); return {x:(e.clientX-r.left)*(W/r.width), y:(e.clientY-r.top)*(H/r.height)}; }
+  function start(e){ drawing=true; last=pos(e); e.preventDefault(); stroke(e); }
+  function stroke(e){ if(!drawing) return; var p=pos(e);
+    ctx.globalCompositeOperation = tool==='eraser' ? 'destination-out' : 'source-over';
+    ctx.strokeStyle = tool==='eraser' ? 'rgba(0,0,0,1)' : COLOURS[tool];
+    ctx.lineWidth = tool==='eraser' ? 34 : size;
+    ctx.beginPath(); ctx.moveTo(last.x,last.y); ctx.lineTo(p.x,p.y); ctx.stroke(); last=p; dirty=true; }
+  function end(){ if(drawing){ drawing=false; if(dirty){ scheduleSave(); dirty=false; } } }
+  canvas.addEventListener('pointerdown',function(e){ canvas.setPointerCapture&&canvas.setPointerCapture(e.pointerId); start(e); });
+  canvas.addEventListener('pointermove',stroke);
+  canvas.addEventListener('pointerup',end); canvas.addEventListener('pointercancel',end); canvas.addEventListener('pointerleave',function(){ if(drawing){ /* keep drawing only while down */ } });
+  window.addEventListener('pointerup',end);
+
+  ov.querySelectorAll('.wb-tool').forEach(function(b){ b.addEventListener('click',function(){
+    tool=b.dataset.tool;
+    ov.querySelectorAll('.wb-tool').forEach(function(x){ x.classList.toggle('on',x===b); });
+  }); });
+  ov.querySelector('.wb-size').addEventListener('input',function(e){ size=+e.target.value; });
+  ov.querySelector('.wb-clear').addEventListener('click',function(){ ctx.clearRect(0,0,W,H); save(); });
+  ov.querySelector('.wb-close').addEventListener('click',function(){ ov.classList.remove('open'); });
+  ov.querySelector('.wb-save').addEventListener('click',function(){
+    try{ var a=document.createElement('a'); a.download='whiteboard-'+(window.__WB_KEY__||'notes')+'.png'; a.href=canvas.toDataURL('image/png'); document.body.appendChild(a); a.click(); a.remove(); }catch(e){} });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&ov.classList.contains('open')) ov.classList.remove('open'); });
+
+  window.wbToggle=function(){ ov.classList.toggle('open'); };
+  load();
+})();
+</script>
+<script>
+(function(){
+  function updThemeBtn(){var b=document.getElementById('themeBtn');if(!b)return;var dark=document.documentElement.getAttribute('data-theme')==='dark'||(!document.documentElement.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme:dark)').matches);b.innerHTML=dark?'☀️ <span class="lbl">Light</span>':'🌙 <span class="lbl">Dark</span>';}
+  function updTermBtn(){var b=document.getElementById('termBtn');if(!b)return;var w=document.documentElement.classList.contains('tt-white');b.innerHTML='⌨️ <span class="lbl">'+(w?'White':'Green')+'</span>';}
+  window.toggleTheme=function(){var d=document.documentElement;var cur=d.getAttribute('data-theme');var sys=matchMedia('(prefers-color-scheme:dark)').matches;var nx=(cur==='dark'||(!cur&&sys))?'light':'dark';d.setAttribute('data-theme',nx);try{localStorage.setItem('labs-theme',nx);}catch(e){}updThemeBtn();};
+  window.toggleTerm=function(){var d=document.documentElement;d.classList.toggle('tt-white');try{localStorage.setItem('labs-term',d.classList.contains('tt-white')?'white':'green');}catch(e){}updTermBtn();};
+  function init(){updThemeBtn();updTermBtn();}
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+})();
+</script>
+</body></html>
