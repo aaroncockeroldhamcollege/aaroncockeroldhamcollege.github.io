@@ -1,0 +1,12 @@
+Oldham College Digital Labs
+Copyright (C) 2026 Aaron Cocker-Swanick
+
+The HTML, CSS and JavaScript of this site are licensed under the GNU General Public License version 2 (see LICENSE.txt).
+
+Not covered by the GPL:
+- The Oldham College name and logo, which remain the property of Oldham College.
+- Fonts loaded from Google Fonts (SIL Open Font License) and system fonts such as Calibri.
+- Bootstrap 5.3.3 (assets/bootstrap) is (c) The Bootstrap Authors, MIT licence.
+- Photos in assets/photos are from Unsplash, used under the Unsplash License - see assets/photos/CREDITS.txt.
+- Pyodide 0.27.7 with pandas, NumPy and Matplotlib (Python in the browser, assets/pyodide/) - each under its own open-source licence; see assets/pyodide/README-LICENCES.txt.
+- Product names mentioned in the labs (for example Visio, Excel, Packet Tracer, Wireshark) are trademarks of their owners; the labs are independent training simulators and are not affiliated with them.
